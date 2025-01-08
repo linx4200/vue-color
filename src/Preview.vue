@@ -4,6 +4,7 @@ import { defineModel, effectScope, watch, ref } from 'vue';
 import Checkerboard from './components/common/Checkerboard.vue';
 import Alpha from './components/common/Alpha.vue';
 import EditableInput from './components/common/EditableInput.vue';
+import Hue from './components/common/Hue.vue';
 
 const color = defineModel({
   default: 'red'
@@ -26,11 +27,15 @@ scope.run(() => {
   </div>
 
   <div>Alpha</div>
-  <div class="alpha-container">
+  <div class="common-container">
     <Alpha v-model:tinyColor='color' />
   </div>
+
   <div>Editable Input: {{inputValue}} </div>
   <div><EditableInput label="r" desc="abc" :value="inputValue" @change="(value) => inputValue = value" :max="5" :min="1" /></div>
+
+  <div>Hue</div>
+  <div class="common-container"><Hue direction="horizontal" v-model:tinyColor="color" /></div>
 </template>
 
 <style scoped>
@@ -40,7 +45,7 @@ scope.run(() => {
   position: relative;
 }
 
-.alpha-container {
+.common-container {
   width: 500px;
   height: 10px;
   position: relative;

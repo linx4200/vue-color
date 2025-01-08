@@ -1,8 +1,8 @@
-import { ref } from 'vue';
+import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
 
 export type useTinyColorModelProps = {
-  tinyColor: tinycolor.ColorInputWithoutInstance
+  tinyColor?: tinycolor.ColorInput;
 }
 
 // function convert2TinyColor(data: tinycolor.ColorInputWithoutInstance): InternalColor {
@@ -23,18 +23,26 @@ export type useTinyColorModelProps = {
 
 
 export const EmitEventName = 'update:tinyColor';
-// 使用了就自动支持 v-model:internal="color" 的输入方式
-// 返回内部使用 color
-// todo: any
-export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
 
-  // tiny color 对象是响应式的，直接改动可触发 UI 更新
-  const tinyColorRef = ref(new tinycolor(props.tinyColor));
+/**
+ * To support `v-model:tinyColor="color"`
+ * @param props
+ * @param emit
+ * @returns returns a tinycolor instance wrapped by `computed`, and a function to invoke emit.
+ */
+export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
+
+  const tinyColorRef = computed(() => {
+    if (props.tinyColor instanceof tinycolor) {
+      return props.tinyColor;
+    }
+    return new tinycolor(props.tinyColor);
+  });
 
   function updateColor(value: tinycolor.Instance) {
     // 只是起一个通知作用
     emit(EmitEventName, value.clone());
   }
 
-  return { color: tinyColorRef.value, updateColor }
+  return { colorRef: tinyColorRef, updateColor }
 }

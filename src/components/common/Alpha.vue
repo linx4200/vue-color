@@ -19,19 +19,20 @@
 import { computed, useTemplateRef, defineProps } from 'vue';
 import Checkerboard from './Checkerboard.vue';
 import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
+import { getPageXYFromEvent } from '../../utils/events.ts';
 
 const props = defineProps<useTinyColorModelProps>();
 const emit = defineEmits([EmitEventName]);
 
-const { color, updateColor } = useTinyColorModel(props, emit);
+const { colorRef, updateColor } = useTinyColorModel(props, emit);
 
 const gradientColor = computed(() => {
-  const rgba = color.toRgb();
+  const rgba = colorRef.value.toRgb();
   const rgbStr = [rgba.r, rgba.g, rgba.b].join(',');
   return 'linear-gradient(to right, rgba(' + rgbStr + ', 0) 0%, rgba(' + rgbStr + ', 1) 100%)';
 });
 
-const alpha = computed(() => color.getAlpha());
+const alpha = computed(() => colorRef.value.getAlpha());
 
 const containerRef = useTemplateRef('container');
 
@@ -47,13 +48,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
 
   const scrollX = window.screenX || window.pageXOffset;
   const xOffset = container.getBoundingClientRect().left + scrollX;
-  let pageX = 0;
-  if (e instanceof MouseEvent) {
-    pageX = e.pageX;
-  }
-  if (e instanceof TouchEvent) {
-    pageX = (e.touches ? e.touches[0].pageX : e.changedTouches ? e.changedTouches[0].pageX : 0);
-  }
+  let pageX = getPageXYFromEvent(e);
   const left = pageX - xOffset
 
   let a;
@@ -66,8 +61,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   }
 
   if (alpha.value !== a) {
-    color.setAlpha(a);
-    updateColor(color);
+    colorRef.value.setAlpha(a);
+    updateColor(colorRef.value);
   }
 }
 
