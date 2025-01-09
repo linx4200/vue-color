@@ -20,6 +20,8 @@
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/clamp": "^1.0.3",
+    "@types/lodash.throttle": "^4.1.9",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.2.1",
     "typescript": "~5.6.2",
@@ -30,6 +32,8 @@
     "node": ">=18"
   },
   "dependencies": {
+    "clamp": "^1.0.1",
+    "lodash.throttle": "^4.1.1",
     "tinycolor2": "^1.6.0"
   }
 }

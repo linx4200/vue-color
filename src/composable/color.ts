@@ -30,7 +30,7 @@ export const EmitEventName = 'update:tinyColor';
  * @param emit
  * @returns returns a tinycolor instance wrapped by `computed`, and a function to invoke emit.
  */
-export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
+export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
 
   const tinyColorRef = computed(() => {
     if (props.tinyColor instanceof tinycolor) {

@@ -19,7 +19,7 @@
 import { computed, useTemplateRef, defineProps } from 'vue';
 import Checkerboard from './Checkerboard.vue';
 import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
-import { getPageXYFromEvent } from '../../utils/events.ts';
+import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 
 const props = defineProps<useTinyColorModelProps>();
 const emit = defineEmits([EmitEventName]);
@@ -46,9 +46,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   }
   const containerWidth = container.clientWidth
 
-  const scrollX = window.screenX || window.pageXOffset;
-  const xOffset = container.getBoundingClientRect().left + scrollX;
-  let pageX = getPageXYFromEvent(e);
+  const { x: xOffset } = getAbsolutePosition(container);
+  const { x: pageX } = getPageXYFromEvent(e);
   const left = pageX - xOffset
 
   let a;

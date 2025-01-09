@@ -5,6 +5,7 @@ import Checkerboard from './components/common/Checkerboard.vue';
 import Alpha from './components/common/Alpha.vue';
 import EditableInput from './components/common/EditableInput.vue';
 import Hue from './components/common/Hue.vue';
+import Saturation from './components/common/Saturation.vue';
 
 const color = defineModel({
   default: 'red'
@@ -36,6 +37,9 @@ scope.run(() => {
 
   <div>Hue</div>
   <div class="common-container"><Hue direction="horizontal" v-model:tinyColor="color" /></div>
+
+  <div>Saturation</div>
+  <div class="saturation-container"><Saturation v-model:tiny-color="color"/></div>
 </template>
 
 <style scoped>
@@ -48,6 +52,12 @@ scope.run(() => {
 .common-container {
   width: 500px;
   height: 10px;
+  position: relative;
+}
+
+.saturation-container {
+  width: 100px;
+  height: 100px;
   position: relative;
 }
 </style>

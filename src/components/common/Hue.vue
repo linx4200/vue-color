@@ -17,12 +17,13 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults, computed, ref, useTemplateRef, defineEmits } from 'vue';
-import { getPageXYFromEvent } from '../../utils/events.ts';
+import { computed, ref, useTemplateRef } from 'vue';
+import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
 
 type Props = {
   value?: {
+    // todo: 支持 hsv, 因为 hsv 和 hsl 的 h 是一样的
     hsl: {
       h: number;
       s: number;
@@ -94,12 +95,9 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
   const containerWidth = container.clientWidth
   const containerHeight = container.clientHeight
 
-  const scrollX = window.screenX || window.pageXOffset;
-  const scrollY = window.screenY || window.pageYOffset;
-  const xOffset = container.getBoundingClientRect().left + scrollX;
-  const yOffset = container.getBoundingClientRect().top + scrollY;
-  const pageX = getPageXYFromEvent(e);
-  const pageY = getPageXYFromEvent(e, 'y');
+  const {x: xOffset, y: yOffset } = getAbsolutePosition(container);
+  const {x: pageX, y: pageY } = getPageXYFromEvent(e);
+
   const left = pageX - xOffset;
   const top = pageY - yOffset;
 
