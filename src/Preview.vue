@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineModel, effectScope, watch, ref } from 'vue';
+import { defineModel, effectScope, watch, ref, reactive } from 'vue';
 
 import Checkerboard from './components/common/Checkerboard.vue';
 import Alpha from './components/common/Alpha.vue';
@@ -7,8 +7,12 @@ import EditableInput from './components/common/EditableInput.vue';
 import Hue from './components/common/Hue.vue';
 import Saturation from './components/common/Saturation.vue';
 
-const color = defineModel({
+const tinyColor = defineModel('tinycolor', {
   default: 'red'
+});
+
+const colorRGBA = defineModel({
+  default: () => reactive({r: 255, g: 0, b: 0, a: 1})
 });
 
 const inputValue = ref(1);
@@ -16,12 +20,16 @@ const inputValue = ref(1);
 const scope = effectScope();
 
 scope.run(() => {
-  watch(color, () => console.log('Preview color ===>', color.value));
+  watch(tinyColor, () => console.log('Preview tinyColor ===>', tinyColor.value));
 })
 
 </script>
 
 <template>
+  <div>{{ colorRGBA }}</div>
+
+  <br />
+
   <div>Checkerboard</div>
   <div class="checkerboard-container">
     <Checkerboard />
@@ -29,17 +37,17 @@ scope.run(() => {
 
   <div>Alpha</div>
   <div class="common-container">
-    <Alpha v-model:tinyColor='color' />
+    <Alpha v-model:tinyColor='tinyColor' v-model="colorRGBA" />
   </div>
 
   <div>Editable Input: {{inputValue}} </div>
   <div><EditableInput label="r" desc="abc" :value="inputValue" @change="(value) => inputValue = value" :max="5" :min="1" /></div>
 
   <div>Hue</div>
-  <div class="common-container"><Hue direction="horizontal" v-model:tinyColor="color" /></div>
+  <div class="common-container"><Hue direction="horizontal" v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 
   <div>Saturation</div>
-  <div class="saturation-container"><Saturation v-model:tiny-color="color"/></div>
+  <div class="saturation-container"><Saturation v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 </template>
 
 <style scoped>

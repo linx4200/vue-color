@@ -18,11 +18,11 @@
 <script setup lang="ts">
 import { computed, useTemplateRef, defineProps } from 'vue';
 import Checkerboard from './Checkerboard.vue';
-import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
+import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 
 const props = defineProps<useTinyColorModelProps>();
-const emit = defineEmits([EmitEventName]);
+const emit = defineEmits(EmitEventNames);
 
 const { colorRef, updateColor } = useTinyColorModel(props, emit);
 

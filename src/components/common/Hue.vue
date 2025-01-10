@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
-import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
+import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 
 type Props = {
   value?: {
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   direction: 'horizontal'
 });
 
-const emit = defineEmits(['change', EmitEventName]);
+const emit = defineEmits(['change'].concat(EmitEventNames));
 
 const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
 

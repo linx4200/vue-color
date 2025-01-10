@@ -17,7 +17,7 @@
 import { computed, useTemplateRef } from 'vue';
 import clamp from 'clamp';
 import throttle from 'lodash.throttle';
-import { useTinyColorModel, EmitEventName, type useTinyColorModelProps } from '../../composable/color';
+import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 import tinycolor from 'tinycolor2';
 
@@ -32,7 +32,7 @@ type Props = {
   };
 }
 
-const emit = defineEmits(['change', EmitEventName]);
+const emit = defineEmits(['change'].concat(EmitEventNames));
 const props = defineProps<Props & useTinyColorModelProps>();
 const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
 
