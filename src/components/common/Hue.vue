@@ -31,7 +31,7 @@ type Props = {
       a: number;
     }
   };
-  direction: 'horizontal' | 'vertical';
+  direction?: 'horizontal' | 'vertical';
 }
 
 const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {

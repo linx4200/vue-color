@@ -2,10 +2,9 @@ import { computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
 // todo: test all input format
-const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOriginally = false) => {
+const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOriginally = false, originalFormat: string) => {
   if (isObjectOriginally) {
-    const format = color.getFormat();
-    switch (format) {
+    switch (originalFormat) {
       case 'rgb': {
         return color.toRgb();
       }
@@ -50,20 +49,28 @@ export const EmitEventNames = ['update:tinyColor', 'update:modelValue'];
 export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
 
   let isObjectOriginally = false;
+  let originalFormat = '';
 
-  const tinyColorRef = computed(() => {
-    if (typeof props.modelValue === 'object') {
-      isObjectOriginally = true;
+  const tinyColorRef = computed({
+    get: () => {
+      if (typeof props.modelValue === 'object') {
+        isObjectOriginally = true;
+      }
+      const value = tinycolor(props.modelValue ?? props.tinyColor);
+      originalFormat = value.getFormat();
+      return value;
+    },
+    set: (newValue: tinycolor.Instance) => {
+      updateColor(newValue);
     }
-    return new tinycolor(props.modelValue ?? props.tinyColor);
   });
 
-  function updateColor(value: tinycolor.Instance) {
+  const updateColor = (value: tinycolor.Instance) => {
     if (props.tinyColor) {
       emit('update:tinyColor', value.clone());
     }
     if (props.modelValue) {
-      emit('update:modelValue', transformToOriginalInputFormat(value, isObjectOriginally));
+      emit('update:modelValue', transformToOriginalInputFormat(value, isObjectOriginally, originalFormat));
     }
   }
 

@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { defineProps, ref } from 'vue';
+import { getFractionDigit } from '../../utils/math';
 
 type Props = {
   value: string | number;
@@ -55,18 +56,19 @@ function handleInput (e: Event) {
 
 function handleKeyDown (e: KeyboardEvent) {
   let number = Number(props.value);
-  if (number) {
-    let amount = props.step;
+  if (!isNaN(number)) {
+    let step = props.step;
+    const fractionDigit = getFractionDigit(step);
 
     // Up
     if (e.code === 'ArrowUp' || e.keyCode === 38) {
-      update(number + amount);
+      update((number + step).toFixed(fractionDigit));
       e.preventDefault();
     }
 
     // Down
     if (e.code === 'ArrowDown' || e.keyCode === 40) {
-      update(number - amount);
+      update((number - step).toFixed(fractionDigit));
       e.preventDefault();
     }
   }

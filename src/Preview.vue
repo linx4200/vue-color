@@ -7,6 +7,8 @@ import EditableInput from './components/common/EditableInput.vue';
 import Hue from './components/common/Hue.vue';
 import Saturation from './components/common/Saturation.vue';
 
+import Chrome from './components/Chrome.vue';
+
 const tinyColor = defineModel('tinycolor', {
   default: 'red'
 });
@@ -48,6 +50,9 @@ scope.run(() => {
 
   <div>Saturation</div>
   <div class="saturation-container"><Saturation v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+
+  <div>Chrome</div>
+  <div><Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 </template>
 
 <style scoped>
