@@ -65,12 +65,13 @@ export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
     }
   });
 
-  const updateColor = (value: tinycolor.Instance) => {
+  const updateColor = (value: tinycolor.ColorInput) => {
+    const newValue = tinycolor(value);
     if (props.tinyColor) {
-      emit('update:tinyColor', value.clone());
+      emit('update:tinyColor', newValue.clone());
     }
     if (props.modelValue) {
-      emit('update:modelValue', transformToOriginalInputFormat(value, isObjectOriginally, originalFormat));
+      emit('update:modelValue', transformToOriginalInputFormat(newValue, isObjectOriginally, originalFormat));
     }
   }
 
