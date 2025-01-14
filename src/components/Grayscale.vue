@@ -2,7 +2,7 @@
   <div role="application" aria-label="Compact color picker" class="vc-compact">
     <ul class="vc-compact-colors" role="listbox">
       <li
-        v-for="c in (props.palette ?? defaultColors)"
+        v-for="c in palette"
         role="option"
         :aria-label="'color:' + c"
         :aria-selected="c.toUpperCase() === pick"
@@ -19,14 +19,11 @@
 </template>
 
 <script lang="ts">
-const defaultColors: string[] = [
-  '#4D4D4D', '#999999', '#FFFFFF', '#F44E3B', '#FE9200', '#FCDC00',
-  '#DBDF00', '#A4DD00', '#68CCCA', '#73D8FF', '#AEA1FF', '#FDA1FF',
-  '#333333', '#808080', '#CCCCCC', '#D33115', '#E27300', '#FCC400',
-  '#B0BC00', '#68BC00', '#16A5A5', '#009CE0', '#7B64FF', '#FA28FF',
-  '#000000', '#666666', '#B3B3B3', '#9F0500', '#C45100', '#FB9E00',
-  '#808900', '#194D33', '#0C797D', '#0062B1', '#653294', '#AB149E'
-];
+const defaultColors = [
+  '#FFFFFF', '#F2F2F2', '#E6E6E6', '#D9D9D9', '#CCCCCC', '#BFBFBF', '#B3B3B3',
+  '#A6A6A6', '#999999', '#8C8C8C', '#808080', '#737373', '#666666', '#595959',
+  '#4D4D4D', '#404040', '#333333', '#262626', '#0D0D0D', '#000000'
+]
 </script>
 
 <script setup lang="ts">
@@ -34,8 +31,8 @@ import { computed } from 'vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 
 type Props = {
-  palette?: string[]
-};
+  palette?: string[];
+}
 
 const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   palette: () => defaultColors
@@ -52,7 +49,6 @@ const pick = computed(() => {
 const handlerClick = (hex: string) => {
   updateTinyColor(hex);
 }
-
 </script>
 
 <style>

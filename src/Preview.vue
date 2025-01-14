@@ -9,6 +9,7 @@ import Saturation from './components/common/Saturation.vue';
 
 import Chrome from './components/Chrome.vue';
 import Compact from './components/Compact.vue';
+import Grayscale from './components/Grayscale.vue';
 
 const tinyColor = defineModel('tinycolor', {
   default: 'red'
@@ -57,6 +58,9 @@ scope.run(() => {
 
   <div>Compact</div>
   <div><Compact v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+
+  <div>Grayscale</div>
+  <div><Grayscale v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 </template>
 
 <style scoped>
