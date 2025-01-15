@@ -44,7 +44,7 @@ export const EmitEventNames = ['update:tinyColor', 'update:modelValue'];
  * To support `v-model:tinyColor="color"`
  * @param props
  * @param emit
- * @returns returns a tinycolor instance wrapped by `computed`, and a function to invoke emit.
+ * @returns a tinycolor instance wrapped by `computed` and a function to invoke emit;
  */
 export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
 
@@ -56,7 +56,8 @@ export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
       if (typeof props.modelValue === 'object') {
         isObjectOriginally = true;
       }
-      const value = tinycolor(props.modelValue ?? props.tinyColor);
+      const colorInput = props.modelValue ?? props.tinyColor;
+      const value = tinycolor(colorInput);
       originalFormat = value.getFormat();
       return value;
     },
@@ -75,5 +76,8 @@ export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
     }
   }
 
-  return { colorRef: tinyColorRef, updateColor }
+  return {
+    colorRef: tinyColorRef,
+    updateColor,
+  };
 }

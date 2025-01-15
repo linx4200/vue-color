@@ -22,14 +22,10 @@ import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 import tinycolor from 'tinycolor2';
 
 type Props = {
-  value?: {
-    hsv: {
-      h: number;
-      s: number;
-      v: number;
-      a?: number;
-    }
-  };
+  /** Use this hue value to render background first.
+   * Second priority is the hue value from `v-model` or `v-model:tineColor`.
+   * */
+  hue?: number;
 }
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
@@ -37,12 +33,13 @@ const props = defineProps<Props & useTinyColorModelProps>();
 const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
 
 const hsv = computed(() => {
-  return props.value?.hsv ?? tinyColorRef.value.toHsv();
+  return tinyColorRef.value.toHsv();
 });
 
 const bgColor = computed(() => {
-  return `hsl(${hsv.value.h}, 100%, 50%)`;
+  return `hsl(${props.hue ?? hsv.value.h}, 100%, 50%)`;
 });
+
 const pointerTop = computed(() => {
   return (-(hsv.value.v * 100) + 1) + 100 + '%';
 });
@@ -87,10 +84,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   })
 }
 
-function onChange (param: NonNullable<Props['value']>['hsv']) {
-  if (props.value) {
-    emit('change', param);
-  }
+function onChange (param: { h: number, s: number, v: number, a: number }) {
   // tiny color internally doesn't handle saturation and value of HSV mutation
   // so, need to create a new tiny color instance
   updateTinyColor(tinycolor(param));

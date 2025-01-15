@@ -1,7 +1,7 @@
 <template>
   <div role="application" aria-label="Chrome Color Picker" :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']">
     <div class="vc-chrome-saturation-wrap">
-      <Saturation v-model:tinyColor="tinyColorRef"></Saturation>
+      <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueValue"></Saturation>
     </div>
     <div class="vc-chrome-body">
       <div class="vc-chrome-controls">
@@ -12,7 +12,7 @@
 
         <div class="vc-chrome-sliders">
           <div class="vc-chrome-hue-wrap">
-            <Hue v-model:tinyColor="tinyColorRef"></Hue>
+            <Hue :hue="retainedHueValue" @change="onHueChange"></Hue>
           </div>
           <div class="vc-chrome-alpha-wrap" v-if="!props.disableAlpha">
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
@@ -48,7 +48,7 @@
         <div class="vc-chrome-fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
           <div class="vc-chrome-field">
-            <EdIn label="h" :value="hsl.h" @change="(v) => inputChangeHSLA('h', v)"></EdIn>
+            <EdIn label="h" :value="retainedHueValue.toFixed()" @change="(v) => inputChangeHSLA('h', v)"></EdIn>
           </div>
           <div class="vc-chrome-field">
             <EdIn label="s" :value="hsl.s" @change="(v) => inputChangeHSLA('s', v)"></EdIn>
@@ -101,6 +101,12 @@ const emit = defineEmits(['change'].concat(EmitEventNames));
 
 const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
 
+const fieldsIndex = ref(0);
+let highlight = ref(false);
+
+// maintain the hue value, because the hue value may be lost when converting to tinycolor instance in some cases.
+const hueValue = ref<undefined | number>(undefined);
+
 const activeColor = computed(() => {
   const rgba = tinyColorRef.value.toRgb();
   return 'rgba(' + [rgba.r, rgba.g, rgba.b, tinyColorRef.value.getAlpha()].join(',') + ')'
@@ -123,8 +129,17 @@ const alpha = computed(() => {
   return tinyColorRef.value.getAlpha();
 });
 
-const fieldsIndex = ref(0);
-let highlight = ref(false);
+const retainedHueValue = computed(() => {
+  const { h } = tinyColorRef.value.toHsl();
+  if (h !== 0) {
+    return h;
+  }
+  // fallback use the hue value of <Hue />
+  if (typeof hueValue.value !== 'undefined') {
+    return hueValue.value;
+  }
+  return 0;
+});
 
 const inputChangeHex = (type: 'hex' | 'hex8', data?: string) => {
   if (!data) {
@@ -159,6 +174,9 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
   if (key === 's' || key === 'l'){
     newValue[key] = (+((data as string).replace('%', ''))) / 100;
   }
+  if (key === 'h') {
+    hueValue.value = +data;
+  }
   updateTinyColor(tinycolor({
     ...tinyColorRef.value.toHsl(),
     a: alpha.value,
@@ -177,6 +195,11 @@ const showHighlight = () => {
 }
 const hideHighlight = () => {
   highlight.value = false;
+}
+
+const onHueChange = (hue: number, offset: number) => {
+  hueValue.value = hue;
+  updateTinyColor(tinyColorRef.value.spin(offset));
 }
 
 </script>

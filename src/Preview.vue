@@ -12,11 +12,11 @@ import Compact from './components/Compact.vue';
 import Grayscale from './components/Grayscale.vue';
 
 const tinyColor = defineModel('tinycolor', {
-  default: 'red'
+  default: 'blue'
 });
 
 const colorRGBA = defineModel({
-  default: () => reactive({r: 255, g: 0, b: 0, a: 1})
+  default: () => reactive({r: 0, g: 0, b: 255, a: 1})
 });
 
 const inputValue = ref(1);
@@ -47,8 +47,8 @@ scope.run(() => {
   <div>Editable Input: {{inputValue}} </div>
   <div><EditableInput label="r" desc="abc" :value="inputValue" @change="(value) => inputValue = value" :max="5" :min="1" /></div>
 
-  <div>Hue</div>
-  <div class="common-container"><Hue direction="horizontal" v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+  <!-- <div>Hue</div>
+  <div class="common-container"><Hue direction="horizontal" /></div> -->
 
   <div>Saturation</div>
   <div class="saturation-container"><Saturation v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>

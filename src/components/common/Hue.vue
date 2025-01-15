@@ -19,40 +19,35 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
+
+// <Hue /> is not allowed to use tinycolor instance
+// because it may lost hue value in some cases:
+// saturation is 0, lightness is 0 or 100, value is 0
 
 type Props = {
-  value?: {
-    // todo: 支持 hsv, 因为 hsv 和 hsl 的 h 是一样的
-    hsl: {
-      h: number;
-      s: number;
-      l: number;
-      a: number;
-    }
-  };
   direction?: 'horizontal' | 'vertical';
+  hue?: number;
 }
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
+  hue: 0,
   direction: 'horizontal'
 });
 
-const emit = defineEmits(['change'].concat(EmitEventNames));
+const emit = defineEmits(['change']);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-
-const previousHueValue = ref(0);
+let previousHueValue = 0;
 const pullDirection = ref<'right' | 'left' | undefined>();
 
 const containerRef = useTemplateRef('container');
 
 const hue = computed(() => {
-  const h = props.value?.hsl.h || tinyColorRef.value.toHsl().h;
+  let h = props.hue;
 
-  if (h !== 0 && h - previousHueValue.value > 0) pullDirection.value = 'right';
-  if (h !== 0 && h - previousHueValue.value < 0) pullDirection.value = 'left';
-  previousHueValue.value = h
+  if (h !== 0 && h - previousHueValue > 0) pullDirection.value = 'right';
+  if (h !== 0 && h - previousHueValue < 0) pullDirection.value = 'left';
+
+  previousHueValue = h
 
   return h;
 })
@@ -115,17 +110,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
     }
 
     if (hue.value !== h) {
-      if (props.value) {
-        emit('change', {
-          h: h,
-          s: props.value.hsl.s,
-          l: props.value.hsl.l,
-          a: props.value.hsl.a,
-          // source: 'hsl'
-        })
-      }
-      tinyColorRef.value.spin(h - hue.value);
-      updateTinyColor(tinyColorRef.value);
+      emitChange(h);
     }
   } else {
     if (left < 0) {
@@ -136,21 +121,14 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
       percent = left * 100 / containerWidth
       h = (360 * percent / 100)
     }
-
     if (hue.value !== h) {
-      if (props.value) {
-        emit('change', {
-          h: h,
-          s: props.value.hsl.s,
-          l: props.value.hsl.l,
-          a: props.value.hsl.a,
-          // source: 'hsl'
-        })
-      }
-      tinyColorRef.value.spin(h - hue.value);
-      updateTinyColor(tinyColorRef.value);
+      emitChange(h);
     }
   }
+}
+
+function emitChange(h: number) {
+  emit('change', h, h - hue.value);
 }
 
 function handleMouseDown (e: MouseEvent) {
