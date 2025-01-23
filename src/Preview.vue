@@ -12,6 +12,7 @@ import Compact from './components/Compact.vue';
 import Grayscale from './components/Grayscale.vue';
 import Material from './components/Material.vue';
 import Photoshop from './components/Photoshop.vue';
+import Sketch from './components/Sketch.vue';
 
 const tinyColor = defineModel('tinycolor', {
   default: 'blue'
@@ -69,6 +70,9 @@ scope.run(() => {
 
   <div>Photoshop</div>
   <div><Photoshop v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+
+  <div>Sketch</div>
+  <div><Sketch v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 </template>
 
 <style scoped>
