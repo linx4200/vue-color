@@ -101,12 +101,12 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
 
   if (props.direction === 'vertical') {
     if (top < 0) {
-      h = 360
+      h = 360;
     } else if (top > containerHeight) {
-      h = 0
+      h = 0;
     } else {
-      percent = -(top * 100 / containerHeight) + 100
-      h = (360 * percent / 100)
+      percent = -(top * 100 / containerHeight) + 100;
+      h = (360 * percent / 100);
     }
 
     if (hue.value !== h) {
