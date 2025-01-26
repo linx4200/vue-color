@@ -37,7 +37,7 @@ import Hue from './common/Hue.vue';
 
 type Prop = {
   /** lightness values */
-  swatches: ({ s: number, l: number} | string)[];
+  swatches?: ({ s: number, l: number} | string)[];
 }
 
 const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
