@@ -27,8 +27,8 @@ export const hueModel = (tinyColorRef: WritableComputedRef<tinycolor.Instance, t
     /** use for the change event of <Hue /> Component */
     setHue,
     /**
-     * use for hue value of all color components
-     * this hue value handles the case when the hue value is lost when converting to tinycolor instance
+     * Use for hue value of all color components.
+     * This hue value handles the case when the hue value is lost when converting to tinycolor instance
      */
     retainedHueRef
   };
