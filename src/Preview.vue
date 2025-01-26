@@ -14,6 +14,7 @@ import Material from './components/Material.vue';
 import Photoshop from './components/Photoshop.vue';
 import Sketch from './components/Sketch.vue';
 import Slider from './components/Slider.vue';
+import Swatches from './components/Swatches.vue';
 import Twitter from './components/Twitter.vue';
 
 const tinyColor = defineModel('tinycolor', {
@@ -78,6 +79,9 @@ scope.run(() => {
 
   <div>Slider</div>
   <div><Slider v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+
+  <div>Swatches</div>
+  <div><Swatches v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
 
   <div>Twitter</div>
   <div><Twitter v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
