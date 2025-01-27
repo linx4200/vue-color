@@ -48,8 +48,6 @@
 </template>
 
 <script setup lang="ts">
-// todo: 更新样式
-
 import { ref, computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
@@ -79,8 +77,8 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   okLabel: 'OK',
   cancelLabel: 'Cancel',
   resetLabel: 'Reset',
-  newLabel: 'New',
-  currentLabel: 'Current',
+  newLabel: 'new',
+  currentLabel: 'current',
   initialColor: '#fff'
 });
 
