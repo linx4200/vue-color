@@ -22,42 +22,42 @@
 
       <div class="vc-chrome-fields-wrap" v-if="!disableFields">
         <div class="vc-chrome-fields" v-show="fieldsIndex === 0">
-          <!-- hex -->
+          <!-- rgba -->
           <div class="vc-chrome-field">
-            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v) => inputChangeHex('hex', v)"></EdIn>
-            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change.hex="(v) => inputChangeHex('hex8', v)"></EdIn>
+            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)"></EdIn>
+          </div>
+          <div class="vc-chrome-field">
+            <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)"></EdIn>
+          </div>
+          <div class="vc-chrome-field">
+            <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)"></EdIn>
+          </div>
+          <div class="vc-chrome-field" v-if="!disableAlpha">
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)"></EdIn>
           </div>
         </div>
 
         <div class="vc-chrome-fields" v-show="fieldsIndex === 1">
-          <!-- rgba -->
+          <!-- hex -->
           <div class="vc-chrome-field">
-            <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)"></EdIn>
-          </div>
-          <div class="vc-chrome-field">
-            <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)"></EdIn>
-          </div>
-          <div class="vc-chrome-field">
-            <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)"></EdIn>
-          </div>
-          <div class="vc-chrome-field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v) => inputChangeRGBA('a', v)"></EdIn>
+            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)"></EdIn>
+            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change.hex="(v: string) => inputChangeHex('hex8', v)"></EdIn>
           </div>
         </div>
 
         <div class="vc-chrome-fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
           <div class="vc-chrome-field">
-            <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v) => inputChangeHSLA('h', v)"></EdIn>
+            <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)"></EdIn>
           </div>
           <div class="vc-chrome-field">
-            <EdIn label="s" :value="hsl.s" @change="(v) => inputChangeHSLA('s', v)"></EdIn>
+            <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)"></EdIn>
           </div>
           <div class="vc-chrome-field">
-            <EdIn label="l" :value="hsl.l" @change="(v) => inputChangeHSLA('l', v)"></EdIn>
+            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)"></EdIn>
           </div>
           <div class="vc-chrome-field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v) => inputChangeHSLA('a', v)"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)"></EdIn>
           </div>
         </div>
 
@@ -80,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-// todo: 看看要不要更新 chrome 的样式
 import { computed, ref } from 'vue';
 import tinycolor from 'tinycolor2';
 
@@ -174,8 +173,9 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
 }
 
 const toggleViews = () =>{
-  if (fieldsIndex.value >= 2) {
+  if (fieldsIndex.value === 2) {
     fieldsIndex.value = 0;
+    return;
   }
   fieldsIndex.value ++;
 }
