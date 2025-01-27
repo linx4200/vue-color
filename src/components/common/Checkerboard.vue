@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 type Props = {
   size?: number;
   white?: string;
   grey?: string;
 }
-
-// todo: does this cache work ?
-let cache: Record<string, string> = {};
 
 const props = withDefaults(defineProps<Props>(), {
   size: 8,
@@ -43,22 +42,11 @@ function renderCheckerboard (c1: string, c2: string, size: number) {
   return canvas.toDataURL()
 }
 
-  // get checkerboard base data and cache
-  function getCheckerboard (c1: string, c2: string, size: number) {
-    const key = c1 + ',' + c2 + ',' + size;
+function getCheckerboard (c1: string, c2: string, size: number) {
+  return renderCheckerboard(c1, c2, size);
+}
 
-    if (cache[key]) {
-      return cache[key];
-    } else {
-      var checkerboard = renderCheckerboard(c1, c2, size)
-      if (checkerboard) {
-        cache[key] = checkerboard;
-      }
-      return checkerboard;
-    }
-  }
-
-  const backgroundImage = `url(${getCheckerboard(props.white, props.grey, props.size)})`;
+const backgroundImage = computed(() => `url(${getCheckerboard(props.white, props.grey, props.size)})`);
 
 </script>
 
