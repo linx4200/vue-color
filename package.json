@@ -2,7 +2,9 @@
   "name": "vue-color",
   "version": "3.0.0-alpha.1",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/vue-color.umd.cjs",
   "module": "./dist/vue-color.js",
   "exports": {
@@ -21,29 +23,23 @@
     "type": "git",
     "url": "https://github.com/xiaokaike/vue-color"
   },
-  "author": [
-    "Xinran <liuxinran1008@gmail.com>",
-    "xiaokai <kexiaokai@gmail.com>"
-  ],
+  "author": "Xinran <liuxinran1008@gmail.com>, xiaokai <kexiaokai@gmail.com>",
   "peerDependencies": {
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@types/clamp": "^1.0.3",
-    "@types/lodash.throttle": "^4.1.9",
     "@types/material-colors": "^1.2.3",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.2.1",
     "typescript": "~5.7.3",
     "vite": "^6.0.11",
+    "vitest": "^3.0.5",
     "vue-tsc": "^2.2.0"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
-    "clamp": "^1.0.1",
-    "lodash.throttle": "^4.1.1",
     "material-colors": "^1.2.6",
     "tinycolor2": "^1.6.0"
   }

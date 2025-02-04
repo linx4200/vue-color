@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed, useTemplateRef } from 'vue';
-import clamp from 'clamp';
-import throttle from 'lodash.throttle';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
-import tinycolor from 'tinycolor2';
+import { clamp } from '../../utils/math.ts';
+import { throttle } from '../../utils/throttle.ts';
 
 type Props = {
   /** Use this hue value to render background first.
