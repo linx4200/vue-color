@@ -18,7 +18,7 @@
     "dev": "vite",
     "build": "vue-tsc --project tsconfig.json && vite build",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest --workspace=vitest.workspace.ts"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,13 @@
     "@types/material-colors": "^1.2.3",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/browser": "^3.0.5",
+    "playwright": "^1.50.1",
     "typescript": "~5.7.3",
     "vite": "^6.0.11",
     "vitest": "^3.0.5",
+    "vitest-browser-vue": "^0.1.0",
     "vue-tsc": "^2.2.0"
-  },
-  "engines": {
-    "node": ">=18"
   },
   "dependencies": {
     "material-colors": "^1.2.6",
