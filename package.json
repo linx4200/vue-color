@@ -17,7 +17,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --project tsconfig.json && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
