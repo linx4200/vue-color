@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineModel, effectScope, watch, reactive, computed } from 'vue';
+import { effectScope, watch, reactive, computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
 import Chrome from './components/Chrome.vue';
@@ -66,15 +66,14 @@ const textColor = computed(() => {
         <h1>Vue-color</h1><span class="tag">v3.0</span>
       </div>
 
-      <p class="intro roboto" :style="{color: textColor}">
+      <div class="intro roboto" :style="{color: textColor}">
         A collection of efficient color pickers designed for modern web development.
         <ul class="feature-list roboto" :style="{color: textColor, opacity: 0.75}">
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly </li>
-          <li>✅ Minimal Footprint</li>
         </ul>
-      </p>
+      </div>
     </div>
     <div :style="{flex: 0.8}">
       <div class="row">
@@ -139,7 +138,7 @@ const textColor = computed(() => {
   </div>
 </template>
 
-<style>
+<style scope>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 </style>
 

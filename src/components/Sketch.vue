@@ -1,45 +1,45 @@
 <template>
-  <div role="application" aria-label="Sketch color picker" :class="['vc-sketch', disableAlpha ? 'vc-sketch__disable-alpha' : '']">
-    <div class="vc-sketch-saturation-wrap">
+  <div role="application" aria-label="Sketch color picker" :class="[$style.wrap, disableAlpha ? $style.disableAlpha : '']">
+    <div :class="$style.saturation">
       <Saturation :hue="retainedHueRef" v-model:tinyColor="tinyColorRef"></Saturation>
     </div>
-    <div class="vc-sketch-controls">
-      <div class="vc-sketch-sliders">
-        <div class="vc-sketch-hue-wrap">
+    <div :class="$style.controls">
+      <div :class="$style.sliders">
+        <div :class="$style.hue">
           <Hue :hue="retainedHueRef" @change="setHue"/>
         </div>
-        <div class="vc-sketch-alpha-wrap" v-if="!disableAlpha">
+        <div :class="$style.alpha" v-if="!disableAlpha">
           <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
         </div>
       </div>
-      <div class="vc-sketch-color-wrap">
-        <div :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" class="vc-sketch-active-color" :style="{background: tinyColorRef.toRgbString()}"></div>
+      <div :class="$style.color">
+        <div :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" :class="$style.activeColor" :style="{background: tinyColorRef.toRgbString()}"></div>
         <Checkerboard />
       </div>
     </div>
-    <div class="vc-sketch-field" v-if="!disableFields">
+    <div :class="$style.field" v-if="!disableFields">
       <!-- rgba -->
-      <div class="vc-sketch-field--double">
+      <div :class="$style.fieldDouble">
         <EdIn label="hex" :value="hex" @change="inputChangeHex"></EdIn>
       </div>
-      <div class="vc-sketch-field--single">
+      <div :class="$style.fieldSingle">
         <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)"></EdIn>
       </div>
-      <div class="vc-sketch-field--single">
+      <div :class="$style.fieldSingle">
         <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)"></EdIn>
       </div>
-      <div class="vc-sketch-field--single">
+      <div :class="$style.fieldSingle">
         <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)"></EdIn>
       </div>
-      <div class="vc-sketch-field--single" v-if="!disableAlpha">
+      <div :class="$style.fieldSingle" v-if="!disableAlpha">
         <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="inputChangeAlpha"></EdIn>
       </div>
     </div>
-    <div class="vc-sketch-presets" role="group" aria-label="A color preset, pick one to set as current color">
+    <div :class="$style.presets" role="group" aria-label="A color preset, pick one to set as current color">
       <template v-for="c in props.presetColors">
         <div
           v-if="!isTransparent(c)"
-          class="vc-sketch-presets-color"
+          :class="$style.presetColor"
           :aria-label="'Color:' + c"
           :key="c + '-color'"
           :style="{background: c}"
@@ -49,7 +49,7 @@
           v-else
           :key="c"
           :aria-label="'Color:' + c"
-          class="vc-sketch-presets-color"
+          :class="$style.presetColor"
           @click="handlePreset(c)">
           <Checkerboard />
         </div>
@@ -146,8 +146,8 @@ const isTransparent = (color: string) => {
 }
 </script>
 
-<style>
-.vc-sketch {
+<style module>
+.wrap {
   position: relative;
   width: 200px;
   padding: 10px 10px 0;
@@ -157,40 +157,40 @@ const isTransparent = (color: string) => {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, .15), 0 8px 16px rgba(0, 0, 0, .15);
 }
 
-.vc-sketch-saturation-wrap {
+.saturation {
   width: 100%;
   padding-bottom: 75%;
   position: relative;
   overflow: hidden;
 }
 
-.vc-sketch-controls {
+.controls {
   display: flex;
 }
 
-.vc-sketch-sliders {
+.sliders {
   padding: 4px 0;
   flex: 1;
 }
 
-.vc-sketch-sliders .vc-hue,
-.vc-sketch-sliders .vc-alpha-gradient {
+.sliders ::global(.vc-hue),
+.sliders ::global(.vc-alpha-gradient) {
   border-radius: 2px;
 }
 
-.vc-sketch-hue-wrap {
+.hue {
   position: relative;
   height: 10px;
 }
 
-.vc-sketch-alpha-wrap {
+.alpha {
   position: relative;
   height: 10px;
   margin-top: 4px;
   overflow: hidden;
 }
 
-.vc-sketch-color-wrap {
+.color {
   width: 24px;
   height: 24px;
   position: relative;
@@ -199,7 +199,7 @@ const isTransparent = (color: string) => {
   border-radius: 3px;
 }
 
-.vc-sketch-active-color {
+.activeColor {
   position: absolute;
   top: 0;
   left: 0;
@@ -210,16 +210,16 @@ const isTransparent = (color: string) => {
   z-index: 2;
 }
 
-.vc-sketch-color-wrap .vc-checkerboard {
+.color :global(.vc-checkerboard) {
   background-size: auto;
 }
 
-.vc-sketch-field {
+.field {
   display: flex;
   padding-top: 4px;
 }
 
-.vc-sketch-field .vc-input__input {
+.field :global(.vc-input-input) {
   width: 90%;
   padding: 4px 0 3px 10%;
   border: none;
@@ -227,26 +227,25 @@ const isTransparent = (color: string) => {
   font-size: 10px;
 }
 
-.vc-sketch-field .vc-input__label {
+.field :global(.vc-input-label) {
   display: block;
   text-align: center;
   font-size: 11px;
   color: #222;
   padding-top: 3px;
   padding-bottom: 4px;
-  text-transform: capitalize;
 }
 
-.vc-sketch-field--single {
+.fieldSingle {
   flex: 1;
   padding-left: 6px;
 }
 
-.vc-sketch-field--double {
+.fieldDouble {
   flex: 2;
 }
 
-.vc-sketch-presets {
+.presets {
   margin-right: -10px;
   margin-left: -10px;
   padding-left: 10px;
@@ -254,7 +253,7 @@ const isTransparent = (color: string) => {
   border-top: 1px solid #eee;
 }
 
-.vc-sketch-presets-color {
+.presetColor {
   border-radius: 3px;
   overflow: hidden;
   position: relative;
@@ -267,12 +266,12 @@ const isTransparent = (color: string) => {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
 }
 
-.vc-sketch-presets-color .vc-checkerboard {
+.presetColor :global(.vc-checkerboard) {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
   border-radius: 3px;
 }
 
-.vc-sketch__disable-alpha .vc-sketch-color-wrap {
+.disableAlpha .color {
   height: 10px;
 }
 </style>

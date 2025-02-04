@@ -1,8 +1,17 @@
 {
   "name": "vue-color",
-  "private": true,
   "version": "3.0.0-alpha.1",
   "type": "module",
+  "files": ["dist"],
+  "main": "./dist/vue-color.umd.cjs",
+  "module": "./dist/vue-color.js",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-color.js",
+      "require": "./dist/vue-color.umd.cjs"
+    },
+    "./style.css": "./dist/vue-color.css"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --project tsconfig.json && vite build",

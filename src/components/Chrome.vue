@@ -1,69 +1,69 @@
 <template>
-  <div role="application" aria-label="Chrome Color Picker" :class="['vc-chrome', disableAlpha ? 'vc-chrome__disable-alpha' : '']">
-    <div class="vc-chrome-saturation-wrap">
+  <div role="application" aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
+    <div :class="$style.saturation">
       <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
     </div>
-    <div class="vc-chrome-body">
-      <div class="vc-chrome-controls">
-        <div class="vc-chrome-color-wrap">
-          <div :aria-label="`current color is ${tinyColorRef.toHexString()}`" class="vc-chrome-active-color" :style="{background: activeColor}"></div>
+    <div :class="$style.body">
+      <div :class="$style.controls">
+        <div :class="$style.colorWrap">
+          <div :aria-label="`current color is ${tinyColorRef.toHexString()}`" :class="$style.activeColor"></div>
           <Checkerboard v-if="!props.disableAlpha"></Checkerboard>
         </div>
 
-        <div class="vc-chrome-sliders">
-          <div class="vc-chrome-hue-wrap">
+        <div :class="$style.sliders">
+          <div :class="$style.hueWrap">
             <Hue :hue="retainedHueRef" @change="setHue"></Hue>
           </div>
-          <div class="vc-chrome-alpha-wrap" v-if="!props.disableAlpha">
+          <div :class="$style.alphaWrap" v-if="!props.disableAlpha">
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
           </div>
         </div>
       </div>
 
-      <div class="vc-chrome-fields-wrap" v-if="!disableFields">
-        <div class="vc-chrome-fields" v-show="fieldsIndex === 0">
+      <div :class="$style.fieldsWrap" v-if="!disableFields">
+        <div :class="$style.fields" v-show="fieldsIndex === 0">
           <!-- rgba -->
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field" v-if="!disableAlpha">
+          <div :class="$style.field" v-if="!disableAlpha">
             <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)"></EdIn>
           </div>
         </div>
 
-        <div class="vc-chrome-fields" v-show="fieldsIndex === 1">
+        <div :class="$style.fields" v-show="fieldsIndex === 1">
           <!-- hex -->
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)"></EdIn>
             <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change.hex="(v: string) => inputChangeHex('hex8', v)"></EdIn>
           </div>
         </div>
 
-        <div class="vc-chrome-fields" v-show="fieldsIndex === 2">
+        <div :class="$style.fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field">
+          <div :class="$style.field">
             <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)"></EdIn>
           </div>
-          <div class="vc-chrome-field" v-if="!disableAlpha">
+          <div :class="$style.field" v-if="!disableAlpha">
             <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)"></EdIn>
           </div>
         </div>
 
         <!-- btn -->
-        <div class="vc-chrome-toggle-btn" role="button" aria-label="Change another color definition" @click="toggleViews">
-          <div class="vc-chrome-toggle-icon">
+        <div :class="$style.toggleBtn" role="button" aria-label="Change another color definition" @click="toggleViews">
+          <div :class="$style.toggleIcon">
             <svg style="width:24px; height:24px" viewBox="0 0 24 24"
               @mouseover="showHighlight"
               @mouseenter="showHighlight"
@@ -71,7 +71,7 @@
               <path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
             </svg>
           </div>
-          <div class="vc-chrome-toggle-icon-highlight" v-show="highlight"></div>
+          <div :class="$style.toggleIconHighlight" v-show="highlight"></div>
         </div>
         <!-- btn -->
       </div>
@@ -188,8 +188,8 @@ const hideHighlight = () => {
 
 </script>
 
-<style>
-.vc-chrome {
+<style module>
+.wrapper {
   background: #fff;
   border-radius: 2px;
   box-shadow: 0 0 2px rgba(0,0,0,.3), 0 4px 8px rgba(0,0,0,.3);
@@ -198,56 +198,57 @@ const hideHighlight = () => {
   font-family: Menlo;
   background-color: #fff;
 }
-.vc-chrome-controls {
+.controls {
   display: flex;
 }
-.vc-chrome-color-wrap {
+.colorWrap {
   position: relative;
   width: 36px;
 }
-.vc-chrome-active-color {
+.activeColor {
   position: relative;
   width: 30px;
   height: 30px;
   border-radius: 15px;
   overflow: hidden;
   z-index: 1;
+  color: v-bind('activeColor');
 }
-.vc-chrome-color-wrap .vc-checkerboard {
+.colorWrap :global(.vc-checkerboard) {
   width: 30px;
   height: 30px;
   border-radius: 15px;
   background-size: auto;
 }
-.vc-chrome-sliders {
+.sliders {
   flex: 1;
 }
-.vc-chrome-fields-wrap {
+.fieldsWrap {
   display: flex;
   padding-top: 16px;
 }
-.vc-chrome-fields {
+.fields {
   display: flex;
   margin-left: -6px;
   flex: 1;
 }
-.vc-chrome-field {
+.field {
   padding-left: 6px;
   width: 100%;
 }
-.vc-chrome-toggle-btn {
+.toggleBtn {
   width: 32px;
   text-align: right;
   position: relative;
 }
-.vc-chrome-toggle-icon {
+.toggleIcon {
   margin-right: -4px;
   margin-top: 12px;
   cursor: pointer;
   position: relative;
   z-index: 2;
 }
-.vc-chrome-toggle-icon-highlight {
+.toggleIconHighlight {
   position: absolute;
   width: 24px;
   height: 28px;
@@ -256,22 +257,22 @@ const hideHighlight = () => {
   top: 10px;
   left: 12px;
 }
-.vc-chrome-hue-wrap {
+.hueWrap {
   position: relative;
   height: 10px;
   margin-bottom: 8px;
 }
-.vc-chrome-alpha-wrap {
+.alphaWrap {
   position: relative;
   height: 10px;
 }
-.vc-chrome-hue-wrap .vc-hue {
+.hueWrap :global(.vc-hue) {
   border-radius: 2px;
 }
-.vc-chrome-alpha-wrap .vc-alpha-gradient {
+.alphaWrap :global(.vc-alpha-gradient) {
   border-radius: 2px;
 }
-.vc-chrome-hue-wrap .vc-hue-picker, .vc-chrome-alpha-wrap .vc-alpha-picker {
+.hueWrap :global(.vc-hue-picker), .alphaWrap :global(.vc-alpha-picker) {
   width: 12px;
   height: 12px;
   border-radius: 6px;
@@ -279,23 +280,23 @@ const hideHighlight = () => {
   background-color: rgb(248, 248, 248);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 }
-.vc-chrome-body {
+.body {
   padding: 16px 16px 12px;
   background-color: #fff;
 }
-.vc-chrome-saturation-wrap {
+.saturation {
   width: 100%;
   padding-bottom: 55%;
   position: relative;
   border-radius: 2px 2px 0 0;
   overflow: hidden;
 }
-.vc-chrome-saturation-wrap .vc-saturation-circle {
+.saturation :global(.vc-saturation-circle) {
   width: 12px;
   height: 12px;
 }
 
-.vc-chrome-fields .vc-input__input {
+.fields :global(.vc-input-input) {
   font-size: 11px;
   color: #333;
   width: 100%;
@@ -305,7 +306,7 @@ const hideHighlight = () => {
   height: 21px;
   text-align: center;
 }
-.vc-chrome-fields .vc-input__label {
+.fields :global(.vc-input-label) {
   text-transform: uppercase;
   font-size: 11px;
   line-height: 11px;
@@ -315,14 +316,14 @@ const hideHighlight = () => {
   margin-top: 12px;
 }
 
-.vc-chrome__disable-alpha .vc-chrome-active-color {
+.disableAlpha :global(.activeColor) {
   width: 18px;
   height: 18px;
 }
-.vc-chrome__disable-alpha .vc-chrome-color-wrap {
+.disableAlpha :global(.colorWra) {
   width: 30px;
 }
-.vc-chrome__disable-alpha .vc-chrome-hue-wrap {
+.disableAlpha :global(.hueWrap) {
   margin-top: 4px;
   margin-bottom: 4px;
 }

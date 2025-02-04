@@ -1,15 +1,15 @@
 <template>
-  <div class="vc-alpha">
-    <div class="vc-alpha-checkerboard-wrap">
+  <div :class="$style.container">
+    <div :class="$style.checkerboard">
       <Checkerboard />
     </div>
-    <div class="vc-alpha-gradient" :style="{background: gradientColor}"></div>
-    <div class="vc-alpha-container" ref="container"
+    <div :class="['vc-alpha-gradient', $style.gradient]" :style="{background: gradientColor}"></div>
+    <div :class="$style.container" ref="container"
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
         @touchstart="handleChange">
-      <div class="vc-alpha-pointer" :style="{left: alpha * 100 + '%'}">
-        <div class="vc-alpha-picker"></div>
+      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}">
+        <div :class="['vc-alpha-picker', $style.picker]"></div>
       </div>
     </div>
   </div>
@@ -82,15 +82,15 @@ function unbindEventListeners () {
 
 </script>
 
-<style>
-.vc-alpha {
+<style module>
+.container {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
 }
-.vc-alpha-checkerboard-wrap {
+.checkerboard {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -98,25 +98,25 @@ function unbindEventListeners () {
   left: 0px;
   overflow: hidden;
 }
-.vc-alpha-gradient {
+.gradient {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
 }
-.vc-alpha-container {
+.container {
   cursor: pointer;
   position: relative;
   z-index: 2;
   height: 100%;
   margin: 0 3px;
 }
-.vc-alpha-pointer {
+.pointer {
   z-index: 2;
   position: absolute;
 }
-.vc-alpha-picker {
+.picker {
   cursor: pointer;
   width: 4px;
   border-radius: 1px;

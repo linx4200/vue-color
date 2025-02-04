@@ -1,14 +1,15 @@
 <template>
-  <div class="vc-saturation"
+  <div
+    :class="['vc-saturation', $style.bg]"
     :style="{background: bgColor}"
     ref="container"
     @mousedown="handleMouseDown"
     @touchmove="handleChange"
     @touchstart="handleChange">
-    <div class="vc-saturation--white"></div>
-    <div class="vc-saturation--black"></div>
-    <div class="vc-saturation-pointer" :style="{top: pointerTop, left: pointerLeft}">
-      <div class="vc-saturation-circle"></div>
+    <div :class="[$style.bg, $style.white]"></div>
+    <div :class="[$style.bg, $style.black]"></div>
+    <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}">
+      <div :class="['vc-saturation-circle', $style.circle]"></div>
     </div>
   </div>
 </template>
@@ -108,10 +109,8 @@ function unbindEventListeners () {
 
 </script>
 
-<style>
-.vc-saturation,
-.vc-saturation--white,
-.vc-saturation--black {
+<style module>
+.bg {
   cursor: pointer;
   position: absolute;
   top: 0;
@@ -120,17 +119,19 @@ function unbindEventListeners () {
   bottom: 0;
 }
 
-.vc-saturation--white {
+.white {
   background: linear-gradient(to right, #fff, rgba(255,255,255,0));
 }
-.vc-saturation--black {
+.black {
   background: linear-gradient(to top, #000, rgba(0,0,0,0));
 }
-.vc-saturation-pointer {
+
+.pointer {
   cursor: pointer;
   position: absolute;
 }
-.vc-saturation-circle {
+
+.circle {
   cursor: head;
   width: 4px;
   height: 4px;

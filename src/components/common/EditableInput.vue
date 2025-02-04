@@ -1,14 +1,14 @@
 <template>
-  <div class="vc-editable-input">
+  <div :class="['vc-editable-input', $style.wrapper]">
     <input
       :aria-labelledby="labelId"
-      class="vc-input__input"
+      :class="['vc-input-input', $style.input]"
       :value="props.value"
       @keydown="handleKeyDown"
       @input="handleInput"
     >
-    <span :for="label" class="vc-input__label" :id="labelId">{{props.label}}</span>
-    <span class="vc-input__desc" v-show="!!desc">{{desc}}</span>
+    <span :for="label" :class="['vc-input-label', $style.label]" :id="labelId">{{props.label}}</span>
+    <span v-if="!!desc" class="vc-input-desc">{{desc}}</span>
   </div>
 </template>
 
@@ -83,16 +83,16 @@ function handleKeyDown (e: KeyboardEvent) {
 // }
 </script>
 
-<style>
-.vc-editable-input {
+<style module>
+.wrapper {
   position: relative;
 }
-.vc-input__input {
+.input {
   padding: 0;
   border: 0;
   outline: none;
 }
-.vc-input__label {
+.label {
   text-transform: capitalize;
 }
 </style>

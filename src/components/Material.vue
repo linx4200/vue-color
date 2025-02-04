@@ -1,16 +1,16 @@
 <template>
-  <div role="application" aria-label="Material color picker" class="vc-material">
-    <EdIn class="vc-material-hex" label="hex" :value="tinyColorRef.toHexString()"
-      :style="{ borderColor: tinyColorRef.toHex() }" @change="onHexChange"></EdIn>
+  <div role="application" aria-label="Material color picker" :class="$style.wrap">
+    <EdIn :class="$style.hex" label="hex" :value="tinyColorRef.toHexString()"
+      :style="{ borderColor: tinyColorRef.toHexString() }" @change="onHexChange"></EdIn>
 
-    <div class="vc-material-split">
-      <div class="vc-material-third">
+    <div :class="$style.rgb">
+      <div :class="$style.color">
         <EdIn label="r" :value="rgb.r" @change="(v) => onChange('r', v)"></EdIn>
       </div>
-      <div class="vc-material-third">
+      <div :class="$style.color">
         <EdIn label="g" :value="rgb.g" @change="(v) => onChange('g', v)"></EdIn>
       </div>
-      <div class="vc-material-third">
+      <div :class="$style.color">
         <EdIn label="b" :value="rgb.b" @change="(v) => onChange('b', v)"></EdIn>
       </div>
     </div>
@@ -44,8 +44,8 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
 }
 </script>
 
-<style>
-.vc-material {
+<style module>
+.wrap {
   width: 98px;
   height: 98px;
   padding: 16px;
@@ -56,7 +56,7 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   background-color: #fff;
 }
 
-.vc-material .vc-input__input {
+.wrap :global(.vc-input-input) {
   width: 100%;
   margin-top: 12px;
   font-size: 15px;
@@ -64,25 +64,24 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   height: 30px;
 }
 
-.vc-material .vc-input__label {
+.wrap :global(.vc-input-label) {
   position: absolute;
   top: 0;
   left: 0;
   font-size: 11px;
   color: #999;
-  text-transform: capitalize;
 }
 
-.vc-material-hex {
+.hex {
   border-bottom-width: 2px;
   border-bottom-style: solid;
 }
-.vc-material-split {
+.rgb {
   display: flex;
   margin-right: -10px;
   padding-top: 11px;
 }
-.vc-material-third {
+.color {
   flex: 1;
   padding-right: 10px;
 }

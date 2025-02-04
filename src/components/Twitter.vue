@@ -1,23 +1,26 @@
 <template>
-  <div class="vc-twitter" :class="{
-    'vc-twitter-hide-triangle ': props.triangle === 'hide',
-    'vc-twitter-top-left-triangle ': props.triangle === 'top-left',
-    'vc-twitter-top-right-triangle ': props.triangle === 'top-right',
-  }" :style="{
+  <div
+    :class="[$style.wrap, {
+      'hideTriangle': props.triangle === 'hide',
+      'topLeftTriangle': props.triangle === 'top-left',
+      'topRightTriangle': props.triangle === 'top-right',
+    }]"
+    :style="{
       width: typeof props.width === 'number' ? `${props.width}px` : props.width
-    }">
-    <div class="vc-twitter-triangle-shadow"></div>
-    <div class="vc-twitter-triangle"></div>
+    }"
+  >
+    <div :class="$style.triangleShadow"></div>
+    <div :class="$style.triangle"></div>
 
-    <div class="vc-twitter-body">
-      <span class="vc-twitter-swatch" :style="{
+    <div :class="$style.body">
+      <span :class="$style.swatch" :style="{
         background: color,
         boxShadow: `0 0 4px ${equal(color) ? color : 'transparent'}`,
-      }" v-for="(color, index) in defaultColors" :key="index" @click="handlerClick(color)">
+      }" v-for="(color, index) in presetColors" :key="index" @click="handlerClick(color)">
       </span>
-      <div class="vc-twitter-hash">#</div>
+      <div :class="$style.hash">#</div>
       <EdIn label="#" :value="hex.replace('#', '')" @change="inputChange"></EdIn>
-      <div class="vc-twitter-clear"></div>
+      <div :class="$style.clear"></div>
     </div>
   </div>
 </template>
@@ -37,13 +40,13 @@ import tinycolor from 'tinycolor2';
 
 type Props = {
   width?: number | string;
-  defaultColors?: string[];
+  presetColors?: string[];
   triangle?: 'hide' | 'top-left' | 'top-right';
 }
 
 const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
   width: 276,
-  defaultColors: () => defaultColors,
+  presetColors: () => defaultColors,
   triangle: 'top-left'
 });
 const emit = defineEmits(EmitEventNames);
@@ -68,8 +71,8 @@ const inputChange = (hex: string) => {
 }
 </script>
 
-<style>
-.vc-twitter {
+<style module>
+.wrap {
   background: #fff;
   border: 0 solid rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
@@ -77,7 +80,7 @@ const inputChange = (hex: string) => {
   position: relative;
 }
 
-.vc-twitter-triangle {
+.triangle {
   width: 0px;
   height: 0px;
   border-style: solid;
@@ -86,7 +89,7 @@ const inputChange = (hex: string) => {
   position: absolute;
 }
 
-.vc-twitter-triangle-shadow {
+.triangleShadow {
   width: 0px;
   height: 0px;
   border-style: solid;
@@ -95,15 +98,15 @@ const inputChange = (hex: string) => {
   position: absolute;
 }
 
-.vc-twitter-body {
+.body {
   padding: 15px 9px 9px 15px;
 }
 
-.vc-twitter .vc-editable-input {
+.wrap :global(.vc-editable-input) {
   position: relative;
 }
 
-.vc-twitter .vc-editable-input input {
+.wrap :global(.vc-input-input) {
   width: 100px;
   font-size: 14px;
   color: #666;
@@ -118,11 +121,11 @@ const inputChange = (hex: string) => {
   padding-left: 8px;
 }
 
-.vc-twitter .vc-editable-input span {
+.wrap :global(.vc-editable-input) span {
   display: none;
 }
 
-.vc-twitter-hash {
+.hash {
   background: #F0F0F0;
   height: 30px;
   width: 30px;
@@ -134,7 +137,7 @@ const inputChange = (hex: string) => {
   justify-content: center;
 }
 
-.vc-twitter-swatch {
+.swatch {
   width: 30px;
   height: 30px;
   float: left;
@@ -145,34 +148,34 @@ const inputChange = (hex: string) => {
   outline: none;
 }
 
-.vc-twitter-clear {
+.clear {
   clear: both;
 }
 
-.vc-twitter-hide-triangle .vc-twitter-triangle {
+.hideTriangle .triangle {
   display: none;
 }
 
-.vc-twitter-hide-triangle .vc-twitter-triangle-shadow {
+.hideTriangle .triangleShadow {
   display: none;
 }
 
-.vc-twitter-top-left-triangle .vc-twitter-triangle {
+.topLeftTriangle .triangle {
   top: -10px;
   left: 12px;
 }
 
-.vc-twitter-top-left-triangle .vc-twitter-triangle-shadow {
+.topLeftTriangle .triangleShadow {
   top: -11px;
   left: 12px;
 }
 
-.vc-twitter-top-right-triangle .vc-twitter-triangle {
+.topRightTriangle .triangle {
   top: -10px;
   right: 12px;
 }
 
-.vc-twitter-top-right-triangle .vc-twitter-triangle-shadow {
+.topRightTriangle .triangleShadow {
   top: -11px;
   right: 12px;
 }

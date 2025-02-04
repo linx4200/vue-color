@@ -1,6 +1,6 @@
 <template>
-  <div :class="['vc-hue', directionClass]">
-    <div class="vc-hue-container"
+  <div :class="['vc-hue', directionClass, $style.wrap]">
+    <div :class="$style.container"
       role="slider"
       :aria-valuenow="hue"
       aria-valuemin="0"
@@ -9,20 +9,22 @@
       @mousedown="handleMouseDown"
       @touchmove="handleChange"
       @touchstart="handleChange">
-      <div class="vc-hue-pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
-        <div class="vc-hue-picker"></div>
+      <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
+        <div :class="['vc-hue-picker', $style.picker]"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef, useCssModule } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 
 // <Hue /> is not allowed to use tinycolor instance
 // because it may lost hue value in some cases:
 // saturation is 0, lightness is 0 or 100, value is 0
+
+const classes = useCssModule();
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
@@ -54,8 +56,8 @@ const hue = computed(() => {
 
 const directionClass = computed(() => {
   return {
-    'vc-hue--horizontal': props.direction === 'horizontal',
-    'vc-hue--vertical': props.direction === 'vertical'
+    [classes.horizontal]: props.direction === 'horizontal',
+    [classes.vertical]: props.direction === 'vertical'
   }
 });
 
@@ -147,8 +149,8 @@ function unbindEventListeners () {
 }
 </script>
 
-<style>
-.vc-hue {
+<style module>
+.wrap {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -156,23 +158,23 @@ function unbindEventListeners () {
   left: 0px;
   border-radius: 2px;
 }
-.vc-hue--horizontal {
+.horizontal {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
 }
-.vc-hue--vertical {
+.vertical {
   background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
 }
-.vc-hue-container {
+.container {
   cursor: pointer;
   margin: 0 2px;
   position: relative;
   height: 100%;
 }
-.vc-hue-pointer {
+.pointer {
   z-index: 2;
   position: absolute;
 }
-.vc-hue-picker {
+.picker {
   cursor: pointer;
   margin-top: 1px;
   width: 4px;

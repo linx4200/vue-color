@@ -1,46 +1,46 @@
 <template>
-  <div role="application" aria-label="PhotoShop color picker" :class="['vc-photoshop', disableFields ? 'vc-photoshop__disable-fields' : '']">
-    <div role="heading" class="vc-ps-head">{{title}}</div>
-    <div class="vc-ps-body">
-      <div class="vc-ps-saturation-wrap">
+  <div role="application" aria-label="PhotoShop color picker" :class="[$style.wrap, disableFields ? $style.disableFields : '']">
+    <div role="heading" :class="$style.title">{{title}}</div>
+    <div :class="$style.body">
+      <div :class="$style.saturation">
         <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
       </div>
-      <div class="vc-ps-hue-wrap">
+      <div :class="$style.hue">
         <Hue direction="vertical" :hue="retainedHueRef" @change="setHue">
-          <div class="vc-ps-hue-pointer">
-            <i class="vc-ps-hue-pointer--left"></i><i class="vc-ps-hue-pointer--right"></i>
+          <div :class="$style.huePointer">
+            <i :class="$style.huePointerLeft"></i><i :class="$style.huePointerRight"></i>
           </div>
         </Hue>
       </div>
-      <div :class="['vc-ps-controls', disableFields ? 'vc-ps-controls__disable-fields' : '']">
-        <div class="vc-ps-previews">
-          <div class="vc-ps-previews__label">{{ newLabel }}</div>
-          <div class="vc-ps-previews__swatches">
-            <div class="vc-ps-previews__pr-color" :aria-label="`New color is #${hex}`" :style="{background: `#${hex}`}"></div>
-            <div class="vc-ps-previews__pr-color" :aria-label="`Current color is ${currentColorRef}`" :style="{background: currentColorRef}" @click="clickCurrentColor"></div>
+      <div :class="[[$style.controls], disableFields ? $style.controlsDisableFields : '']">
+        <div :class="$style.preview">
+          <div :class="$style.previewLabel">{{ newLabel }}</div>
+          <div :class="$style.previewSwatches">
+            <div :class="$style.previewColor" :aria-label="`New color is #${hex}`" :style="{background: `#${hex}`}"></div>
+            <div :class="$style.previewColor" :aria-label="`Current color is ${currentColorRef}`" :style="{background: currentColorRef}" @click="clickCurrentColor"></div>
           </div>
-          <div class="vc-ps-previews__label">{{ currentLabel }}</div>
+          <div :class="$style.previewLabel">{{ currentLabel }}</div>
         </div>
-        <div class="vc-ps-actions" v-if="!disableFields">
-          <div class="vc-ps-ac-btn" role="button" :aria-label="okLabel" @click="handleOK">{{ okLabel }}</div>
-          <div class="vc-ps-ac-btn" role="button" :aria-label="cancelLabel" @click="handleCancel">{{ cancelLabel }}</div>
+        <div :class="$style.actions" v-if="!disableFields">
+          <div :class="$style.actionBtn" role="button" :aria-label="okLabel" @click="handleOK">{{ okLabel }}</div>
+          <div :class="$style.actionBtn" role="button" :aria-label="cancelLabel" @click="handleCancel">{{ cancelLabel }}</div>
 
-          <div class="vc-ps-fields">
+          <div :class="$style.fields">
             <!-- hsla -->
             <EdIn label="h" desc="°" :value="hsv.h.toFixed()" @change="(v) => inputChangeHSV('h', v)"></EdIn>
             <EdIn label="s" desc="%" :value="(hsv.s * 100).toFixed()" :min="0" :max="100" @change="(v) => inputChangeHSV('s', v)"></EdIn>
             <EdIn label="v" desc="%" :value="(hsv.v * 100).toFixed()" :min="0" :max="100" @change="(v) => inputChangeHSV('v', v)"></EdIn>
-            <div class="vc-ps-fields__divider"></div>
+            <div :class="$style.fieldsDivider"></div>
             <!-- rgb -->
             <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)"></EdIn>
             <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)"></EdIn>
             <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)"></EdIn>
-            <div class="vc-ps-fields__divider"></div>
+            <div :class="$style.fieldsDivider"></div>
             <!-- hex -->
-            <EdIn label="#" class="vc-ps-fields__hex" :value="hex" @change="inputChangeHex"></EdIn>
+            <EdIn label="#" :class="$style.hex" :value="hex" @change="inputChangeHex"></EdIn>
           </div>
 
-          <div v-if="hasResetButton" class="vc-ps-ac-btn" aria-label="reset" @click="handleReset">{{ resetLabel }}</div>
+          <div v-if="hasResetButton" :class="$style.actionBtn" aria-label="reset" @click="handleReset">{{ resetLabel }}</div>
         </div>
       </div>
     </div>
@@ -150,8 +150,8 @@ const handleReset = () => {
 
 </script>
 
-<style>
-.vc-photoshop {
+<style module>
+.wrap {
   background: #DCDCDC;
   border-radius: 4px;
   box-shadow: 0 0 0 1px rgba(0,0,0,.25), 0 8px 16px rgba(0,0,0,.15);
@@ -159,10 +159,10 @@ const handleReset = () => {
   width: 513px;
   font-family: Roboto;
 }
-.vc-photoshop__disable-fields {
+.disableFields {
   width: 390px;
 }
-.vc-ps-head {
+.title {
   background-image: linear-gradient(-180deg, #F0F0F0 0%, #D4D4D4 100%);
   border-bottom: 1px solid #B1B1B1;
   box-shadow: inset 0 1px 0 0 rgba(255,255,255,.2), inset 0 -1px 0 0 rgba(0,0,0,.02);
@@ -173,12 +173,11 @@ const handleReset = () => {
   color: #4D4D4D;
   text-align: center;
 }
-.vc-ps-body {
+.body {
   padding: 15px;
   display: flex;
 }
-
-.vc-ps-saturation-wrap {
+.saturation {
   width: 256px;
   height: 256px;
   position: relative;
@@ -186,12 +185,11 @@ const handleReset = () => {
   border-bottom: 2px solid #F0F0F0;
   overflow: hidden;
 }
-.vc-ps-saturation-wrap .vc-saturation-circle {
+.saturation :global(.vc-saturation-circle) {
   width: 12px;
   height: 12px;
 }
-
-.vc-ps-hue-wrap {
+.hue {
   position: relative;
   height: 256px;
   width: 19px;
@@ -199,11 +197,11 @@ const handleReset = () => {
   border: 2px solid #B3B3B3;
   border-bottom: 2px solid #F0F0F0;
 }
-.vc-ps-hue-pointer {
+.huePointer {
   position: relative;
 }
-.vc-ps-hue-pointer--left,
-.vc-ps-hue-pointer--right {
+.huePointerLeft,
+.huePointerRight {
   position: absolute;
   width: 0;
   height: 0;
@@ -211,8 +209,8 @@ const handleReset = () => {
   border-width: 5px 0 5px 8px;
   border-color: transparent transparent transparent #555;
 }
-.vc-ps-hue-pointer--left:after,
-.vc-ps-hue-pointer--right:after {
+.huePointerLeft:after,
+.huePointerRight:after {
   content: "";
   width: 0;
   height: 0;
@@ -224,27 +222,27 @@ const handleReset = () => {
   left: 1px;
   transform: translate(-8px, -5px);
 }
-.vc-ps-hue-pointer--left {
+.huePointerLeft {
   transform: translate(-13px, -4px);
 }
-.vc-ps-hue-pointer--right {
+.huePointerRight {
   transform: translate(20px, -4px) rotate(180deg);
 }
 
-.vc-ps-controls {
+.controls {
   width: 180px;
   margin-left: 10px;
   display: flex;
 }
-.vc-ps-controls__disable-fields {
+.controlsDisableFields {
   width: auto;
 }
 
-.vc-ps-actions {
+.actions {
   margin-left: 20px;
   flex: 1;
 }
-.vc-ps-ac-btn {
+.actionBtn {
   cursor: pointer;
   background-image: linear-gradient(-180deg, #FFFFFF 0%, #E6E6E6 100%);
   border: 1px solid #878787;
@@ -257,32 +255,32 @@ const handleReset = () => {
   text-align: center;
   margin-bottom: 10px;
 }
-.vc-ps-previews {
+.preview {
   width: 60px;
 }
-.vc-ps-previews__swatches {
+.previewSwatches {
   border: 1px solid #B3B3B3;
   border-bottom: 1px solid #F0F0F0;
   margin-bottom: 2px;
   margin-top: 1px;
 }
-.vc-ps-previews__pr-color {
+.previewColor {
   height: 34px;
   box-shadow: inset 1px 0 0 #000, inset -1px 0 0 #000, inset 0 1px 0 #000;
 }
-.vc-ps-previews__label {
+.previewLabel {
   font-size: 14px;
   color: #000;
   text-align: center;
 }
 
-.vc-ps-fields {
+.fields {
   padding-top: 5px;
   padding-bottom: 9px;
   width: 80px;
   position: relative;
 }
-.vc-ps-fields .vc-input__input {
+.fields :global(.vc-input-input) {
   margin-left: 40%;
   width: 40%;
   height: 18px;
@@ -293,7 +291,7 @@ const handleReset = () => {
   padding-left: 3px;
   margin-right: 10px;
 }
-.vc-ps-fields .vc-input__label, .vc-ps-fields .vc-input__desc {
+.fields :global(.vc-input-label), .fields :global(.vc-input-desc) {
   top: 0;
   text-transform: uppercase;
   font-size: 13px;
@@ -301,20 +299,20 @@ const handleReset = () => {
   line-height: 22px;
   position: absolute;
 }
-.vc-ps-fields .vc-input__label {
+.fields :global(.vc-input-label) {
   left: 0;
   width: 34px;
 }
-.vc-ps-fields .vc-input__desc {
+.fields :global(.vc-input-desc) {
   right: 0;
   width: 0;
 }
 
-.vc-ps-fields__divider {
+.fieldsDivider {
   height: 5px;
 }
 
-.vc-ps-fields__hex .vc-input__input {
+.hex :global(.vc-input-input) {
   margin-left: 20%;
   width: 80%;
   height: 18px;
@@ -324,7 +322,7 @@ const handleReset = () => {
   font-size: 13px;
   padding-left: 3px;
 }
-.vc-ps-fields__hex .vc-input__label {
+.hex :global(.vc-input-label) {
   position: absolute;
   top: 0;
   left: 0;

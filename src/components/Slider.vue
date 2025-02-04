@@ -1,16 +1,19 @@
 <template>
-  <div role="application" aria-label="Slider color picker" class="vc-slider">
-    <div class="vc-slider-hue-warp">
+  <div role="application" aria-label="Slider color picker" :class="$style.wrap">
+    <div :class="$style.hue">
       <hue :hue="retainedHueRef" @change="setHue"></hue>
     </div>
-    <div class="vc-slider-swatches" role="group">
-      <div class="vc-slider-swatch" v-for="(swatch, index) in normalizedSwatches" :key="index" :data-index="index"
+    <div :class="$style.swatches" role="group">
+      <div :class="$style.swatch" v-for="(swatch, index) in normalizedSwatches" :key="index" :data-index="index"
         :aria-label="'color:' + hex"
         role="button"
         @click="handleSwClick(swatch)">
         <div
-          class="vc-slider-swatch-picker"
-          :class="{'vc-slider-swatch-picker--active': isActive(swatch), 'vc-slider-swatch-picker--white': swatch.l === 1}"
+          :class="{
+            [$style.swatchPicker]: true,
+            [$style.swatchPickerActive]: isActive(swatch),
+            [$style.swatchPickerWhite]: swatch.l === 1
+          }"
           :style="{background: 'hsl(' + hsl.h + ', ' + swatch.s * 100 + '%, ' + swatch.l * 100 + '%)'}"
         ></div>
       </div>
@@ -85,16 +88,16 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
 }
 </script>
 
-<style>
-.vc-slider {
+<style module>
+.wrap {
   position: relative;
   width: 410px;
 }
-.vc-slider-hue-warp {
+.hue {
   height: 12px;
   position: relative;
 }
-.vc-slider-hue-warp .vc-hue-picker {
+.hue :global(.vc-hue-picker) {
   width: 14px;
   height: 14px;
   border-radius: 6px;
@@ -102,39 +105,39 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
   background-color: rgb(248, 248, 248);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 }
-.vc-slider-swatches {
+.swatches {
   display: flex;
   margin-top: 20px;
 }
-.vc-slider-swatch {
+.swatch {
   margin-right: 1px;
   flex: 1;
   width: 20%;
 }
-.vc-slider-swatch:first-child {
+.swatch:first-child {
   margin-right: 1px;
 }
-.vc-slider-swatch:first-child .vc-slider-swatch-picker {
+.swatch:first-child .swatchPicker {
   border-radius: 2px 0px 0px 2px;
 }
-.vc-slider-swatch:last-child {
+.swatch:last-child {
   margin-right: 0;
 }
-.vc-slider-swatch:last-child .vc-slider-swatch-picker {
+.swatch:last-child .swatchPicker {
   border-radius: 0px 2px 2px 0px;
 }
-.vc-slider-swatch-picker {
+.swatchPicker {
   cursor: pointer;
   height: 12px;
 }
-.vc-slider-swatch:nth-child(n) .vc-slider-swatch-picker.vc-slider-swatch-picker--active {
+.swatch:nth-child(n) .swatchPicker.swatchPickerActive {
   transform: scaleY(1.8);
   border-radius: 3.6px/2px;
 }
-.vc-slider-swatch-picker--white {
+.swatchPickerWhite {
   box-shadow: inset 0 0 0 1px #ddd;
 }
-.vc-slider-swatch-picker--active.vc-slider-swatch-picker--white {
+.swatchPickerActive.swatchPickerWhite {
   box-shadow: inset 0 0 0 0.6px #ddd;
 }
 </style>
