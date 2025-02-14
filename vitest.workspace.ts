@@ -1,4 +1,5 @@
 import { defineWorkspace } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
 
 export default defineWorkspace([
   {
@@ -11,9 +12,9 @@ export default defineWorkspace([
     },
   },
   {
+    plugins: [vue()],
     test: {
       include: [
-        'tests/common/**/*.{test,spec}.ts',
         'tests/components/**/*.{test,spec}.ts',
         'tests/utils/**/*.browser.{test,spec}.ts',
       ],
