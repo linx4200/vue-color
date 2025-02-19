@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 function renderCheckerboard (c1: string, c2: string, size: number) {
   // Won't render in server
   // todo: check ssr
+  /* v8 ignore next 3 */
   if (typeof document === 'undefined') {
     return null
   }
@@ -30,6 +31,7 @@ function renderCheckerboard (c1: string, c2: string, size: number) {
   canvas.width = canvas.height = size * 2
   var ctx = canvas.getContext('2d')
   // If no context can be found, return early.
+  /* v8 ignore next 3 */
   if (!ctx) {
     return null
   }

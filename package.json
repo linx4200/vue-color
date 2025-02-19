@@ -18,7 +18,8 @@
     "dev": "vite",
     "build": "vue-tsc --project tsconfig.json && vite build",
     "preview": "vite preview",
-    "test": "vitest --workspace=vitest.workspace.ts"
+    "test": "vitest --workspace=vitest.workspace.ts",
+    "coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/browser": "^3.0.5",
+    "@vitest/coverage-v8": "^3.0.5",
     "playwright": "^1.50.1",
     "typescript": "~5.7.3",
     "vite": "^6.0.11",

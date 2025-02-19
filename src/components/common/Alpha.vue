@@ -8,7 +8,7 @@
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
         @touchstart="handleChange">
-      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}">
+      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}" :aria-label="`current alpha value is ${alpha}`" role="slider">
         <div :class="['vc-alpha-picker', $style.picker]"></div>
       </div>
     </div>
