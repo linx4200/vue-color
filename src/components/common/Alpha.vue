@@ -4,10 +4,14 @@
       <Checkerboard />
     </div>
     <div :class="['vc-alpha-gradient', $style.gradient]" :style="{background: gradientColor}"></div>
-    <div :class="$style.container" ref="container"
+    <div
+        :class="$style.container"
+        ref="container"
+        data-testid="slider-container"
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
-        @touchstart="handleChange">
+        @touchstart="handleChange"
+      >
       <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}" :aria-label="`current alpha value is ${alpha}`" role="slider">
         <div :class="['vc-alpha-picker', $style.picker]"></div>
       </div>
@@ -42,13 +46,14 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const container = containerRef.value;
   if (!container) {
     // for some edge cases, container may not exist. see #220
+    /* v8 ignore next 2 */
     return
   }
   const containerWidth = container.clientWidth
 
   const { x: xOffset } = getAbsolutePosition(container);
   const { x: pageX } = getPageXYFromEvent(e);
-  const left = pageX - xOffset
+  const left = pageX - xOffset;
 
   let a;
   if (left < 0) {
