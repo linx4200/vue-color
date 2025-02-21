@@ -87,6 +87,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
   const container = containerRef.value;
   if (!container) {
     // for some edge cases, container may not exist. see #220
+    /* v8 ignore next 2 */
     return
   }
   const containerWidth = container.clientWidth
