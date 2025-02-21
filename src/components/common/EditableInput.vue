@@ -49,11 +49,6 @@ function handleInput (e: Event) {
   update((e.target as HTMLInputElement)?.value);
 }
 
-// **** unused
-// function handleBlur (e) {
-//   console.log(e)
-// }
-
 function handleKeyDown (e: KeyboardEvent) {
   let number = Number(props.value);
   if (!isNaN(number)) {
