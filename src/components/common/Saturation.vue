@@ -5,7 +5,9 @@
     ref="container"
     @mousedown="handleMouseDown"
     @touchmove="handleChange"
-    @touchstart="handleChange">
+    @touchstart="handleChange"
+    role="slider"
+  >
     <div :class="[$style.bg, $style.white]"></div>
     <div :class="[$style.bg, $style.black]"></div>
     <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}">

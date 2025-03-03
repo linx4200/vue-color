@@ -1,14 +1,16 @@
 <template>
   <div :class="['vc-hue', directionClass, $style.wrap]">
     <div :class="$style.container"
+      ref="container"
+      @mousedown="handleMouseDown"
+      @touchmove="handleChange"
+      @touchstart="handleChange"
       role="slider"
       :aria-valuenow="hue"
       aria-valuemin="0"
       aria-valuemax="360"
-      ref="container"
-      @mousedown="handleMouseDown"
-      @touchmove="handleChange"
-      @touchstart="handleChange">
+      aria-label="Hue"
+    >
       <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
         <div :class="['vc-hue-picker', $style.picker]"></div>
       </div>

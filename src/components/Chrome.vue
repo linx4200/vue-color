@@ -1,12 +1,12 @@
 <template>
-  <div role="application" aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
+  <div aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
     <div :class="$style.saturation">
       <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
     </div>
     <div :class="$style.body">
       <div :class="$style.controls">
         <div :class="$style.colorWrap">
-          <div :aria-label="`current color is ${tinyColorRef.toHexString()}`" :class="$style.activeColor"></div>
+          <div aria-live="polite" :aria-label="`Current color is ${tinyColorRef.toHexString()}`" :class="$style.activeColor"></div>
           <Checkerboard v-if="!props.disableAlpha"></Checkerboard>
         </div>
 
@@ -24,7 +24,7 @@
         <div :class="$style.fields" v-show="fieldsIndex === 0">
           <!-- rgba -->
           <div :class="$style.field">
-            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)"></EdIn>
+            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" aria-label="Red"></EdIn>
           </div>
           <div :class="$style.field">
             <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)"></EdIn>
@@ -62,7 +62,14 @@
         </div>
 
         <!-- btn -->
-        <div :class="$style.toggleBtn" role="button" aria-label="Change another color definition" @click="toggleViews">
+        <div
+          :class="$style.toggleBtn"
+          role="button"
+          aria-label="Change color format"
+          @click="toggleViews"
+          @keydown.enter="toggleViews"
+          @keydown.space="toggleViews"
+        >
           <div :class="$style.toggleIcon">
             <svg style="width:24px; height:24px" viewBox="0 0 24 24"
               @mouseover="showHighlight"

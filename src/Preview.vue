@@ -71,7 +71,8 @@ const textColor = computed(() => {
         <ul class="feature-list roboto" :style="{color: textColor, opacity: 0.75}">
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
-          <li>✅ SSR-Friendly </li>
+          <li>✅ SSR-Friendly</li>
+          <li>✅ Optimized for Accessibility</li>
         </ul>
       </div>
     </div>

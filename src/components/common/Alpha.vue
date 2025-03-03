@@ -7,12 +7,17 @@
     <div
         :class="$style.container"
         ref="container"
-        data-testid="slider-container"
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
         @touchstart="handleChange"
+        @keydown="handleKeydown"
+        role="slider"
+        aria-label="Transparency"
+        aria-valuemax="1"
+        aria-valuemin="0"
+        :aria-valuenow="alpha.toFixed(1)"
       >
-      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}" :aria-label="`current alpha value is ${alpha}`" role="slider">
+      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}">
         <div :class="['vc-alpha-picker', $style.picker]"></div>
       </div>
     </div>
@@ -20,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, defineProps } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 import Checkerboard from './Checkerboard.vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
@@ -68,6 +73,12 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
     colorRef.value.setAlpha(a);
     updateColor(colorRef.value);
   }
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  // todo: add keyboard operation support
+  // if (event.key === 'ArrowRight') this.value = Math.min(this.value + 1, this.max);
+  // if (event.key === 'ArrowLeft') this.value = Math.max(this.value - 1, this.min);
 }
 
 function handleMouseDown (e: MouseEvent) {

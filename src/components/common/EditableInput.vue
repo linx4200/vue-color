@@ -1,19 +1,19 @@
 <template>
   <div :class="['vc-editable-input', $style.wrapper]">
     <input
-      :aria-labelledby="labelId"
       :class="['vc-input-input', $style.input]"
       :value="props.value"
       @keydown="handleKeyDown"
       @input="handleInput"
+      :aria-label="ariaLabel"
     >
-    <span :for="label" :class="['vc-input-label', $style.label]" :id="labelId">{{props.label}}</span>
+    <label :for="label" :class="['vc-input-label', $style.label]">{{props.label}}</label>
     <span v-if="!!desc" class="vc-input-desc">{{desc}}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { useAttrs } from 'vue';
 import { getFractionDigit } from '../../utils/math';
 
 type Props = {
@@ -31,7 +31,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['change']);
 
-const labelId = ref(`input__label__${props.label}__${Math.random().toString().slice(2, 5)}`);
+const attrs = useAttrs();
+
+const ariaLabel = attrs['aria-label'] as string ?? props.label;
 
 function update (newVal: number | string) {
   if (props.max && +newVal > props.max) {
