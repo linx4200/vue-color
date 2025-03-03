@@ -52,8 +52,8 @@ import { ref, computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
 import EdIn from './common/EditableInput.vue';
-import Saturation from './common/Saturation.vue';
-import Hue from './common/Hue.vue';
+import Saturation from './common/SaturationSlider.vue';
+import Hue from './common/HueSlider.vue';
 
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 import { hueModel } from '../composable/hue.ts';

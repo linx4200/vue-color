@@ -41,7 +41,7 @@
           <!-- hex -->
           <div :class="$style.field">
             <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)"></EdIn>
-            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change.hex="(v: string) => inputChangeHex('hex8', v)"></EdIn>
+            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="(v: string) => inputChangeHex('hex8', v)"></EdIn>
           </div>
         </div>
 
@@ -90,11 +90,11 @@
 import { computed, ref } from 'vue';
 import tinycolor from 'tinycolor2';
 
-import Saturation from './common/Saturation.vue';
-import Hue from './common/Hue.vue';
-import Alpha from './common/Alpha.vue';
+import Saturation from './common/SaturationSlider.vue';
+import Hue from './common/HueSlider.vue';
+import Alpha from './common/AlphaSlider.vue';
 import EdIn from './common/EditableInput.vue';
-import Checkerboard from './common/Checkerboard.vue';
+import Checkerboard from './common/CheckerboardBG.vue';
 
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 import { hueModel } from '../composable/hue.ts';

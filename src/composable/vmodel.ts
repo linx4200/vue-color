@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
 
 // todo: test all input format
@@ -26,9 +26,8 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOrigi
     let newValue = color.toString();
     try {
       newValue = JSON.parse(newValue);
-    } catch (e) {
-      // no need to handle
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) { /* no need to handle */ }
     return newValue;
   }
 }
@@ -46,7 +45,7 @@ export const EmitEventNames = ['update:tinyColor', 'update:modelValue'];
  * @param emit
  * @returns a tinycolor instance wrapped by `computed` and a function to invoke emit;
  */
-export function useTinyColorModel(props: useTinyColorModelProps, emit: any) {
+export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
 
   let isObjectOriginally = false;
   let originalFormat = '';

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-vue';
-import Checkerboard from '../../../src/components/common/Checkerboard.vue';
+import Checkerboard from '../../../src/components/common/CheckerboardBG.vue';
 
 test('render correctly by default', async () => {
   const { container } = render(Checkerboard)

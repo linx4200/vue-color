@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue';
-import Checkerboard from './Checkerboard.vue';
+import Checkerboard from './CheckerboardBG.vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 
@@ -46,7 +46,9 @@ const alpha = computed(() => colorRef.value.getAlpha());
 const containerRef = useTemplateRef('container');
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
-  !skip && e.preventDefault();
+  if (!skip) {
+    e.preventDefault();
+  }
 
   const container = containerRef.value;
   if (!container) {
@@ -75,7 +77,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   }
 }
 
-function handleKeydown(event: KeyboardEvent) {
+function handleKeydown(/* event: KeyboardEvent */) {
   // todo: add keyboard operation support
   // if (event.key === 'ArrowRight') this.value = Math.min(this.value + 1, this.max);
   // if (event.key === 'ArrowLeft') this.value = Math.max(this.value - 1, this.min);

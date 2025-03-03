@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-vue';
-import Alpha from '../../../src/components/common/Alpha.vue';
+import Alpha from '../../../src/components/common/AlphaSlider.vue';
 
 test('The position of the picker should be correct when rendered with a color with alpha value.', async () => {
   const { getByRole } = render(Alpha, {

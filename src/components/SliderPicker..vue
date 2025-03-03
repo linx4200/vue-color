@@ -36,7 +36,7 @@ const defaultSwatches = [
 import { computed } from 'vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel';
 import { hueModel } from '../composable/hue';
-import Hue from './common/Hue.vue';
+import Hue from './common/HueSlider.vue';
 
 type Prop = {
   /** lightness values */

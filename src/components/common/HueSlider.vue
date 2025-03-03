@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, useCssModule } from 'vue';
+import { watch, computed, ref, useTemplateRef, useCssModule } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
 
 // <Hue /> is not allowed to use tinycolor instance
@@ -40,20 +40,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['change']);
 
-let previousHueValue = 0;
 const pullDirection = ref<'right' | 'left' | undefined>();
 
 const containerRef = useTemplateRef('container');
 
-const hue = computed(() => {
-  let h = props.hue;
+const hue = computed(() => props.hue);
 
-  if (h !== 0 && h - previousHueValue > 0) pullDirection.value = 'right';
-  if (h !== 0 && h - previousHueValue < 0) pullDirection.value = 'left';
-
-  previousHueValue = h
-
-  return h;
+watch<typeof hue>(hue, (newHue, OldHue) => {
+  if (newHue.value !== 0 && newHue.value - OldHue.value > 0) pullDirection.value = 'right';
+  if (newHue.value !== 0 && newHue.value - OldHue.value < 0) pullDirection.value = 'left';
 })
 
 const directionClass = computed(() => {
@@ -84,7 +79,9 @@ const pointerLeft = computed(() => {
 });
 
 function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
-  !skip && e.preventDefault()
+  if(!skip) {
+    e.preventDefault();
+  }
 
   const container = containerRef.value;
   if (!container) {

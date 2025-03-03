@@ -1,4 +1,4 @@
-export function throttle<T extends (...args: any[]) => void>(
+export function throttle<T extends (...args: unknown[]) => void>(
   callback: T,
   delay: number,
   options: { leading?: boolean; trailing?: boolean } = { leading: true, trailing: false }

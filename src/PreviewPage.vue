@@ -2,15 +2,15 @@
 import { effectScope, watch, reactive, computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
-import Chrome from './components/Chrome.vue';
-import Compact from './components/Compact.vue';
-import Grayscale from './components/Grayscale.vue';
-import Material from './components/Material.vue';
-import Photoshop from './components/Photoshop.vue';
-import Sketch from './components/Sketch.vue';
-import Slider from './components/Slider.vue';
-import Swatches from './components/Swatches.vue';
-import Twitter from './components/Twitter.vue';
+import Chrome from './components/ChromePicker.vue';
+import Compact from './components/CompactPicker.vue';
+import Grayscale from './components/GrayscalePicker..vue';
+import Material from './components/MaterialPicker..vue';
+import Photoshop from './components/PhotoshopPicker..vue';
+import Sketch from './components/SketchPicker..vue';
+import Slider from './components/SliderPicker..vue';
+import Swatches from './components/SwatchesPicker..vue';
+import Twitter from './components/TwitterPicker..vue';
 
 const tinyColor = defineModel('tinycolor', {
   default: '#F5F7FA'

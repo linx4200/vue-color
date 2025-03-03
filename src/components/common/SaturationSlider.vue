@@ -53,6 +53,7 @@ const pointerLeft = computed(() => {
 const containerRef = useTemplateRef('container');
 
 const throttleFn = throttle((fn, args) => {
+  // @ts-expect-error fn is unknown
   fn(args);
 }, 20,
 {
@@ -61,7 +62,9 @@ const throttleFn = throttle((fn, args) => {
 });
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
-  !skip && e.preventDefault()
+  if(!skip) {
+    e.preventDefault();
+  }
   var container = containerRef.value;
   if (!container) {
     // for some edge cases, container may not exist. see #220

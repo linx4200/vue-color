@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-vue';
-import Hue from '../../../src/components/common/Hue.vue';
+import Hue from '../../../src/components/common/HueSlider.vue';
 
 test('The position of the picker should be correct', async () => {
   const { getByRole, rerender } = render(Hue, {

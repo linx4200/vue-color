@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-const presetColors = [
+const presetColorsOfSketch = [
   '#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321',
   '#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2',
   '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF',
@@ -72,10 +72,10 @@ import { computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
 import EdIn from './common/EditableInput.vue';
-import Saturation from './common/Saturation.vue';
-import Hue from './common/Hue.vue';
-import Alpha from './common/Alpha.vue';
-import Checkerboard from './common/Checkerboard.vue';
+import Saturation from './common/SaturationSlider.vue';
+import Hue from './common/HueSlider.vue';
+import Alpha from './common/AlphaSlider.vue';
+import Checkerboard from './common/CheckerboardBG.vue';
 
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 import { hueModel } from '../composable/hue.ts';
@@ -87,7 +87,7 @@ type Props = {
 }
 
 const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
-  presetColors: () => presetColors,
+  presetColors: () => presetColorsOfSketch,
   disableAlpha: false,
   disableFields: false
 });
