@@ -4,13 +4,13 @@ import tinycolor from 'tinycolor2';
 
 import Chrome from './components/ChromePicker.vue';
 import Compact from './components/CompactPicker.vue';
-import Grayscale from './components/GrayscalePicker..vue';
-import Material from './components/MaterialPicker..vue';
-import Photoshop from './components/PhotoshopPicker..vue';
-import Sketch from './components/SketchPicker..vue';
-import Slider from './components/SliderPicker..vue';
-import Swatches from './components/SwatchesPicker..vue';
-import Twitter from './components/TwitterPicker..vue';
+import Grayscale from './components/GrayscalePicker.vue';
+import Material from './components/MaterialPicker.vue';
+import Photoshop from './components/PhotoshopPicker.vue';
+import Sketch from './components/SketchPicker.vue';
+import Slider from './components/SliderPicker.vue';
+import Swatches from './components/SwatchesPicker.vue';
+import Twitter from './components/TwitterPicker.vue';
 
 const tinyColor = defineModel('tinycolor', {
   default: '#F5F7FA'
