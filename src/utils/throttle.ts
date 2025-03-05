@@ -1,31 +1,21 @@
-export function throttle<T extends (...args: unknown[]) => void>(
-  callback: T,
-  delay: number,
-  options: { leading?: boolean; trailing?: boolean } = { leading: true, trailing: false }
-): (...args: Parameters<T>) => void {
-  let lastCallTime: number | null = null;
-  let timeout: ReturnType<typeof setTimeout> | null = null;
-  let lastArgs: Parameters<T> | null = null;
-
-  return function (...args: Parameters<T>) {
-    const now = Date.now();
-    const shouldCall = lastCallTime === null && options.leading;
-
-    if (shouldCall) {
-      callback(...args);
-      lastCallTime = now;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const throttle = <T extends ((...args: any[]) => any)>(fn: T, wait = 300) => {
+  let inThrottle: boolean,
+    lastFn: ReturnType<typeof setTimeout>,
+    lastTime: number;
+  return (...args: unknown[]) => {
+    if (!inThrottle) {
+      fn(...args);
+      lastTime = Date.now();
+      inThrottle = true;
     } else {
-      lastArgs = args;
-      if (!timeout && options.trailing) {
-        timeout = setTimeout(() => {
-          if (lastArgs) {
-            callback(...lastArgs);
-            lastCallTime = Date.now();
-          }
-          timeout = null;
-          lastArgs = null;
-        }, delay);
-      }
+      clearTimeout(lastFn);
+      lastFn = setTimeout(() => {
+        if (Date.now() - lastTime >= wait) {
+          fn(...args);
+          lastTime = Date.now();
+        }
+      }, Math.max(wait - (Date.now() - lastTime), 0));
     }
   };
-}
+};
