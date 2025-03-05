@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const throttle = <T extends ((...args: any[]) => any)>(fn: T, wait = 300) => {
+export const throttle = <T extends ((...args: any[]) => any)>(fn: T, wait = 20) => {
   let inThrottle: boolean,
     lastFn: ReturnType<typeof setTimeout>,
     lastTime: number;

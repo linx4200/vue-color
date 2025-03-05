@@ -14,4 +14,17 @@ export default [
   ...pluginVue.configs["flat/essential"],
   ...pluginVueA11y.configs["flat/recommended"],
   {files: ["**/*.vue"], languageOptions: {parserOptions: {parser: tseslint.parser}}},
+  { "rules": {
+    "vuejs-accessibility/label-has-for": [
+      "error",
+      {
+        "components": ["VLabel"],
+        "controlComponents": ["VInput"],
+        "required": {
+          "some": ["nesting", "id"]
+        },
+      }
+    ]
+  }
+  }
 ];

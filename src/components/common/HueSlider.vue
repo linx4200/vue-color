@@ -10,6 +10,8 @@
       aria-valuemin="0"
       aria-valuemax="360"
       aria-label="Hue"
+      tabindex="0"
+      @keydown="handleKeyDown"
     >
       <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
         <div :class="['vc-hue-picker', $style.picker]"></div>
@@ -20,7 +22,8 @@
 
 <script setup lang="ts">
 import { watch, computed, ref, useTemplateRef, useCssModule } from 'vue';
-import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
+import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
+import { throttle } from '../../utils/throttle.ts';
 
 // <Hue /> is not allowed to use tinycolor instance
 // because it may lost hue value in some cases:
@@ -133,9 +136,11 @@ function emitChange(h: number) {
   emit('change', h, h - hue.value);
 }
 
+const throttledHandleChange = throttle(handleChange);
+
 function handleMouseDown (e: MouseEvent) {
   handleChange(e, true)
-  window.addEventListener('mousemove', handleChange)
+  window.addEventListener('mousemove', throttledHandleChange)
   window.addEventListener('mouseup', handleMouseUp)
 }
 
@@ -144,8 +149,49 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', handleChange)
+  window.removeEventListener('mousemove', throttledHandleChange)
   window.removeEventListener('mouseup', handleMouseUp)
+}
+
+function handleKeyDown(e: KeyboardEvent) {
+  e.preventDefault();
+  const keyDirection = resolveArrowDirection(e);
+  const containerDirection = props.direction;
+  const currentValue = hue.value;
+  let newValue;
+  switch(keyDirection) {
+    case 'left': {
+      if (containerDirection !== 'horizontal') {
+        return;
+      }
+      newValue = currentValue - 1 < 0 ? 0 : currentValue - 1;
+      break;
+    }
+    case 'right': {
+      if (containerDirection !== 'horizontal') {
+        return;
+      }
+      newValue = currentValue + 1 > 360 ? 360 : currentValue + 1;
+      break;
+    }
+    case 'up': {
+      if (containerDirection !== 'vertical') {
+        return;
+      }
+      newValue = currentValue - 1 < 0 ? 0 : currentValue - 1;
+      break;
+    }
+    case 'down': {
+      if (containerDirection !== 'vertical') {
+        return
+      }
+      newValue = currentValue + 1 > 360 ? 360 : currentValue + 1;
+      break;
+    };
+  }
+  if (newValue) {
+    emitChange(Math.floor(newValue));
+  }
 }
 </script>
 

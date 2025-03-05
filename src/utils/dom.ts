@@ -28,3 +28,19 @@ export const getAbsolutePosition = (container: HTMLElement) => {
     y: rect.top + scrollY
   }
 }
+
+export const resolveArrowDirection = (e: KeyboardEvent) => {
+  if (e.code === 'ArrowUp' || e.keyCode === 38) {
+    return 'up';
+  }
+  if (e.code === 'ArrowDown' || e.keyCode === 40) {
+    return 'down';
+  }
+  if (e.code === 'ArrowLeft' || e.keyCode === 37) {
+    return 'left';
+  }
+  if (e.code === 'ArrowRight' || e.keyCode === 39) {
+    return 'right';
+  }
+  return null;
+}

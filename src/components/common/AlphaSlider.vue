@@ -10,12 +10,13 @@
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
         @touchstart="handleChange"
-        @keydown="handleKeydown"
         role="slider"
         aria-label="Transparency"
         aria-valuemax="1"
         aria-valuemin="0"
         :aria-valuenow="alpha.toFixed(1)"
+        tabindex="0"
+        @keydown="handleKeydown"
       >
       <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}">
         <div :class="['vc-alpha-picker', $style.picker]"></div>
@@ -28,7 +29,8 @@
 import { computed, useTemplateRef } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
-import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
+import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
+import { throttle } from '../../utils/throttle.ts';
 
 const props = defineProps<useTinyColorModelProps>();
 const emit = defineEmits(EmitEventNames);
@@ -77,15 +79,11 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   }
 }
 
-function handleKeydown(/* event: KeyboardEvent */) {
-  // todo: add keyboard operation support
-  // if (event.key === 'ArrowRight') this.value = Math.min(this.value + 1, this.max);
-  // if (event.key === 'ArrowLeft') this.value = Math.max(this.value - 1, this.min);
-}
+const throttledHandleChange = throttle(handleChange);
 
 function handleMouseDown (e: MouseEvent) {
   handleChange(e, true);
-  window.addEventListener('mousemove', handleChange);
+  window.addEventListener('mousemove', throttledHandleChange);
   window.addEventListener('mouseup', handleMouseUp);
 }
 
@@ -94,8 +92,29 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', handleChange);
+  window.removeEventListener('mousemove', throttledHandleChange);
   window.removeEventListener('mouseup', handleMouseUp);
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  e.preventDefault();
+  const keyDirection = resolveArrowDirection(e);
+  const currentValue = alpha.value;
+  let newValue;
+  switch(keyDirection) {
+    case 'left': {
+      newValue = currentValue - 0.1 < 0 ? 0 : currentValue - 0.1;
+      break;
+    }
+    case 'right': {
+      newValue = currentValue + 0.1 > 1 ? 1 : currentValue + 0.1;
+      break;
+    }
+  }
+  if (typeof newValue !== 'undefined') {
+    colorRef.value.setAlpha(newValue);
+    updateColor(colorRef.value);
+  }
 }
 
 </script>
