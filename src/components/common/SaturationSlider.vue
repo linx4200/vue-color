@@ -1,3 +1,4 @@
+<!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
 <template>
   <div
     :class="['vc-saturation', $style.bg]"
@@ -6,13 +7,27 @@
     @mousedown="handleMouseDown"
     @touchmove="handleChange"
     @touchstart="handleChange"
-    role="slider"
+    role="application"
+    aria-label="Saturation and brightness picker"
   >
     <div :class="[$style.bg, $style.white]"></div>
     <div :class="[$style.bg, $style.black]"></div>
-    <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}">
+
+    <div
+      :class="$style.pointer"
+      :style="{top: pointerTop, left: pointerLeft}"
+      role="slider"
+      tabindex="0"
+      aria-valuemin="0"
+      aria-valuemax="1"
+      aria-label="press arrow to change saturation or brightness"
+      aria-valuenow="?"
+      :aria-valuetext="`saturation: ${hsv.s.toFixed(0)}%, brightness: ${hsv.v.toFixed(0)}%`"
+      @keydown="handleKeyDown"
+    >
       <div :class="['vc-saturation-circle', $style.circle]"></div>
     </div>
+
   </div>
 </template>
 
@@ -20,7 +35,7 @@
 import tinycolor from 'tinycolor2';
 import { computed, useTemplateRef } from 'vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
-import { getPageXYFromEvent, getAbsolutePosition } from '../../utils/dom.ts';
+import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
 
@@ -52,15 +67,6 @@ const pointerLeft = computed(() => {
 
 const containerRef = useTemplateRef('container');
 
-const throttleFn = throttle((fn, args) => {
-  // @ts-expect-error fn is unknown
-  fn(args);
-}, 20,
-{
-  'leading': true,
-  'trailing': false
-});
-
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   if(!skip) {
     e.preventDefault();
@@ -82,12 +88,12 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const saturation = left / containerWidth;
   const brightness = clamp(-(top / containerHeight) + 1, 0, 1);
 
-  throttleFn(onChange, {
+ onChange({
     h: hsv.value.h,
     s: saturation,
     v: brightness,
     a: hsv.value.a,
-  })
+  });
 }
 
 function onChange (param: { h: number, s: number, v: number, a: number }) {
@@ -96,9 +102,11 @@ function onChange (param: { h: number, s: number, v: number, a: number }) {
   updateTinyColor(tinycolor(param));
 }
 
+const throttledHandleChange = throttle(handleChange, 20);
+
 function handleMouseDown () {
-  window.addEventListener('mousemove', handleChange)
-  window.addEventListener('mouseup', handleChange)
+  window.addEventListener('mousemove', throttledHandleChange)
+  window.addEventListener('mouseup', throttledHandleChange)
   window.addEventListener('mouseup', handleMouseUp)
 }
 
@@ -107,9 +115,48 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', handleChange);
-  window.removeEventListener('mouseup', handleChange);
+  window.removeEventListener('mousemove', throttledHandleChange);
+  window.removeEventListener('mouseup', throttledHandleChange);
   window.removeEventListener('mouseup', handleMouseUp);
+}
+
+function handleKeyDown(e: KeyboardEvent) {
+  e.preventDefault();
+  const direction = resolveArrowDirection(e);
+  switch(direction) {
+    case 'left': {
+      const newSaturation = hsv.value.s - 0.01;
+      onChange({
+        ...hsv.value,
+        s: newSaturation >= 0 ? newSaturation : 0
+      })
+      break;
+    }
+    case 'right': {
+      const newSaturation = hsv.value.s + 0.01;
+      onChange({
+        ...hsv.value,
+        s: newSaturation > 1 ? 1 : newSaturation
+      })
+      break;
+    }
+    case 'up': {
+      const newBrightness = hsv.value.v + 0.01;
+      onChange({
+        ...hsv.value,
+        v: newBrightness > 1 ? 1 : newBrightness
+      })
+      break;
+    }
+    case 'down': {
+      const newBrightness = hsv.value.v - 0.01;
+      onChange({
+        ...hsv.value,
+        v: newBrightness < 0 ? 0 : newBrightness
+      })
+      break;
+    };
+  }
 }
 
 </script>
