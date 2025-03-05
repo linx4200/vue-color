@@ -6,15 +6,18 @@
       @keydown="handleKeyDown"
       @input="handleInput"
       :aria-label="ariaLabel"
+      :id="labelId"
+      :type="valueType"
     >
-    <label :for="label" :class="['vc-input-label', $style.label]">{{props.label}}</label>
+    <label :for="labelId" :class="['vc-input-label', $style.label]">{{props.label}}</label>
     <span v-if="!!desc" class="vc-input-desc">{{desc}}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAttrs } from 'vue';
+import { computed } from 'vue';
 import { getFractionDigit } from '../../utils/math';
+import { resolveArrowDirection } from '../../utils/dom';
 
 type Props = {
   value: string | number;
@@ -23,6 +26,9 @@ type Props = {
   max?: number;
   min?: number;
   step?: number;
+  a11y?: {
+    label?: string;
+  }
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,9 +37,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['change']);
 
-const attrs = useAttrs();
+const ariaLabel = props.a11y?.label ?? props.label;
 
-const ariaLabel = attrs['aria-label'] as string ?? props.label;
+const labelId = `input__label__${ariaLabel}__${Math.random().toString().slice(2, 5)}`;
+
+const valueType = computed(() => typeof props.value);
 
 function update (newVal: number | string) {
   if (props.max && +newVal > props.max) {
@@ -56,15 +64,16 @@ function handleKeyDown (e: KeyboardEvent) {
   if (!isNaN(number)) {
     let step = props.step;
     const fractionDigit = getFractionDigit(step);
+    const arrowDirection = resolveArrowDirection(e);
 
     // Up
-    if (e.code === 'ArrowUp' || e.keyCode === 38) {
+    if (arrowDirection === 'up') {
       update((number + step).toFixed(fractionDigit));
       e.preventDefault();
     }
 
     // Down
-    if (e.code === 'ArrowDown' || e.keyCode === 40) {
+    if (arrowDirection === 'down') {
       update((number - step).toFixed(fractionDigit));
       e.preventDefault();
     }
