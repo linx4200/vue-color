@@ -1,5 +1,5 @@
 <template>
-  <div role="application" aria-label="Compact color picker" :class="$style.wrap">
+  <div :class="$style.wrap" role="application" aria-label="Compact color picker" tabindex="0">
     <ul :class="$style.colors" role="listbox" aria-label="Pick a color">
       <li
         v-for="c in props.palette"
