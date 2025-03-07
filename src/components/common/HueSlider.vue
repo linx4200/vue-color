@@ -5,13 +5,13 @@
       @mousedown="handleMouseDown"
       @touchmove="handleChange"
       @touchstart="handleChange"
+      @keydown="handleKeyDown"
       role="slider"
       :aria-valuenow="hue"
       aria-valuemin="0"
       aria-valuemax="360"
       aria-label="Hue"
       tabindex="0"
-      @keydown="handleKeyDown"
     >
       <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
         <div :class="['vc-hue-picker', $style.picker]"></div>
@@ -164,33 +164,33 @@ function handleKeyDown(e: KeyboardEvent) {
       if (containerDirection !== 'horizontal') {
         return;
       }
-      newValue = currentValue - 1 < 0 ? 0 : currentValue - 1;
+      newValue = currentValue - 1 < 0 ? 0 : Math.floor(currentValue - 1);
       break;
     }
     case 'right': {
       if (containerDirection !== 'horizontal') {
         return;
       }
-      newValue = currentValue + 1 > 360 ? 360 : currentValue + 1;
+      newValue = currentValue + 1 > 360 ? 360 : Math.ceil(currentValue + 1);
       break;
     }
     case 'up': {
       if (containerDirection !== 'vertical') {
         return;
       }
-      newValue = currentValue - 1 < 0 ? 0 : currentValue - 1;
+      newValue = currentValue - 1 < 0 ? 0 : Math.floor(currentValue - 1);
       break;
     }
     case 'down': {
       if (containerDirection !== 'vertical') {
         return
       }
-      newValue = currentValue + 1 > 360 ? 360 : currentValue + 1;
+      newValue = currentValue + 1 > 360 ? 360 : Math.ceil(currentValue + 1);
       break;
     };
   }
   if (newValue) {
-    emitChange(Math.floor(newValue));
+    emitChange(newValue);
   }
 }
 </script>

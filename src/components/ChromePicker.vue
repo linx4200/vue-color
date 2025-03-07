@@ -1,12 +1,12 @@
 <template>
-  <div aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
+  <div role="application" aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
     <div :class="$style.saturation">
       <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
     </div>
     <div :class="$style.body">
       <div :class="$style.controls">
         <div :class="$style.colorWrap">
-          <div aria-live="polite" :aria-label="`Current color is ${tinyColorRef.toHexString()}`" :class="$style.activeColor"></div>
+          <div role="presentation" aria-live="polite" :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" :class="$style.activeColor"></div>
           <Checkerboard v-if="!props.disableAlpha"></Checkerboard>
         </div>
 
@@ -24,61 +24,67 @@
         <div :class="$style.fields" v-show="fieldsIndex === 0">
           <!-- rgba -->
           <div :class="$style.field">
-            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" aria-label="Red"></EdIn>
+            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
           </div>
           <div :class="$style.field">
-            <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)"></EdIn>
+            <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
           </div>
           <div :class="$style.field">
-            <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)"></EdIn>
+            <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
           </div>
           <div :class="$style.field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
         <div :class="$style.fields" v-show="fieldsIndex === 1">
           <!-- hex -->
           <div :class="$style.field">
-            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)"></EdIn>
-            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="(v: string) => inputChangeHex('hex8', v)"></EdIn>
+            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)" :a11y="{label: 'Hex'}"></EdIn>
+            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="(v: string) => inputChangeHex('hex8', v)" :a11y="{label: 'Hex with transparency'}"></EdIn>
           </div>
         </div>
 
         <div :class="$style.fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
           <div :class="$style.field">
-            <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)"></EdIn>
+            <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
           </div>
           <div :class="$style.field">
-            <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)"></EdIn>
+            <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
           </div>
           <div :class="$style.field">
-            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)"></EdIn>
+            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)" :a11y="{label: 'L'}"></EdIn>
           </div>
           <div :class="$style.field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)" :a11y="{label: 'transparency'}"></EdIn>
           </div>
         </div>
 
         <!-- btn -->
         <div
           :class="$style.toggleBtn"
-          role="button"
-          aria-label="Change color format"
           @click="toggleViews"
           @keydown.enter="toggleViews"
           @keydown.space="toggleViews"
+          @mouseover="showHighlight"
+          @mouseenter="showHighlight"
+          @mouseout="hideHighlight"
+          @focus="showHighlight"
+          @blur="hideHighlight"
+          role="button"
+          aria-label="Change color format"
+          tabindex="0"
         >
-          <div :class="$style.toggleIcon">
-            <svg style="width:24px; height:24px" viewBox="0 0 24 24"
-              @mouseover="showHighlight"
-              @mouseenter="showHighlight"
-              @mouseout="hideHighlight">
+          <div :class="$style.toggleIcon" role="presentation">
+            <svg
+              style="width:24px; height:24px"
+              viewBox="0 0 24 24"
+            >
               <path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
             </svg>
           </div>
-          <div :class="$style.toggleIconHighlight" v-show="highlight"></div>
+          <div :class="$style.toggleIconHighlight" v-show="highlight" role="presentation"></div>
         </div>
         <!-- btn -->
       </div>
@@ -112,7 +118,6 @@ const { hueRef, setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColo
 
 const fieldsIndex = ref(0);
 let highlight = ref(false);
-
 
 const activeColor = computed(() => {
   const rgba = tinyColorRef.value.toRgb();
