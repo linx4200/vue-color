@@ -20,19 +20,19 @@
     <div :class="$style.field" v-if="!disableFields">
       <!-- rgba -->
       <div :class="$style.fieldDouble">
-        <EdIn label="hex" :value="hex" @change="inputChangeHex"></EdIn>
+        <EdIn label="hex" :value="hex" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
       </div>
       <div :class="$style.fieldSingle">
-        <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)"></EdIn>
+        <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
       </div>
       <div :class="$style.fieldSingle">
-        <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)"></EdIn>
+        <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
       </div>
       <div :class="$style.fieldSingle">
-        <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)"></EdIn>
+        <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
       </div>
       <div :class="$style.fieldSingle" v-if="!disableAlpha">
-        <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="inputChangeAlpha"></EdIn>
+        <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="inputChangeAlpha" :a11y="{label: 'Transparency'}"></EdIn>
       </div>
     </div>
     <div :class="$style.presets" role="group" aria-label="A color preset, pick one to set as current color">
@@ -40,17 +40,23 @@
         <div
           v-if="!isTransparent(c)"
           :class="$style.presetColor"
-          :aria-label="'Color:' + c"
           :key="c + '-color'"
           :style="{background: c}"
-          @click="handlePreset(c)">
-        </div>
+          @click="handlePreset(c)"
+          :aria-label="'Color:' + c"
+          role="button"
+          tabindex="0"
+          @keydown.space="handlePreset(c)"
+          ></div>
         <div
           v-else
           :key="c"
-          :aria-label="'Color:' + c"
           :class="$style.presetColor"
-          @click="handlePreset(c)">
+          @click="handlePreset(c)"
+          aria-label="Color: transparency"
+          role="button"
+          tabindex="0"
+          @keydown.space="handlePreset(c)">
           <Checkerboard />
         </div>
       </template>
