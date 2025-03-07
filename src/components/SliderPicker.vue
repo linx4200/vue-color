@@ -3,11 +3,19 @@
     <div :class="$style.hue">
       <hue :hue="retainedHueRef" @change="setHue"></hue>
     </div>
-    <div :class="$style.swatches" role="group">
-      <div :class="$style.swatch" v-for="(swatch, index) in normalizedSwatches" :key="index" :data-index="index"
-        :aria-label="'color:' + hex"
-        role="button"
-        @click="handleSwClick(swatch)">
+    <div :class="$style.swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
+      <div
+        v-for="(swatch, index) in normalizedSwatches"
+        :class="$style.swatch"
+        :key="index"
+        data-index="index"
+        @click="handleSwClick(swatch)"
+        :aria-label="'Color:' + hex"
+        role="option"
+        @keydown.space="handleSwClick(swatch)"
+        :aria-selected="isActive(swatch)"
+        tabindex="0"
+      >
         <div
           :class="{
             [$style.swatchPicker]: true,

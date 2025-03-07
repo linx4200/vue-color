@@ -1,17 +1,17 @@
 <template>
-  <div role="application" aria-label="Material color picker" :class="$style.wrap">
+  <div role="application" aria-label="Material color inputs" :class="$style.wrap">
     <EdIn :class="$style.hex" label="hex" :value="tinyColorRef.toHexString()"
-      :style="{ borderColor: tinyColorRef.toHexString() }" @change="onHexChange"></EdIn>
+      :style="{ borderColor: tinyColorRef.toHexString() }" @change="onHexChange" :a11y="{label: 'Hex'}"></EdIn>
 
     <div :class="$style.rgb">
       <div :class="$style.color">
-        <EdIn label="r" :value="rgb.r" @change="(v) => onChange('r', v)"></EdIn>
+        <EdIn label="r" :value="rgb.r" @change="(v) => onChange('r', v)" :a11y="{label: 'Red'}"></EdIn>
       </div>
       <div :class="$style.color">
-        <EdIn label="g" :value="rgb.g" @change="(v) => onChange('g', v)"></EdIn>
+        <EdIn label="g" :value="rgb.g" @change="(v) => onChange('g', v)" :a11y="{label: 'Green'}"></EdIn>
       </div>
       <div :class="$style.color">
-        <EdIn label="b" :value="rgb.b" @change="(v) => onChange('b', v)"></EdIn>
+        <EdIn label="b" :value="rgb.b" @change="(v) => onChange('b', v)" :a11y="{label: 'Blue'}"></EdIn>
       </div>
     </div>
   </div>
