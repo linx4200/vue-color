@@ -1,15 +1,17 @@
 <template>
   <div role="application" aria-label="Compact color picker" :class="$style.wrap">
-    <ul :class="$style.colors" role="listbox">
+    <ul :class="$style.colors" role="listbox" aria-label="Pick a color">
       <li
         v-for="c in props.palette"
-        role="option"
-        :aria-label="'color:' + c"
-        :aria-selected="c.toUpperCase() === pick"
         :key="c"
         :class="{[$style.colorItemWhite]: c === '#FFFFFF', [$style.colorItem]: true }"
         :style="{background: c}"
         @click="handlerClick(c)"
+        role="option"
+        :aria-label="'color:' + c"
+        :aria-selected="c.toUpperCase() === pick"
+        @keydown.space="handlerClick(c)"
+        tabindex="0"
       >
         <div :class="$style.dot" v-show="c.toUpperCase() === pick"></div>
       </li>
