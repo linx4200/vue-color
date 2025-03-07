@@ -174,14 +174,14 @@ function handleKeyDown(e: KeyboardEvent) {
       newValue = currentValue + 1 > 360 ? 360 : Math.ceil(currentValue + 1);
       break;
     }
-    case 'up': {
+    case 'down': {
       if (containerDirection !== 'vertical') {
         return;
       }
       newValue = currentValue - 1 < 0 ? 0 : Math.floor(currentValue - 1);
       break;
     }
-    case 'down': {
+    case 'up': {
       if (containerDirection !== 'vertical') {
         return
       }
