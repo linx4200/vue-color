@@ -35,7 +35,7 @@
         <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="inputChangeAlpha" :a11y="{label: 'Transparency'}"></EdIn>
       </div>
     </div>
-    <div :class="$style.presets" role="group" aria-label="A color preset, pick one to set as current color">
+    <div :class="$style.presets" role="listbox" aria-label="A color preset, pick one to set as current color">
       <template v-for="c in props.presetColors">
         <div
           v-if="!isTransparent(c)"
@@ -44,7 +44,8 @@
           :style="{background: c}"
           @click="handlePreset(c)"
           :aria-label="'Color:' + c"
-          role="button"
+          :aria-selected="`#${hex.toLowerCase()}` === c.toLowerCase()"
+          role="option"
           tabindex="0"
           @keydown.space="handlePreset(c)"
           ></div>
@@ -54,7 +55,8 @@
           :class="$style.presetColor"
           @click="handlePreset(c)"
           aria-label="Color: transparency"
-          role="button"
+          :aria-selected="alpha === 0"
+          role="option"
           tabindex="0"
           @keydown.space="handlePreset(c)">
           <Checkerboard />
@@ -139,7 +141,6 @@ const inputChangeAlpha = (data?: number) => {
   if (!data || isNaN(Number(data))) {
     return;
   }
-  console.log('=data==>', data);
   updateTinyColor(tinyColorRef.value.setAlpha(data));
 }
 
