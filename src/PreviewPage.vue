@@ -66,7 +66,7 @@ const textColor = computed(() => {
         <h1>Vue-color</h1><span class="tag">v3.0</span>
       </div>
 
-      <div class="intro roboto" :style="{color: textColor}">
+      <main class="intro roboto" :style="{color: textColor}">
         A collection of efficient color pickers designed for modern web development.
         <ul class="feature-list roboto" :style="{color: textColor, opacity: 0.75}">
           <li>✅ Modular & Tree-Shakable</li>
@@ -74,12 +74,12 @@ const textColor = computed(() => {
           <li>✅ SSR-Friendly</li>
           <li>✅ Optimized for Accessibility</li>
         </ul>
-      </div>
+      </main>
     </div>
     <div :style="{flex: 0.8}">
       <div class="row">
         <div class="col">
-          <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}">
+          <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}" :aria-hidden="true">
             {{ hex }}<br />
             {{ colorRGBA }}<br />
             {{ hsva }}
@@ -96,7 +96,7 @@ const textColor = computed(() => {
         </div>
 
         <div class="picker-container">
-          <div><Photoshop v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+          <div><Photoshop v-model:tinyColor="tinyColor" v-model="colorRGBA" :hasResetButton="true" /></div>
           <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Photoshop</div>
         </div>
       </div>

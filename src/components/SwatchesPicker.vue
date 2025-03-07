@@ -1,15 +1,19 @@
 <template>
   <div role="application" aria-label="Swatches color picker" :class="$style.wrap" :data-pick="hex">
-    <div :class="$style.box" role="listbox">
+    <div :class="$style.box" role="listbox" aria-label="Pick a color" tabindex="0">
       <div :class="$style.colorGroup" v-for="(group, $idx) in palette" :key="$idx">
-        <div :class="[$style.color, {[$style.colorWhite]: c === '#FFFFFF' }]"
-          role="option"
-          :aria-label="'Color:' + c"
-          :aria-selected="equal(c)"
+        <div
+          :class="[$style.color, {[$style.colorWhite]: c === '#FFFFFF' }]"
           v-for="c in group" :key="c"
           :data-color="c"
           :style="{background: c}"
-          @click="handlerClick(c)">
+          @click="handlerClick(c)"
+          role="option"
+          :aria-label="'Color:' + c"
+          :aria-selected="equal(c)"
+          @keydown.space="handlerClick(c)"
+          tabindex="0"
+        >
           <div :class="$style.pick" v-show="equal(c)">
             <svg style="width: 24px; height:24px;" viewBox="0 0 24 24">
               <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
