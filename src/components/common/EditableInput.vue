@@ -21,7 +21,7 @@ import { resolveArrowDirection } from '../../utils/dom';
 
 type Props = {
   value: string | number;
-  label: string;
+  label?: string;
   desc?: string;
   max?: number;
   min?: number;

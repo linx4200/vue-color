@@ -8,18 +8,31 @@
     :style="{
       width: typeof props.width === 'number' ? `${props.width}px` : props.width
     }"
+    role="application"
+    aria-label="Twitter color picker"
   >
     <div :class="$style.triangleShadow"></div>
     <div :class="$style.triangle"></div>
 
-    <div :class="$style.body">
-      <span :class="$style.swatch" :style="{
-        background: color,
-        boxShadow: `0 0 4px ${equal(color) ? color : 'transparent'}`,
-      }" v-for="(color, index) in presetColors" :key="index" @click="handlerClick(color)">
+    <div :class="$style.body" role="listbox" tabindex="0" aria-label="Select a color">
+      <span
+        v-for="(color, index) in presetColors"
+        :key="index"
+        :class="$style.swatch"
+          :style="{
+          background: color,
+          boxShadow: `0 0 4px ${equal(color) ? color : 'transparent'}`,
+        }"
+        @click="handlerClick(color)"
+        role="option"
+        :aria-label="'color:' + color"
+        :aria-selected="equal(color)"
+        @keydown.space="handlerClick(color)"
+        tabindex="0"
+      >
       </span>
-      <div :class="$style.hash">#</div>
-      <EdIn label="#" :value="hex.replace('#', '')" @change="inputChange"></EdIn>
+      <div :class="$style.hash" aria-hidden="true">#</div>
+      <EdIn :value="hex.replace('#', '')" @change="inputChange" :a11y="{label: 'Hex'}"></EdIn>
       <div :class="$style.clear"></div>
     </div>
   </div>
