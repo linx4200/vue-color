@@ -7,7 +7,6 @@
       @input="handleInput"
       :aria-label="ariaLabel"
       :id="labelId"
-      :type="valueType"
     >
     <label :for="labelId" :class="['vc-input-label', $style.label]" aria-hidden="true">{{props.label}}</label>
     <span v-if="!!desc" class="vc-input-desc" aria-hidden="true">{{desc}}</span>
