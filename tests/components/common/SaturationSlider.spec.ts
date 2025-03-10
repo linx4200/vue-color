@@ -9,7 +9,7 @@ test('Render background with given hue value', async () => {
     },
   });
 
-  const background = getByRole('slider').element() as HTMLElement;
+  const background = getByRole('application').element() as HTMLElement;
   // hsl(180, 100%, 50%)
   expect(background.style.backgroundColor).toEqual('rgb(0, 255, 255)');
 

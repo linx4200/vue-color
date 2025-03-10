@@ -49,9 +49,9 @@ const containerRef = useTemplateRef('container');
 
 const hue = computed(() => props.hue);
 
-watch<typeof hue>(hue, (newHue, OldHue) => {
-  if (newHue.value !== 0 && newHue.value - OldHue.value > 0) pullDirection.value = 'right';
-  if (newHue.value !== 0 && newHue.value - OldHue.value < 0) pullDirection.value = 'left';
+watch(hue, (newHue, oldHue) => {
+  if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
+  if (newHue !== 0 && newHue - oldHue < 0) pullDirection.value = 'left';
 })
 
 const directionClass = computed(() => {

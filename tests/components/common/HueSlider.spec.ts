@@ -10,26 +10,27 @@ test('The position of the picker should be correct', async () => {
     },
   });
 
-  const pointerElement = getByRole('presentation').element()  as HTMLElement;
-  expect(pointerElement.style.left).toBe('50%');
-  expect(pointerElement.style.top).toBe('0px');
+  const sliderElement = getByRole('slider').element() as HTMLElement;
+  const pointerElement = sliderElement.querySelector('div');
+  expect(pointerElement?.style.left).toBe('50%');
+  expect(pointerElement?.style.top).toBe('0px');
 
   await rerender({ hue: 200 }); // pull to right
   await rerender({ hue: 0 });
-  expect(pointerElement.style.left).toBe('100%');
-  expect(pointerElement.style.top).toBe('0px');
+  expect(pointerElement?.style.left).toBe('100%');
+  expect(pointerElement?.style.top).toBe('0px');
 
 
   // ======= vertical =======
 
   await rerender({ direction: 'vertical', hue: 180 });
-  expect(pointerElement.style.top).toBe('50%');
-  expect(pointerElement.style.left).toBe('0px');
+  expect(pointerElement?.style.top).toBe('50%');
+  expect(pointerElement?.style.left).toBe('0px');
 
   await rerender({ direction: 'vertical', hue: 200 });
   await rerender({ direction: 'vertical', hue: 0 });
-  expect(pointerElement.style.top).toBe('0px');
-  expect(pointerElement.style.left).toBe('0px');
+  expect(pointerElement?.style.top).toBe('0px');
+  expect(pointerElement?.style.left).toBe('0px');
 });
 
 test('Click the pointer and update color events should be emitted with correct alpha value (horizontally)', async () => {
