@@ -16,6 +16,33 @@ test('Render correctly with value, label and desc', async () => {
   await expect.element(getByRole('textbox')).toHaveValue('value');
 });
 
+test('render correct aria-label with props.label', async () => {
+  const { getByRole } = render(EditableInput, {
+    props: {
+      value: 'value',
+      label: 'foo'
+    },
+  });
+  const textbox = getByRole('textbox');
+  await expect.element(textbox).toHaveAccessibleName('foo');
+  await expect.element(textbox).toHaveAttribute('id', expect.stringContaining('input__label__foo__'));
+});
+
+test('render correct aria-label with props.a11y.label', async () => {
+  const { getByRole } = render(EditableInput, {
+    props: {
+      value: 'value',
+      label: 'foo',
+      a11y: {
+        label: 'bar'
+      }
+    },
+  });
+  const textbox = getByRole('textbox');
+  await expect.element(textbox).toHaveAccessibleName('bar');
+  await expect.element(textbox).toHaveAttribute('id', expect.stringContaining('input__label__bar__'));
+});
+
 test('Change the value and emit the event', async () => {
   const { getByRole, emitted } = render(EditableInput, {
     props: {
@@ -59,13 +86,14 @@ test('Handle the key down event with step', async () => {
   });
   const textbox = getByRole('textbox');
 
-  await textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
+  textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
   expect(emitted()['change'][0]).toEqual([`${initialValue + step}`]);
 
-  await textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
+  textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowDown' }));
   expect(emitted()['change'][1]).toEqual([`${initialValue - step}`]);
 
-  await rerender({ step: 2.2, value: 1.111 });
-  await textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
+  rerender({ step: 2.2, value: 1.111 });
+  await Promise.resolve();
+  textbox.element().dispatchEvent(new KeyboardEvent('keydown', { code: 'ArrowUp' }));
   expect(emitted()['change'][2]).toEqual(['3.3']);
 });

@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { getFractionDigit } from '../../utils/math';
 import { resolveArrowDirection } from '../../utils/dom';
 
@@ -39,8 +38,6 @@ const emit = defineEmits(['change']);
 const ariaLabel = props.a11y?.label ?? props.label;
 
 const labelId = `input__label__${ariaLabel}__${Math.random().toString().slice(2, 5)}`;
-
-const valueType = computed(() => typeof props.value);
 
 function update (newVal: number | string) {
   if (props.max && +newVal > props.max) {

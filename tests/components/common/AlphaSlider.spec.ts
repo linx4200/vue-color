@@ -51,3 +51,42 @@ test('Click the pointer and update color events should be emitted with correct a
   expect(emitted()).toHaveProperty('update:modelValue');
   expect(emitted()['update:modelValue'][2]).toEqual([{ r: 100, g: 100, b: 100, a: 1 }]);
 });
+
+test('When up and down keyboard events are fired then update color events should be emitted with correct alpha value', async () => {
+
+  const { getByRole, emitted, rerender } = render(Alpha, {
+    props: {
+      modelValue: { r: 100, g: 100, b: 100, a: 0.2 }
+    }
+  });
+
+  const slider = getByRole('slider').element();
+  const keyboardEvent1 = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
+  slider.dispatchEvent(keyboardEvent1);
+
+  expect(emitted()).toHaveProperty('update:modelValue');
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  expect(emitted()['update:modelValue'][0]?.[0]?.a).toBeCloseTo(0.1, 0);
+
+  await rerender({modelValue : { r: 100, g: 100, b: 100, a: 0 }});
+  const keyboardEvent2 = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
+  slider.dispatchEvent(keyboardEvent2);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  expect(emitted()['update:modelValue'][1]?.[0]?.a).toBe(0);
+
+
+  const keyboardEvent3 = new KeyboardEvent('keydown', { code: 'ArrowRight' });
+  slider.dispatchEvent(keyboardEvent3);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  expect(emitted()['update:modelValue'][2]?.[0]?.a).toBe(0.1);
+
+  await rerender({modelValue : { r: 100, g: 100, b: 100, a: 1 }});
+  const keyboardEvent4 = new KeyboardEvent('keydown', { code: 'ArrowRight' });
+  slider.dispatchEvent(keyboardEvent4);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  expect(emitted()['update:modelValue'][3]?.[0]?.a).toBe(1);
+});

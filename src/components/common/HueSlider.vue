@@ -189,7 +189,7 @@ function handleKeyDown(e: KeyboardEvent) {
       break;
     };
   }
-  if (newValue) {
+  if (typeof newValue !== 'undefined') {
     emitChange(newValue);
   }
 }
