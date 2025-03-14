@@ -74,7 +74,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   var container = containerRef.value;
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    return
+    /* v8 ignore next 2 */
+    return;
   }
   const containerWidth = container.clientWidth
   const containerHeight = container.clientHeight
@@ -88,7 +89,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const saturation = left / containerWidth;
   const brightness = clamp(-(top / containerHeight) + 1, 0, 1);
 
- onChange({
+  onChange({
     h: hsv.value.h,
     s: saturation,
     v: brightness,
