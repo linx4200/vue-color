@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import Hue from '../../../src/components/common/HueSlider.vue';
 import { waitForRerender } from '../../tools';
@@ -120,9 +120,8 @@ const keyboardEventCases = [
   }
 ];
 
-for (const { direction, oppositeDirection, initialValue, keyboardEventCode, changedValueNormally, valueOfLimitation} of keyboardEventCases) {
-  test(`When ${keyboardEventCode} keyboard events are fired, update color events should be emitted with correct value.`, async () => {
-
+describe('When keyboard events is fired, update color events should be emitted with correct value', () => {
+  test.each(keyboardEventCases)('$keyboardEventCode', async ({ direction, oppositeDirection, initialValue, keyboardEventCode, changedValueNormally, valueOfLimitation}) => {
     const { getByRole, emitted, rerender } = render(Hue, {
       props: {
         hue: initialValue,
@@ -154,4 +153,4 @@ for (const { direction, oppositeDirection, initialValue, keyboardEventCode, chan
     expect((emitted()['change'][1] as [number, number])[0]).toEqual(valueOfLimitation);
     expect((emitted()['change'][1] as [number, number])[1]).toEqual(0);
   });
-}
+})

@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test, describe } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import Saturation from '../../../src/components/common/SaturationSlider.vue';
 import { waitForRerender } from '../../tools';
@@ -115,9 +115,8 @@ const keyboardEventCases = [
   }
 ];
 
-for (const { keyboardEventCode, expectedValue} of keyboardEventCases) {
-  test(`When ${keyboardEventCode} keyboard events are fired, update color events should be emitted with correct value.`, async () => {
-
+describe('When keyboard event is fired, update color events should be emitted with correct value', () => {
+  test.each(keyboardEventCases)('$keyboardEventCode', async ({ keyboardEventCode, expectedValue}) => {
     const container = document.createElement('div');
     document.body.appendChild(container);
     container.style.width = '100px';
@@ -132,6 +131,6 @@ for (const { keyboardEventCode, expectedValue} of keyboardEventCases) {
     const returnedValue = (emitted()['update:modelValue'][0] as [typeof expectedValue])[0];
     (Object.keys(returnedValue) as [keyof typeof initialValueOfKeyboardEventCases]).forEach((k) => {
       expect(returnedValue[k]).toBeCloseTo(expectedValue[k]);
-    })
+    });
   });
-}
+});
