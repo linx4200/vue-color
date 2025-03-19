@@ -20,7 +20,7 @@
         </div>
       </div>
 
-      <div :class="$style.fieldsWrap" v-if="!disableFields">
+      <div :class="$style.fieldsWrap" v-if="!disableFields" data-testid="fields">
         <div :class="$style.fields" v-show="fieldsIndex === 0">
           <!-- rgba -->
           <div :class="$style.field">
@@ -54,10 +54,10 @@
             <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
           </div>
           <div :class="$style.field">
-            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)" :a11y="{label: 'L'}"></EdIn>
+            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)" :a11y="{label: 'Lightness'}"></EdIn>
           </div>
           <div :class="$style.field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)" :a11y="{label: 'transparency'}"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
@@ -105,6 +105,7 @@ import Checkerboard from './common/CheckerboardBG.vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 import { hueModel } from '../composable/hue.ts';
 
+// todo: disableAlpha 的样式有问题
 type Props = {
   disableAlpha?: boolean;
   disableFields?: boolean;
@@ -184,7 +185,7 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
   }));
 }
 
-const toggleViews = () =>{
+const toggleViews = () => {
   if (fieldsIndex.value === 2) {
     fieldsIndex.value = 0;
     return;
