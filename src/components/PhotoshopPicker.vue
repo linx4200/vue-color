@@ -22,7 +22,7 @@
               :style="{background: currentColorRef}"
               @click="clickCurrentColor"
               role="button"
-              :aria-label="`Previous color is ${currentColorRef}`"
+              :aria-label="`Current color is ${currentColorRef}`"
               @keydown.space="clickCurrentColor"
               tabindex="0"
             ></div>
@@ -53,7 +53,7 @@
             :class="$style.actionBtn"
             @click="handleReset"
             role="button"
-            aria-label="rest"
+            :aria-label="resetLabel"
             @keydown.space="handleReset"
             tabindex="0"
           >{{ resetLabel }}</div>
@@ -83,7 +83,7 @@ type Props = {
   resetLabel?: string;
   newLabel?: string;
   currentLabel?: string;
-  initialColor?: string;
+  currentColor?: string;
 }
 
 const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
@@ -95,7 +95,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   resetLabel: 'Reset',
   newLabel: 'new',
   currentLabel: 'current',
-  initialColor: '#fff'
+  currentColor: '#fff'
 });
 
 const emit = defineEmits(EmitEventNames.concat(['ok', 'cancel', 'reset']));
@@ -103,7 +103,7 @@ const emit = defineEmits(EmitEventNames.concat(['ok', 'cancel', 'reset']));
 const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
 const { hueRef, setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
 
-const currentColorRef = ref(props.initialColor);
+const currentColorRef = ref(props.currentColor);
 
 const hsv = computed(() => tinyColorRef.value.toHsv());
 const hex = computed(() => {
