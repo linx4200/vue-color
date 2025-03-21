@@ -19,7 +19,7 @@
     "build": "vue-tsc --project tsconfig.json && vite build",
     "preview": "vite preview",
     "test": "vitest --workspace=vitest.workspace.ts",
-    "coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"
   },
   "repository": {
