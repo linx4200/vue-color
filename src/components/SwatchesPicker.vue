@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts">
-// todo: check tree shaking
 import material from 'material-colors';
 import type colors from 'material-colors';
 
@@ -40,7 +39,7 @@ const colorMap = [
 
 const intensity = ['900', '700', '500', '300', '100'] as Array<keyof typeof colors['red']>;
 
-const defaultColors = (() => {
+const defaultColors = /*#__PURE__*/ (() => {
   const colors: string[][] = [];
   colorMap.forEach((type) => {
     let typeColor: string[] = []
