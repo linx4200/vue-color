@@ -14,10 +14,11 @@
     },
     "./style.css": "./dist/vue-color.css"
   },
+  "types": "./dist/types/index.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --project tsconfig.json && vite build",
-    "preview": "vite preview",
+    "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
+    "demo": "vite demo",
+    "demo:build": "vue-tsc --project demo/tsconfig.json && vite build demo",
     "test": "vitest --workspace=vitest.workspace.ts",
     "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"
@@ -33,6 +34,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/material-colors": "^1.2.3",
+    "@types/node": "^22.13.11",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/browser": "^3.0.5",

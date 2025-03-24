@@ -2,15 +2,15 @@
 import { effectScope, watch, reactive, computed } from 'vue';
 import tinycolor from 'tinycolor2';
 
-import Chrome from './components/ChromePicker.vue';
-import Compact from './components/CompactPicker.vue';
-import Grayscale from './components/GrayscalePicker.vue';
-import Material from './components/MaterialPicker.vue';
-import Photoshop from './components/PhotoshopPicker.vue';
-import Sketch from './components/SketchPicker.vue';
-import Slider from './components/SliderPicker.vue';
-import Swatches from './components/SwatchesPicker.vue';
-import Twitter from './components/TwitterPicker.vue';
+import Chrome from '../src/components/ChromePicker.vue';
+import Compact from '../src/components/CompactPicker.vue';
+import Grayscale from '../src/components/GrayscalePicker.vue';
+import Material from '../src/components/MaterialPicker.vue';
+import Photoshop from '../src/components/PhotoshopPicker.vue';
+import Sketch from '../src/components/SketchPicker.vue';
+import Slider from '../src/components/SliderPicker.vue';
+import Swatches from '../src/components/SwatchesPicker.vue';
+import Twitter from '../src/components/TwitterPicker.vue';
 
 const tinyColor = defineModel('tinycolor', {
   default: '#F5F7FA'
@@ -85,7 +85,7 @@ const textColor = computed(() => {
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <div><Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" :disable-alpha="true" />
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Chrome</div>
           </div>
         </div>

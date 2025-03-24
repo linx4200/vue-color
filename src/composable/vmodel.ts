@@ -1,7 +1,6 @@
 import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
 
-// todo: test all input format
 const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOriginally = false, originalFormat: string) => {
   if (isObjectOriginally) {
     switch (originalFormat) {

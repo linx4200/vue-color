@@ -1,5 +1,3 @@
-export const VERSION = '3.0.0';
-
 export * from './components/ChromePicker.vue';
 export * from './components/CompactPicker.vue';
 export * from './components/GrayscalePicker.vue';
