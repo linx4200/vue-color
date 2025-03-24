@@ -9,10 +9,14 @@
   "module": "./dist/vue-color.js",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/vue-color.js",
       "require": "./dist/vue-color.umd.cjs"
     },
-    "./style.css": "./dist/vue-color.css"
+    "./style.css": {
+      "import": "./dist/vue-color.css",
+      "require": "./dist/vue-color.css"
+    }
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {

@@ -85,53 +85,53 @@ const textColor = computed(() => {
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" :disable-alpha="true" />
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Chrome</div>
+            <Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" />
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
         <div class="picker-container">
           <div><Sketch v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Sketch</div>
+          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
         </div>
 
         <div class="picker-container">
           <div><Photoshop v-model:tinyColor="tinyColor" v-model="colorRGBA" :hasResetButton="true" /></div>
-          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Photoshop</div>
+          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
       <div class="row" :style="{marginTop: '5%'}">
         <div class="col">
           <div class="picker-container">
             <div><Compact v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Compact</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
           </div>
           <div class="picker-container">
             <div><Grayscale v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Grayscale</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
           </div>
           <div class="picker-container">
             <div><Material v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Material</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
             <div><Slider v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Slider</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
           </div>
 
           <div class="picker-container">
             <div><Twitter v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Twitter</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
             <div><Swatches v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">Swatches</div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
           </div>
         </div>
       </div>

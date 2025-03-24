@@ -1,12 +1,12 @@
-export * from './components/ChromePicker.vue';
-export * from './components/CompactPicker.vue';
-export * from './components/GrayscalePicker.vue';
-export * from './components/MaterialPicker.vue';
-export * from './components/PhotoshopPicker.vue';
-export * from './components/SketchPicker.vue';
-export * from './components/SliderPicker.vue';
-export * from './components/SwatchesPicker.vue';
-export * from './components/TwitterPicker.vue';
+export { default as ChromePicker } from './components/ChromePicker.vue';
+export { default as CompactPicker } from './components/CompactPicker.vue';
+export { default as GrayscalePicker } from './components/GrayscalePicker.vue';
+export { default as MaterialPicker } from './components/MaterialPicker.vue';
+export { default as PhotoshopPicker } from './components/PhotoshopPicker.vue';
+export { default as SketchPicker } from './components/SketchPicker.vue';
+export { default as SliderPicker } from './components/SliderPicker.vue';
+export { default as SwatchesPicker } from './components/SwatchesPicker.vue';
+export { default as TwitterPicker } from './components/TwitterPicker.vue';
 
-export * from './components/common/AlphaSlider.vue';
-export * from './components/common/HueSlider.vue';
+export { default as AlphaSlider } from './components/common/AlphaSlider.vue';
+export { default as HueSlider } from './components/common/HueSlider.vue';
