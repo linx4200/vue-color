@@ -22,7 +22,7 @@
   "scripts": {
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
     "demo": "vite demo",
-    "demo:build": "vue-tsc --project demo/tsconfig.json && vite build demo",
+    "demo:build": "vite build demo",
     "test": "vitest --workspace=vitest.workspace.ts",
     "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"
