@@ -134,12 +134,11 @@ test('change color by clicking preset color', async () => {
   expect((emitted()['update:modelValue'][0] as [string])[0]).toBe('#417505');
 
   await presetColors.last().click();
-  expect((emitted()['update:modelValue'][1] as [string])[0]).toBe('rgba(0, 0, 0, 0)');
+  expect((emitted()['update:modelValue'][1] as [string])[0]).toBe('#000000');
 
   presetColors.nth(10).element().dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
   expect((emitted()['update:modelValue'][2] as [string])[0]).toBe('#b8e986');
 
   presetColors.last().element().dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
-  expect((emitted()['update:modelValue'][3] as [string])[0]).toBe('rgba(0, 0, 0, 0)');
-
+  expect((emitted()['update:modelValue'][3] as [string])[0]).toBe('#000000');
 });

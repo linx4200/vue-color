@@ -16,14 +16,14 @@ const tinyColor = defineModel('tinycolor', {
   default: '#F5F7FA'
 });
 
-const colorRGBA = defineModel({
+const color = defineModel({
   default: () => reactive({r: 0, g: 0, b: 255, a: 1})
 });
 
 const scope = effectScope();
 
 scope.run(() => {
-  watch(tinyColor, () => console.log(tinyColor.value));
+  watch(color, () => console.log('color changed ==>', color.value));
 });
 
 function invertColor(rgb: { r: number; g: number; b: number }): string {
@@ -81,56 +81,56 @@ const textColor = computed(() => {
         <div class="col">
           <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}" :aria-hidden="true">
             {{ hex }}<br />
-            {{ colorRGBA }}<br />
+            {{ color }}<br />
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <Chrome v-model:tinyColor="tinyColor" v-model="colorRGBA" />
+            <Chrome v-model:tinyColor="tinyColor" v-model="color" />
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
         <div class="picker-container">
-          <div><Sketch v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+          <div><Sketch v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
         </div>
 
         <div class="picker-container">
-          <div><Photoshop v-model:tinyColor="tinyColor" v-model="colorRGBA" :hasResetButton="true" /></div>
+          <div><Photoshop v-model:tinyColor="tinyColor" v-model="color" :hasResetButton="true" /></div>
           <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
       <div class="row" :style="{marginTop: '5%'}">
         <div class="col">
           <div class="picker-container">
-            <div><Compact v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Compact v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
           </div>
           <div class="picker-container">
-            <div><Grayscale v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Grayscale v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
           </div>
           <div class="picker-container">
-            <div><Material v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Material v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
-            <div><Slider v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Slider v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
           </div>
 
           <div class="picker-container">
-            <div><Twitter v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Twitter v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
-            <div><Swatches v-model:tinyColor="tinyColor" v-model="colorRGBA" /></div>
+            <div><Swatches v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
           </div>
         </div>

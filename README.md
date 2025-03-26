@@ -61,7 +61,7 @@ import { reactive } from 'vue'
 import { ChromePicker } from 'vue-color'
 
 const color = defineModel({
-  default: () => reactive({r: 0, g: 0, b: 255, a: 1})
+  default: '#68CCCA'
 });
 </script>
 ```

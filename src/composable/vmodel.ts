@@ -1,7 +1,9 @@
 import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
 
-const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOriginally = false, originalFormat: string) => {
+type TinyColorFormat = 'name' | 'hex8' | 'hex' | 'prgb' | 'rgb' | 'hsv' | 'hsl';
+
+const transformToOriginalInputFormat = (color: tinycolor.Instance, originalFormat?: TinyColorFormat, isObjectOriginally = false) => {
   if (isObjectOriginally) {
     switch (originalFormat) {
       case 'rgb': {
@@ -22,7 +24,7 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, isObjectOrigi
     }
   } else {
     // transform back to the original format
-    let newValue = color.toString();
+    let newValue = color.toString(originalFormat);
     try {
       newValue = JSON.parse(newValue);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,17 +48,21 @@ export const EmitEventNames = ['update:tinyColor', 'update:modelValue'];
  */
 export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
 
-  let isObjectOriginally = false;
-  let originalFormat = '';
+  let isObjectOriginally: boolean;
+  let originalFormat: TinyColorFormat;
 
   const tinyColorRef = computed({
     get: () => {
-      if (typeof props.modelValue === 'object') {
-        isObjectOriginally = true;
-      }
       const colorInput = props.modelValue ?? props.tinyColor;
       const value = tinycolor(colorInput);
-      originalFormat = value.getFormat();
+      if (typeof originalFormat === 'undefined') {
+        originalFormat = value.getFormat() as TinyColorFormat;
+      }
+      if (typeof isObjectOriginally === 'undefined') {
+        if (typeof props.modelValue === 'object') {
+          isObjectOriginally = true;
+        }
+      }
       return value;
     },
     set: (newValue: tinycolor.Instance) => {
@@ -70,7 +76,7 @@ export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
       emit('update:tinyColor', newValue.clone());
     }
     if (props.modelValue) {
-      emit('update:modelValue', transformToOriginalInputFormat(newValue, isObjectOriginally, originalFormat));
+      emit('update:modelValue', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
     }
   }
 
