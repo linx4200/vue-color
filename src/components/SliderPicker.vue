@@ -1,12 +1,12 @@
 <template>
-  <div role="application" aria-label="Slider color picker" :class="$style.wrap">
-    <div :class="$style.hue">
+  <div role="application" aria-label="Slider color picker" class="vc-slider-picker">
+    <div class="hue">
       <hue :hue="retainedHueRef" @change="setHue"></hue>
     </div>
-    <div :class="$style.swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
+    <div class="swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
       <div
         v-for="(swatch, index) in normalizedSwatches"
-        :class="$style.swatch"
+        class="swatch"
         :key="index"
         data-index="index"
         @click="handleSwClick(swatch)"
@@ -18,9 +18,9 @@
       >
         <div
           :class="{
-            [$style.swatchPicker]: true,
-            [$style.swatchPickerActive]: isActive(swatch),
-            [$style.swatchPickerWhite]: swatch.l === 1
+            'picker': true,
+            'picker_active': isActive(swatch),
+            'picker_white': swatch.l === 1
           }"
           :style="{background: 'hsl(' + hsl.h + ', ' + swatch.s * 100 + '%, ' + swatch.l * 100 + '%)'}"
         ></div>
@@ -96,8 +96,8 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-slider-picker {
   position: relative;
   width: 410px;
 }
@@ -125,27 +125,27 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
 .swatch:first-child {
   margin-right: 1px;
 }
-.swatch:first-child .swatchPicker {
+.swatch:first-child .picker {
   border-radius: 2px 0px 0px 2px;
 }
 .swatch:last-child {
   margin-right: 0;
 }
-.swatch:last-child .swatchPicker {
+.swatch:last-child .picker {
   border-radius: 0px 2px 2px 0px;
 }
-.swatchPicker {
+.picker {
   cursor: pointer;
   height: 12px;
 }
-.swatch:nth-child(n) .swatchPicker.swatchPickerActive {
+.swatch:nth-child(n) .picker_active {
   transform: scaleY(1.8);
   border-radius: 3.6px/2px;
 }
-.swatchPickerWhite {
+.picker_white {
   box-shadow: inset 0 0 0 1px #ddd;
 }
-.swatchPickerActive.swatchPickerWhite {
+.picker_active.picker_white {
   box-shadow: inset 0 0 0 0.6px #ddd;
 }
 </style>

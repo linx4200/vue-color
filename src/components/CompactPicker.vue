@@ -1,10 +1,10 @@
 <template>
-  <div :class="$style.wrap" role="application" aria-label="Compact color picker" tabindex="0">
-    <ul :class="$style.colors" role="listbox" aria-label="Pick a color">
+  <div class="vc-compact-picker" role="application" aria-label="Compact color picker" tabindex="0">
+    <ul class="colors" role="listbox" aria-label="Pick a color">
       <li
         v-for="c in props.palette"
         :key="c"
-        :class="{[$style.colorItemWhite]: c === '#FFFFFF', [$style.colorItem]: true }"
+        :class="{'color-item_white': c === '#FFFFFF', 'color-item': true }"
         :style="{background: c}"
         @click="handlerClick(c)"
         role="option"
@@ -13,7 +13,7 @@
         @keydown.space="handlerClick(c)"
         tabindex="0"
       >
-        <div :class="$style.dot" v-show="c.toUpperCase() === pick"></div>
+        <div class="dot" v-show="c.toUpperCase() === pick"></div>
       </li>
     </ul>
   </div>
@@ -56,8 +56,8 @@ const handlerClick = (hex: string) => {
 
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-compact-picker {
   padding-top: 5px;
   padding-left: 5px;
   width: 245px;
@@ -71,7 +71,7 @@ const handlerClick = (hex: string) => {
   padding: 0;
   margin: 0;
 }
-.colorItem {
+.color-item {
   list-style: none;
   width: 15px;
   height: 15px;
@@ -81,10 +81,10 @@ const handlerClick = (hex: string) => {
   position: relative;
   cursor: pointer;
 }
-.colorItemWhite {
+.color-item_white {
   box-shadow: inset 0 0 0 1px #ddd;
 }
-.colorItemWhite .dot {
+.color-item_white .dot {
   background: #000;
 }
 

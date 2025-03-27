@@ -1,16 +1,16 @@
 <template>
-  <div role="application" aria-label="Material color inputs" :class="$style.wrap">
-    <EdIn :class="$style.hex" label="hex" :value="tinyColorRef.toHexString()"
+  <div role="application" aria-label="Material color inputs" class="vc-material-picker">
+    <EdIn class="hex" label="hex" :value="tinyColorRef.toHexString()"
       :style="{ borderColor: tinyColorRef.toHexString() }" @change="onHexChange" :a11y="{label: 'Hex'}"></EdIn>
 
-    <div :class="$style.rgb">
-      <div :class="$style.color">
+    <div class="rgb">
+      <div class="color">
         <EdIn label="r" :value="rgb.r" @change="(v) => onChange('r', v)" :a11y="{label: 'Red'}"></EdIn>
       </div>
-      <div :class="$style.color">
+      <div class="color">
         <EdIn label="g" :value="rgb.g" @change="(v) => onChange('g', v)" :a11y="{label: 'Green'}"></EdIn>
       </div>
-      <div :class="$style.color">
+      <div class="color">
         <EdIn label="b" :value="rgb.b" @change="(v) => onChange('b', v)" :a11y="{label: 'Blue'}"></EdIn>
       </div>
     </div>
@@ -44,8 +44,8 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-material-picker {
   width: 98px;
   height: 98px;
   padding: 16px;
@@ -56,7 +56,7 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   background-color: #fff;
 }
 
-.wrap :global(.vc-input-input) {
+.vc-material-picker :deep(.vc-input-input) {
   width: 100%;
   margin-top: 12px;
   font-size: 15px;
@@ -64,7 +64,7 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   height: 30px;
 }
 
-.wrap :global(.vc-input-label) {
+.vc-material-picker :deep(.vc-input-label) {
   position: absolute;
   top: 0;
   left: 0;

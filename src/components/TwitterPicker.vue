@@ -1,9 +1,9 @@
 <template>
   <div
-    :class="[$style.wrap, {
-      'hideTriangle': props.triangle === 'hide',
-      'topLeftTriangle': props.triangle === 'top-left',
-      'topRightTriangle': props.triangle === 'top-right',
+    :class="['vc-twitter-picker', {
+      'tri_hide': props.triangle === 'hide',
+      'tri_top_left': props.triangle === 'top-left',
+      'tri_top_right': props.triangle === 'top-right',
     }]"
     :style="{
       width: typeof props.width === 'number' ? `${props.width}px` : props.width
@@ -11,14 +11,14 @@
     role="application"
     aria-label="Twitter color picker"
   >
-    <div :class="$style.triangleShadow"></div>
-    <div :class="$style.triangle"></div>
+    <div class="triangle_shadow"></div>
+    <div class="triangle"></div>
 
-    <div :class="$style.body" role="listbox" tabindex="0" aria-label="Select a color">
+    <div class="body" role="listbox" tabindex="0" aria-label="Select a color">
       <span
         v-for="(color, index) in presetColors"
         :key="index"
-        :class="$style.swatch"
+        class="swatch"
           :style="{
           background: color,
           boxShadow: `0 0 4px ${equal(color) ? color : 'transparent'}`,
@@ -31,9 +31,9 @@
         tabindex="0"
       >
       </span>
-      <div :class="$style.hash" aria-hidden="true">#</div>
+      <div class="hash" aria-hidden="true">#</div>
       <EdIn :value="hex.replace('#', '')" @change="inputChange" :a11y="{label: 'Hex'}"></EdIn>
-      <div :class="$style.clear"></div>
+      <div class="clear"></div>
     </div>
   </div>
 </template>
@@ -84,8 +84,8 @@ const inputChange = (hex: string) => {
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-twitter-picker {
   background: #fff;
   border: 0 solid rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
@@ -102,7 +102,7 @@ const inputChange = (hex: string) => {
   position: absolute;
 }
 
-.triangleShadow {
+.triangle_shadow {
   width: 0px;
   height: 0px;
   border-style: solid;
@@ -115,11 +115,11 @@ const inputChange = (hex: string) => {
   padding: 15px 9px 9px 15px;
 }
 
-.wrap :global(.vc-editable-input) {
+.vc-twitter-picker :deep(.vc-editable-input) {
   position: relative;
 }
 
-.wrap :global(.vc-input-input) {
+.vc-twitter-picker :deep(.vc-input-input) {
   width: 100px;
   font-size: 14px;
   color: #666;
@@ -134,7 +134,7 @@ const inputChange = (hex: string) => {
   padding-left: 8px;
 }
 
-.wrap :global(.vc-editable-input) span {
+.vc-twitter-picker :deep(.vc-editable-input) span {
   display: none;
 }
 
@@ -165,30 +165,30 @@ const inputChange = (hex: string) => {
   clear: both;
 }
 
-.hideTriangle .triangle {
+.tri_hide .triangle {
   display: none;
 }
 
-.hideTriangle .triangleShadow {
+.tri_hide .triangle_shadow {
   display: none;
 }
 
-.topLeftTriangle .triangle {
+.tri_top_left .triangle {
   top: -10px;
   left: 12px;
 }
 
-.topLeftTriangle .triangleShadow {
+.tri_top_left .triangle_shadow {
   top: -11px;
   left: 12px;
 }
 
-.topRightTriangle .triangle {
+.tri_top_right .triangle {
   top: -10px;
   right: 12px;
 }
 
-.topRightTriangle .triangleShadow {
+.tri_top_right .triangle_shadow {
   top: -11px;
   right: 12px;
 }
