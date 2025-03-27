@@ -283,13 +283,13 @@ const hideHighlight = () => {
   position: relative;
   height: 10px;
 }
-.hue-wrap :deep(.vc-hue .container) {
+.hue-wrap :deep(.container) {
   border-radius: 2px;
 }
 .alpha-wrap :deep(.gradient) {
   border-radius: 2px;
 }
-.hue-wrap :deep(.vc-hue-picker), .alpha-wrap :deep(.picker) {
+.hue-wrap :deep(.picker), .alpha-wrap :deep(.picker) {
   width: 12px;
   height: 12px;
   border-radius: 6px;

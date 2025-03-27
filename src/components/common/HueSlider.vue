@@ -1,5 +1,5 @@
 <template>
-  <div class="vc-hue">
+  <div class="vc-hue-slider">
     <div
       :class="{
         container: true,
@@ -19,7 +19,7 @@
       tabindex="0"
     >
       <div class="picker-wrap" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
-        <div class="vc-hue-picker"></div>
+        <div class="picker"></div>
       </div>
     </div>
   </div>
@@ -192,7 +192,7 @@ function handleKeyDown(e: KeyboardEvent) {
 </script>
 
 <style scoped>
-.vc-hue {
+.vc-hue-slider {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -215,7 +215,7 @@ function handleKeyDown(e: KeyboardEvent) {
   z-index: 2;
   position: absolute;
 }
-.vc-hue-picker {
+.picker {
   cursor: pointer;
   margin-top: 1px;
   width: 4px;
