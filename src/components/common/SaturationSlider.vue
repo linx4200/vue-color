@@ -1,7 +1,7 @@
 <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
 <template>
   <div
-    class="vc-saturation bg"
+    class="vc-saturation-slider bg"
     :style="{background: bgColor}"
     ref="container"
     @mousedown="handleMouseDown"

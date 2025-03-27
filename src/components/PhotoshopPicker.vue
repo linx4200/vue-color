@@ -1,24 +1,24 @@
 <template>
-  <div role="application" aria-label="PhotoShop color picker" :class="[$style.wrap, disableFields ? $style.disableFields : '']">
-    <div :class="$style.title" aria-hidden="true">{{title}}</div>
-    <div :class="$style.body">
-      <div :class="$style.saturation">
+  <div role="application" aria-label="PhotoShop color picker" :class="['vc-photoshop-picker', disableFields ? 'fields_disabled' : '']">
+    <div class="title" aria-hidden="true">{{title}}</div>
+    <div class="body">
+      <div class="saturation">
         <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
       </div>
-      <div :class="$style.hue">
+      <div class="hue">
         <Hue direction="vertical" :hue="retainedHueRef" @change="setHue">
-          <div :class="$style.huePointer">
-            <i :class="$style.huePointerLeft"></i><i :class="$style.huePointerRight"></i>
+          <div class="hue-pointer">
+            <i class="hue-pointer-left"></i><i class="hue-pointer-right"></i>
           </div>
         </Hue>
       </div>
-      <div :class="[[$style.controls], disableFields ? $style.controlsDisableFields : '']">
-        <div :class="$style.preview">
-          <div :class="$style.previewLabel" aria-hidden="true">{{ newLabel }}</div>
-          <div :class="$style.previewSwatches">
-            <div :class="$style.previewColor" :aria-label="`New color is #${hex}`" :style="{background: `#${hex}`}"></div>
+      <div :class="['controls', disableFields ? 'controls_fields_disabled' : '']">
+        <div class="preview">
+          <div class="preview-label" aria-hidden="true">{{ newLabel }}</div>
+          <div class="preview-swatches">
+            <div class="preview-color" :aria-label="`New color is #${hex}`" :style="{background: `#${hex}`}"></div>
             <div
-              :class="$style.previewColor"
+              class="preview-color"
               :style="{background: currentColorRef}"
               @click="clickCurrentColor"
               role="button"
@@ -27,30 +27,30 @@
               tabindex="0"
             ></div>
           </div>
-          <div :class="$style.previewLabel" aria-hidden="true">{{ currentLabel }}</div>
+          <div class="preview-label" aria-hidden="true">{{ currentLabel }}</div>
         </div>
-        <div :class="$style.actions" v-if="!disableFields">
-          <div :class="$style.actionBtn" role="button" aria-label="Click to apply new color" @click="handleOK" @keydown.space="clickCurrentColor" tabindex="0">{{ okLabel }}</div>
-          <div :class="$style.actionBtn" role="button" :aria-label="cancelLabel" @click="handleCancel" @keydown.space="clickCurrentColor" tabindex="0">{{ cancelLabel }}</div>
+        <div class="actions" v-if="!disableFields">
+          <div class="action-btn" role="button" aria-label="Click to apply new color" @click="handleOK" @keydown.space="clickCurrentColor" tabindex="0">{{ okLabel }}</div>
+          <div class="action-btn" role="button" :aria-label="cancelLabel" @click="handleCancel" @keydown.space="clickCurrentColor" tabindex="0">{{ cancelLabel }}</div>
 
-          <div :class="$style.fields">
+          <div class="fields">
             <!-- hsla -->
             <EdIn label="h" desc="°" :value="hsv.h.toFixed()" @change="(v) => inputChangeHSV('h', v)" :a11y="{label: 'Hue'}"></EdIn>
             <EdIn label="s" desc="%" :value="(hsv.s * 100).toFixed()" :min="0" :max="100" @change="(v) => inputChangeHSV('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
             <EdIn label="v" desc="%" :value="(hsv.v * 100).toFixed()" :min="0" :max="100" @change="(v) => inputChangeHSV('v', v)" :a11y="{label: 'Value'}"></EdIn>
-            <div :class="$style.fieldsDivider"></div>
+            <div class="fields-divider"></div>
             <!-- rgb -->
             <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
             <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
             <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
-            <div :class="$style.fieldsDivider"></div>
+            <div class="fields-divider"></div>
             <!-- hex -->
-            <EdIn label="#" :class="$style.hex" :value="hex" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
+            <EdIn label="#" class="hex" :value="hex" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
           </div>
 
           <div
             v-if="hasResetButton"
-            :class="$style.actionBtn"
+            class="action-btn"
             @click="handleReset"
             role="button"
             :aria-label="resetLabel"
@@ -166,8 +166,8 @@ const handleReset = () => {
 
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-photoshop-picker {
   background: #DCDCDC;
   border-radius: 4px;
   box-shadow: 0 0 0 1px rgba(0,0,0,.25), 0 8px 16px rgba(0,0,0,.15);
@@ -175,7 +175,7 @@ const handleReset = () => {
   width: 513px;
   font-family: Roboto;
 }
-.disableFields {
+.fields_disabled {
   width: 390px;
 }
 .title {
@@ -201,7 +201,7 @@ const handleReset = () => {
   border-bottom: 2px solid #F0F0F0;
   overflow: hidden;
 }
-.saturation :global(.vc-saturation-circle) {
+.saturation :deep(.picker) {
   width: 12px;
   height: 12px;
 }
@@ -213,11 +213,11 @@ const handleReset = () => {
   border: 2px solid #B3B3B3;
   border-bottom: 2px solid #F0F0F0;
 }
-.huePointer {
+.hue-pointer {
   position: relative;
 }
-.huePointerLeft,
-.huePointerRight {
+.hue-pointer-left,
+.hue-pointer-right {
   position: absolute;
   width: 0;
   height: 0;
@@ -225,8 +225,8 @@ const handleReset = () => {
   border-width: 5px 0 5px 8px;
   border-color: transparent transparent transparent #555;
 }
-.huePointerLeft:after,
-.huePointerRight:after {
+.hue-pointer-left:after,
+.hue-pointer-right:after {
   content: "";
   width: 0;
   height: 0;
@@ -238,10 +238,10 @@ const handleReset = () => {
   left: 1px;
   transform: translate(-8px, -5px);
 }
-.huePointerLeft {
+.hue-pointer-left {
   transform: translate(-13px, -4px);
 }
-.huePointerRight {
+.hue-pointer-right {
   transform: translate(20px, -4px) rotate(180deg);
 }
 
@@ -250,7 +250,7 @@ const handleReset = () => {
   margin-left: 10px;
   display: flex;
 }
-.controlsDisableFields {
+.controls_fields_disabled {
   width: auto;
 }
 
@@ -258,7 +258,7 @@ const handleReset = () => {
   margin-left: 20px;
   flex: 1;
 }
-.actionBtn {
+.action-btn {
   cursor: pointer;
   background-image: linear-gradient(-180deg, #FFFFFF 0%, #E6E6E6 100%);
   border: 1px solid #878787;
@@ -274,17 +274,17 @@ const handleReset = () => {
 .preview {
   width: 60px;
 }
-.previewSwatches {
+.preview-swatches {
   border: 1px solid #B3B3B3;
   border-bottom: 1px solid #F0F0F0;
   margin-bottom: 2px;
   margin-top: 1px;
 }
-.previewColor {
+.preview-color {
   height: 34px;
   box-shadow: inset 1px 0 0 #000, inset -1px 0 0 #000, inset 0 1px 0 #000;
 }
-.previewLabel {
+.preview-label {
   font-size: 14px;
   color: #000;
   text-align: center;
@@ -296,7 +296,7 @@ const handleReset = () => {
   width: 80px;
   position: relative;
 }
-.fields :global(.vc-input-input) {
+.fields :deep(.vc-input-input) {
   margin-left: 40%;
   width: 40%;
   height: 18px;
@@ -307,7 +307,7 @@ const handleReset = () => {
   padding-left: 3px;
   margin-right: 10px;
 }
-.fields :global(.vc-input-label), .fields :global(.vc-input-desc) {
+.fields :deep(.vc-input-label), .fields :deep(.vc-input-desc) {
   top: 0;
   text-transform: uppercase;
   font-size: 13px;
@@ -315,20 +315,20 @@ const handleReset = () => {
   line-height: 22px;
   position: absolute;
 }
-.fields :global(.vc-input-label) {
+.fields :deep(.vc-input-label) {
   left: 0;
   width: 34px;
 }
-.fields :global(.vc-input-desc) {
+.fields :deep(.vc-input-desc) {
   right: 0;
   width: 0;
 }
 
-.fieldsDivider {
+.fields-divider {
   height: 5px;
 }
 
-.hex :global(.vc-input-input) {
+.hex :deep(.vc-input-input) {
   margin-left: 20%;
   width: 80%;
   height: 18px;
@@ -338,7 +338,7 @@ const handleReset = () => {
   font-size: 13px;
   padding-left: 3px;
 }
-.hex :global(.vc-input-label) {
+.hex :deep(.vc-input-label) {
   position: absolute;
   top: 0;
   left: 0;

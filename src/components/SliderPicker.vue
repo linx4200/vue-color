@@ -105,7 +105,7 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
   height: 12px;
   position: relative;
 }
-.hue :global(.vc-hue-picker) {
+.hue :deep(.picker) {
   width: 14px;
   height: 14px;
   border-radius: 6px;
