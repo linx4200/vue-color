@@ -1,6 +1,11 @@
 <template>
-  <div :class="['vc-hue', directionClass, $style.wrap]">
-    <div :class="$style.container"
+  <div class="vc-hue">
+    <div
+      :class="{
+        container: true,
+        horizontal: props.direction === 'horizontal',
+        vertical: props.direction === 'vertical',
+      }"
       ref="container"
       @mousedown="handleMouseDown"
       @touchmove="handleChange"
@@ -13,23 +18,21 @@
       aria-label="Hue"
       tabindex="0"
     >
-      <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
-        <div :class="['vc-hue-picker', $style.picker]"></div>
+      <div class="picker-wrap" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
+        <div class="vc-hue-picker"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ref, useTemplateRef, useCssModule } from 'vue';
+import { watch, computed, ref, useTemplateRef } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
 // <Hue /> is not allowed to use tinycolor instance
 // because it may lost hue value in some cases:
 // saturation is 0, lightness is 0 or 100, value is 0
-
-const classes = useCssModule();
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
@@ -52,13 +55,6 @@ const hue = computed(() => props.hue);
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
   if (newHue !== 0 && newHue - oldHue < 0) pullDirection.value = 'left';
-})
-
-const directionClass = computed(() => {
-  return {
-    [classes.horizontal]: props.direction === 'horizontal',
-    [classes.vertical]: props.direction === 'vertical'
-  }
 });
 
 const pointerTop = computed(() => {
@@ -195,8 +191,8 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-hue {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -212,15 +208,14 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 .container {
   cursor: pointer;
-  margin: 0 2px;
   position: relative;
   height: 100%;
 }
-.pointer {
+.picker-wrap {
   z-index: 2;
   position: absolute;
 }
-.picker {
+.vc-hue-picker {
   cursor: pointer;
   margin-top: 1px;
   width: 4px;

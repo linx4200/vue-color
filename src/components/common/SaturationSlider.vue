@@ -1,7 +1,7 @@
 <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
 <template>
   <div
-    :class="['vc-saturation', $style.bg]"
+    class="vc-saturation bg"
     :style="{background: bgColor}"
     ref="container"
     @mousedown="handleMouseDown"
@@ -10,11 +10,11 @@
     role="application"
     aria-label="Saturation and brightness picker"
   >
-    <div :class="[$style.bg, $style.white]"></div>
-    <div :class="[$style.bg, $style.black]"></div>
+    <div class="bg white"></div>
+    <div class="bg black"></div>
 
     <div
-      :class="$style.pointer"
+      class="picker-wrap"
       :style="{top: pointerTop, left: pointerLeft}"
       role="slider"
       tabindex="0"
@@ -25,7 +25,7 @@
       :aria-valuetext="`saturation: ${hsv.s.toFixed(0)}%, brightness: ${hsv.v.toFixed(0)}%`"
       @keydown="handleKeyDown"
     >
-      <div :class="['vc-saturation-circle', $style.circle]"></div>
+      <div class="picker"></div>
     </div>
 
   </div>
@@ -159,10 +159,9 @@ function handleKeyDown(e: KeyboardEvent) {
     };
   }
 }
-
 </script>
 
-<style module>
+<style scoped>
 .bg {
   cursor: pointer;
   position: absolute;
@@ -175,17 +174,18 @@ function handleKeyDown(e: KeyboardEvent) {
 .white {
   background: linear-gradient(to right, #fff, rgba(255,255,255,0));
 }
+
 .black {
   background: linear-gradient(to top, #000, rgba(0,0,0,0));
 }
 
-.pointer {
+.picker-wrap {
   cursor: pointer;
   position: absolute;
 }
 
-.circle {
-  cursor: head;
+.picker {
+  cursor: pointer;
   width: 4px;
   height: 4px;
   box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);

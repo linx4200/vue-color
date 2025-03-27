@@ -1,11 +1,11 @@
 <template>
-  <div :class="$style.container">
-    <div :class="$style.checkerboard">
+  <div class="vc-alpha-slider">
+    <div class="checkerboard">
       <Checkerboard />
     </div>
-    <div :class="['vc-alpha-gradient', $style.gradient]" :style="{background: gradientColor}"></div>
+    <div class="gradient" :style="{background: gradientColor}"></div>
     <div
-        :class="$style.container"
+        class="slider"
         ref="container"
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
@@ -18,8 +18,8 @@
         tabindex="0"
         @keydown="handleKeydown"
       >
-      <div :class="$style.pointer" :style="{left: alpha * 100 + '%'}">
-        <div :class="['vc-alpha-picker', $style.picker]"></div>
+      <div class="picker-wrap" :style="{left: alpha * 100 + '%'}">
+        <div class="picker"></div>
       </div>
     </div>
   </div>
@@ -116,17 +116,9 @@ function handleKeydown(e: KeyboardEvent) {
     updateColor(colorRef.value);
   }
 }
-
 </script>
 
-<style module>
-.container {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-}
+<style scoped>
 .checkerboard {
   position: absolute;
   top: 0px;
@@ -142,14 +134,17 @@ function handleKeydown(e: KeyboardEvent) {
   bottom: 0px;
   left: 0px;
 }
-.container {
+.slider {
   cursor: pointer;
-  position: relative;
   z-index: 2;
-  height: 100%;
   margin: 0 3px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
 }
-.pointer {
+.picker-wrap {
   z-index: 2;
   position: absolute;
 }

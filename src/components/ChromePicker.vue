@@ -283,13 +283,13 @@ const hideHighlight = () => {
   position: relative;
   height: 10px;
 }
-.hue-wrap :deep(.vc-hue) {
+.hue-wrap :deep(.vc-hue .container) {
   border-radius: 2px;
 }
-.alpha-wrap :deep(.vc-alpha-gradient) {
+.alpha-wrap :deep(.gradient) {
   border-radius: 2px;
 }
-.hue-wrap :deep(.vc-hue-picker), .alpha-wrap :deep(.vc-alpha-picker) {
+.hue-wrap :deep(.vc-hue-picker), .alpha-wrap :deep(.picker) {
   width: 12px;
   height: 12px;
   border-radius: 6px;
@@ -308,7 +308,7 @@ const hideHighlight = () => {
   border-radius: 2px 2px 0 0;
   overflow: hidden;
 }
-.saturation :deep(.vc-saturation-circle) {
+.saturation :deep(.picker) {
   width: 12px;
   height: 12px;
 }
