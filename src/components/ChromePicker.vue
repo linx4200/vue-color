@@ -1,69 +1,75 @@
 <template>
-  <div role="application" aria-label="Chrome Color Picker" :class="[$style.wrapper, disableAlpha ? $style.disableAlpha : '']">
-    <div :class="$style.saturation">
+  <div role="application" aria-label="Chrome Color Picker" :class="['vc-chrome-picker', disableAlpha ? 'alpha-disabled' : '']">
+    <div class="saturation">
       <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
     </div>
-    <div :class="$style.body">
-      <div :class="$style.controls">
-        <div :class="$style.colorWrap">
-          <div role="presentation" aria-live="polite" :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" :class="$style.activeColor"></div>
+    <div class="body">
+      <div class="controls">
+        <div class="color-wrap">
+          <div
+            class="active-color"
+            :style="{backgroundColor: activeColor}"
+            role="presentation"
+            aria-live="polite"
+            :aria-label="`Current color is ${activeColor}`"
+          ></div>
           <Checkerboard v-if="!props.disableAlpha"></Checkerboard>
         </div>
 
-        <div :class="$style.sliders">
-          <div :class="$style.hueWrap">
+        <div class="sliders">
+          <div class="hue-wrap">
             <Hue :hue="retainedHueRef" @change="setHue"></Hue>
           </div>
-          <div :class="$style.alphaWrap" v-if="!props.disableAlpha">
+          <div class="alpha-wrap" v-if="!props.disableAlpha">
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
           </div>
         </div>
       </div>
 
-      <div :class="$style.fieldsWrap" v-if="!disableFields" data-testid="fields">
-        <div :class="$style.fields" v-show="fieldsIndex === 0">
+      <div class="fieldsWrap" v-if="!disableFields" data-testid="fields">
+        <div class="fields" v-show="fieldsIndex === 0">
           <!-- rgba -->
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
           </div>
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
           </div>
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
           </div>
-          <div :class="$style.field" v-if="!disableAlpha">
+          <div class="field" v-if="!disableAlpha">
             <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
-        <div :class="$style.fields" v-show="fieldsIndex === 1">
+        <div class="fields" v-show="fieldsIndex === 1">
           <!-- hex -->
-          <div :class="$style.field">
+          <div class="field">
             <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)" :a11y="{label: 'Hex'}"></EdIn>
             <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="(v: string) => inputChangeHex('hex8', v)" :a11y="{label: 'Hex with transparency'}"></EdIn>
           </div>
         </div>
 
-        <div :class="$style.fields" v-show="fieldsIndex === 2">
+        <div class="fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
           </div>
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
           </div>
-          <div :class="$style.field">
+          <div class="field">
             <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)" :a11y="{label: 'Lightness'}"></EdIn>
           </div>
-          <div :class="$style.field" v-if="!disableAlpha">
+          <div class="field" v-if="!disableAlpha">
             <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
         <!-- btn -->
         <div
-          :class="$style.toggleBtn"
+          class="toggle-btn"
           @click="toggleViews"
           @keydown.enter="toggleViews"
           @keydown.space="toggleViews"
@@ -76,7 +82,7 @@
           aria-label="Change color format"
           tabindex="0"
         >
-          <div :class="$style.toggleIcon" role="presentation">
+          <div class="toggle-icon" role="presentation">
             <svg
               style="width:24px; height:24px"
               viewBox="0 0 24 24"
@@ -84,7 +90,7 @@
               <path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
             </svg>
           </div>
-          <div :class="$style.toggleIconHighlight" v-show="highlight" role="presentation"></div>
+          <div class="toggle-icon_highlighted" v-show="highlight" role="presentation"></div>
         </div>
         <!-- btn -->
       </div>
@@ -105,7 +111,6 @@ import Checkerboard from './common/CheckerboardBG.vue';
 import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
 import { hueModel } from '../composable/hue.ts';
 
-// todo: disableAlpha 的样式有问题
 type Props = {
   disableAlpha?: boolean;
   disableFields?: boolean;
@@ -201,8 +206,8 @@ const hideHighlight = () => {
 
 </script>
 
-<style module>
-.wrapper {
+<style scoped>
+.vc-chrome-picker {
   background: #fff;
   border-radius: 2px;
   box-shadow: 0 0 2px rgba(0,0,0,.3), 0 4px 8px rgba(0,0,0,.3);
@@ -214,20 +219,19 @@ const hideHighlight = () => {
 .controls {
   display: flex;
 }
-.colorWrap {
+.color-wrap {
   position: relative;
   width: 36px;
 }
-.activeColor {
+.active-color {
   position: relative;
   width: 30px;
   height: 30px;
   border-radius: 15px;
   overflow: hidden;
   z-index: 1;
-  color: v-bind('activeColor');
 }
-.colorWrap :global(.vc-checkerboard) {
+.color-wrap :deep(.vc-checkerboard) {
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -249,19 +253,19 @@ const hideHighlight = () => {
   padding-left: 6px;
   width: 100%;
 }
-.toggleBtn {
+.toggle-btn {
   width: 32px;
   text-align: right;
   position: relative;
 }
-.toggleIcon {
+.toggle-icon {
   margin-right: -4px;
   margin-top: 12px;
   cursor: pointer;
   position: relative;
   z-index: 2;
 }
-.toggleIconHighlight {
+.toggle-icon_highlighted {
   position: absolute;
   width: 24px;
   height: 28px;
@@ -270,22 +274,22 @@ const hideHighlight = () => {
   top: 10px;
   left: 12px;
 }
-.hueWrap {
+.hue-wrap {
   position: relative;
   height: 10px;
   margin-bottom: 8px;
 }
-.alphaWrap {
+.alpha-wrap {
   position: relative;
   height: 10px;
 }
-.hueWrap :global(.vc-hue) {
+.hue-wrap :deep(.vc-hue) {
   border-radius: 2px;
 }
-.alphaWrap :global(.vc-alpha-gradient) {
+.alpha-wrap :deep(.vc-alpha-gradient) {
   border-radius: 2px;
 }
-.hueWrap :global(.vc-hue-picker), .alphaWrap :global(.vc-alpha-picker) {
+.hue-wrap :deep(.vc-hue-picker), .alpha-wrap :deep(.vc-alpha-picker) {
   width: 12px;
   height: 12px;
   border-radius: 6px;
@@ -304,12 +308,12 @@ const hideHighlight = () => {
   border-radius: 2px 2px 0 0;
   overflow: hidden;
 }
-.saturation :global(.vc-saturation-circle) {
+.saturation :deep(.vc-saturation-circle) {
   width: 12px;
   height: 12px;
 }
 
-.fields :global(.vc-input-input) {
+.fields :deep(.vc-input-input) {
   font-size: 11px;
   color: #333;
   width: 100%;
@@ -319,7 +323,7 @@ const hideHighlight = () => {
   height: 21px;
   text-align: center;
 }
-.fields :global(.vc-input-label) {
+.fields :deep(.vc-input-label) {
   text-transform: uppercase;
   font-size: 11px;
   line-height: 11px;
@@ -329,14 +333,14 @@ const hideHighlight = () => {
   margin-top: 12px;
 }
 
-.disableAlpha :global(.activeColor) {
+.alpha-disabled :deep(.active-color) {
   width: 18px;
   height: 18px;
 }
-.disableAlpha :global(.colorWra) {
+.alpha-disabled :deep(.color-wrap) {
   width: 30px;
 }
-.disableAlpha :global(.hueWrap) {
+.alpha-disabled :deep(.hue-wrap) {
   margin-top: 4px;
   margin-bottom: 4px;
 }
