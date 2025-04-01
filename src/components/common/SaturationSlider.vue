@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue';
+import { computed, useTemplateRef, ref } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
@@ -47,6 +47,9 @@ type Props = {
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 const props = defineProps<Props & useTinyColorModelProps>();
+
+/** Record the location where the user clicks */
+const pointerLeftRef = ref(0);
 
 const tinyColorRef = defineColorModel(props, emit);
 
@@ -66,6 +69,11 @@ const pointerTop = computed(() => {
   return (-(hsv.value.v * 100) + 1) + 100 + '%';
 });
 const pointerLeft = computed(() => {
+  // 1. Because when v = 0.01 tinycolor conversion will be inaccurate, use the click position
+  // 2. Because the hue value is lost when v = 0 (as expected), the clicked position is used
+  if (hsv.value.v <= 0.01) {
+    return pointerLeftRef.value * 100 + '%';
+  }
   return hsv.value.s * 100 + '%';
 });
 
@@ -84,8 +92,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const containerWidth = container.clientWidth
   const containerHeight = container.clientHeight
 
-  const {x: xOffset, y: yOffset } = getAbsolutePosition(container);
-  const {x: pageX, y: pageY } = getPageXYFromEvent(e);
+  const { x: xOffset, y: yOffset } = getAbsolutePosition(container);
+  const { x: pageX, y: pageY } = getPageXYFromEvent(e);
 
   const left = clamp(pageX - xOffset, 0, containerWidth);
   const top = clamp(pageY - yOffset, 0, containerHeight);
@@ -93,11 +101,24 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const saturation = left / containerWidth;
   const brightness = clamp(1 - (top / containerHeight), 0, 1);
 
+  pointerLeftRef.value = saturation;
+
   // s and v is multiplied by 100 due to prevention of dithering
+  let s = Math.round(saturation * 100);
+  let v = Math.round(brightness * 100);
+
+  // "1" is treated as percentage number in tinycolor
+  if (s === 1) {
+    s = 0.01;
+  }
+  if (v === 1) {
+    v = 0.01;
+  }
+
   onChange({
     h: hue.value,
-    s: Math.round(saturation * 100),
-    v: Math.round(brightness * 100),
+    s,
+    v,
     a: hsv.value.a,
   });
 }
