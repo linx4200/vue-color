@@ -28,14 +28,14 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
 const props = defineProps<useTinyColorModelProps>();
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef, updateColor } = useTinyColorModel(props, emit);
+const colorRef = defineColorModel(props, emit);
 
 const gradientColor = computed(() => {
   const rgba = colorRef.value.toRgb();
@@ -74,8 +74,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   }
 
   if (alpha.value !== a) {
-    colorRef.value.setAlpha(a);
-    updateColor(colorRef.value);
+    colorRef.value = colorRef.value.setAlpha(a).clone();
   }
 }
 
@@ -112,8 +111,7 @@ function handleKeydown(e: KeyboardEvent) {
     }
   }
   if (typeof newValue !== 'undefined') {
-    colorRef.value.setAlpha(newValue);
-    updateColor(colorRef.value);
+    colorRef.value = colorRef.value.setAlpha(newValue).clone();
   }
 }
 </script>

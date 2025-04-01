@@ -32,9 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import tinycolor from 'tinycolor2';
 import { computed, useTemplateRef } from 'vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
@@ -48,14 +47,19 @@ type Props = {
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 const props = defineProps<Props & useTinyColorModelProps>();
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+
+const tinyColorRef = defineColorModel(props, emit);
 
 const hsv = computed(() => {
   return tinyColorRef.value.toHsv();
 });
 
+const hue = computed(() => {
+  return props.hue ?? hsv.value.h;
+});
+
 const bgColor = computed(() => {
-  return `hsl(${props.hue ?? hsv.value.h}, 100%, 50%)`;
+  return `hsl(${hue.value}, 100%, 50%)`;
 });
 
 const pointerTop = computed(() => {
@@ -87,20 +91,21 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const top = clamp(pageY - yOffset, 0, containerHeight);
 
   const saturation = left / containerWidth;
-  const brightness = clamp(-(top / containerHeight) + 1, 0, 1);
+  const brightness = clamp(1 - (top / containerHeight), 0, 1);
 
+  // s and v is multiplied by 100 due to prevention of dithering
   onChange({
-    h: hsv.value.h,
-    s: saturation,
-    v: brightness,
+    h: hue.value,
+    s: Math.round(saturation * 100),
+    v: Math.round(brightness * 100),
     a: hsv.value.a,
   });
 }
 
 function onChange (param: { h: number, s: number, v: number, a: number }) {
-  // tiny color internally doesn't handle saturation and value of HSV mutation
+  // tiny color internally doesn't handle saturation and brightness of HSV mutation
   // so, need to create a new tiny color instance
-  updateTinyColor(tinycolor(param));
+  tinyColorRef.value = param;
 }
 
 const throttledHandleChange = throttle(handleChange, 20);
@@ -163,7 +168,7 @@ function handleKeyDown(e: KeyboardEvent) {
 
 <style scoped>
 .bg {
-  cursor: pointer;
+  cursor: crosshair;
   position: absolute;
   top: 0;
   left: 0;
@@ -185,7 +190,7 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 
 .picker {
-  cursor: pointer;
+  cursor: move;
   width: 4px;
   height: 4px;
   box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);

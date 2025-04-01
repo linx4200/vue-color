@@ -36,21 +36,19 @@ import { throttle } from '../../utils/throttle.ts';
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
-  hue?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  hue: 0,
   direction: 'horizontal'
 });
 
-const emit = defineEmits(['change']);
+const hue = defineModel({
+  default: 0
+});
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
 const containerRef = useTemplateRef('container');
-
-const hue = computed(() => props.hue);
 
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
@@ -107,7 +105,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
       h = 0;
     } else {
       percent = -(top * 100 / containerHeight) + 100;
-      h = (360 * percent / 100);
+      h = Math.round(360 * percent / 100);
     }
 
     if (hue.value !== h) {
@@ -120,7 +118,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
       h = 360
     } else {
       percent = left * 100 / containerWidth
-      h = (360 * percent / 100)
+      h =  Math.round(360 * percent / 100)
     }
     if (hue.value !== h) {
       emitChange(h);
@@ -129,7 +127,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
 }
 
 function emitChange(h: number) {
-  emit('change', h, h - hue.value);
+  hue.value = h;
 }
 
 const throttledHandleChange = throttle(handleChange);
@@ -207,7 +205,7 @@ function handleKeyDown(e: KeyboardEvent) {
   background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
 }
 .container {
-  cursor: pointer;
+  cursor: crosshair;
   position: relative;
   height: 100%;
 }
@@ -216,7 +214,7 @@ function handleKeyDown(e: KeyboardEvent) {
   position: absolute;
 }
 .picker {
-  cursor: pointer;
+  cursor: col-resize;
   margin-top: 1px;
   width: 4px;
   border-radius: 1px;

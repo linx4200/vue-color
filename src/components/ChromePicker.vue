@@ -1,7 +1,7 @@
 <template>
   <div role="application" aria-label="Chrome Color Picker" :class="['vc-chrome-picker', disableAlpha ? 'alpha-disabled' : '']">
     <div class="saturation">
-      <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
+      <Saturation v-model:tinyColor="tinyColorRef" :hue="hueRef"></Saturation>
     </div>
     <div class="body">
       <div class="controls">
@@ -18,7 +18,7 @@
 
         <div class="sliders">
           <div class="hue-wrap">
-            <Hue :hue="retainedHueRef" @change="setHue"></Hue>
+            <Hue v-model="hueRef"></Hue>
           </div>
           <div class="alpha-wrap" v-if="!props.disableAlpha">
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
@@ -54,7 +54,7 @@
         <div class="fields" v-show="fieldsIndex === 2">
           <!-- hsla -->
           <div class="field">
-            <EdIn label="h" :value="retainedHueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
+            <EdIn label="h" :value="hueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
           </div>
           <div class="field">
             <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
@@ -108,8 +108,8 @@ import Alpha from './common/AlphaSlider.vue';
 import EdIn from './common/EditableInput.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
-import { hueModel } from '../composable/hue.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { retainedHueRef } from '../composable/hue.ts';
 
 type Props = {
   disableAlpha?: boolean;
@@ -119,8 +119,8 @@ type Props = {
 const props = defineProps<Props & useTinyColorModelProps>();
 const emit = defineEmits(['change'].concat(EmitEventNames));
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { hueRef, setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const hueRef = retainedHueRef({ colorRef: tinyColorRef });
 
 const fieldsIndex = ref(0);
 let highlight = ref(false);
@@ -156,7 +156,7 @@ const inputChangeHex = (type: 'hex' | 'hex8', data?: string) => {
     if (type === 'hex') {
       newValue.setAlpha(1);
     }
-    updateTinyColor(newValue);
+    tinyColorRef.value = newValue;
   }
 };
 
@@ -165,11 +165,11 @@ const inputChangeRGBA = (key: 'r' | 'g' | 'b' | 'a', data?: number) => {
     return;
   }
   const newValue = {[key]: data};
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...rgb.value,
     a: alpha.value,
     ...newValue,
-  }));
+  };
 }
 
 const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) => {
@@ -183,11 +183,11 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
   if (key === 'h') {
     hueRef.value = +data;
   }
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...tinyColorRef.value.toHsl(),
     a: alpha.value,
     ...newValue,
-  }));
+  };
 }
 
 const toggleViews = () => {
@@ -301,6 +301,7 @@ const hideHighlight = () => {
   padding: 16px 16px 12px;
   background-color: #fff;
 }
+
 .saturation {
   width: 100%;
   padding-bottom: 55%;
@@ -311,6 +312,7 @@ const hideHighlight = () => {
 .saturation :deep(.picker) {
   width: 12px;
   height: 12px;
+  transform: translate(-6px, -6px);
 }
 
 .fields :deep(.vc-input-input) {
