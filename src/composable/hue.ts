@@ -1,14 +1,39 @@
-import { ref, computed, type WritableComputedRef } from "vue";
+import { ref, computed, type WritableComputedRef, watch } from "vue";
 
-// todo: add description: 改变它同时会改变 tinyColorRef 的值
 /**
- * maintain the hue value, because the hue value may be lost when converting to tinycolor instance in some cases.
- * @param tinyColorRef
- * @returns
+ * Creates a reactive reference to the hue value of a given color, retaining the hue value 
+ * independently from the color reference and allowing for updates via a computed property.
+ * Because tinycolor may lose the hue value when converting formats, especially when v = 0 / s = 0.
+ *
+ * @param {Object} params - The parameters object.
+ * @param {number} [params.defaults] - An optional initial hue value to use if `colorRef` is undefined or doesn't provide one.
+ * @param {WritableComputedRef<tinycolor.Instance, tinycolor.Instance>} [params.colorRef] - 
+ *   A writable computed reference to a `tinycolor` color object. This reference is observed and updated when the hue changes.
+ *
+ * @returns {ComputedRef<number>} A computed reference representing the retained hue value. 
+ *   - `get`: Returns the stored hue value if available, otherwise derives it from `colorRef`, falling back to `0`.
+ *   - `set`: Updates both the internal hue and `colorRef` by spinning the color to match the new hue.
+ *
+ * @example
+ * const color = ref(tinycolor("#00ff00"));
+ * const hue = retainedHueRef({ colorRef: computed({
+ *   get: () => color.value,
+ *   set: val => { color.value = val; }
+ * }) });
+ *
+ * hue.value = 120; // Spins the color to match hue 120
  */
 export const retainedHueRef = ({ defaults, colorRef } : { defaults?: number, colorRef?: WritableComputedRef<tinycolor.Instance, tinycolor.Instance>}) => {
-  const defaultValue = colorRef?.value.toHsl().h ?? defaults;
-  const hueRef = ref<undefined | number>(defaultValue);
+  const hueRef = ref<undefined | number>(defaults);
+
+  if (typeof colorRef !== 'undefined') {
+    watch(colorRef, () => {
+      const h = colorRef?.value.toHsl().h;
+      if (h !== hueRef.value) {
+        hueRef.value = h;
+      }
+    });
+  }
 
   const retainedHueRef = computed({
     get: () => {
@@ -33,5 +58,6 @@ export const retainedHueRef = ({ defaults, colorRef } : { defaults?: number, col
       }
     }
   });
+
   return retainedHueRef;
 }

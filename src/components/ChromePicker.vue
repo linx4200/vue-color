@@ -100,7 +100,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import tinycolor from 'tinycolor2';
 
 import Saturation from './common/SaturationSlider.vue';
 import Hue from './common/HueSlider.vue';
@@ -110,6 +109,8 @@ import Checkerboard from './common/CheckerboardBG.vue';
 
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
 import { retainedHueRef } from '../composable/hue.ts';
+
+import { isValid } from '../utils/color';
 
 type Props = {
   disableAlpha?: boolean;
@@ -151,12 +152,9 @@ const inputChangeHex = (type: 'hex' | 'hex8', data?: string) => {
   if (!data) {
     return;
   }
-  const newValue = tinycolor(data, { format: type });
-  if (newValue.isValid()) {
-    if (type === 'hex') {
-      newValue.setAlpha(1);
-    }
-    tinyColorRef.value = newValue;
+  // todo: add test cases for type
+  if (isValid(data)) {
+    tinyColorRef.value = data;
   }
 };
 

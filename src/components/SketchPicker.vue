@@ -1,12 +1,12 @@
 <template>
   <div role="application" aria-label="Sketch color picker" :class="['vc-sketch-picker', disableAlpha ? 'alpha-disabled' : '']">
     <div class="saturation">
-      <Saturation :hue="retainedHueRef" v-model:tinyColor="tinyColorRef"></Saturation>
+      <Saturation :hue="hueRef" v-model:tinyColor="tinyColorRef"></Saturation>
     </div>
     <div class="controls">
       <div class="sliders">
         <div class="hue">
-          <Hue :hue="retainedHueRef" @change="setHue"/>
+          <Hue v-model="hueRef" />
         </div>
         <div class="alpha" v-if="!disableAlpha">
           <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
@@ -77,7 +77,6 @@ const presetColorsOfSketch = [
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import tinycolor from 'tinycolor2';
 
 import EdIn from './common/EditableInput.vue';
 import Saturation from './common/SaturationSlider.vue';
@@ -85,8 +84,10 @@ import Hue from './common/HueSlider.vue';
 import Alpha from './common/AlphaSlider.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
-import { hueModel } from '../composable/hue.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { retainedHueRef } from '../composable/hue.ts';
+
+import { isValid, isTransparent } from '../utils/color';
 
 type Props = {
   presetColors?: string[];
@@ -101,8 +102,8 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 });
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const hueRef = retainedHueRef({ colorRef: tinyColorRef });
 
 const alpha = computed(() => tinyColorRef.value.getAlpha());
 const hex = computed(() => {
@@ -120,9 +121,8 @@ const inputChangeHex = (data?: string) => {
   if (!data) {
     return;
   }
-  const newValue = tinycolor(data);
-  if (newValue.isValid()) {
-    updateTinyColor(newValue);
+  if (isValid(data)) {
+    tinyColorRef.value = data;
   }
 };
 
@@ -131,25 +131,21 @@ const inputChangeRGBA = (key: 'r' | 'g' | 'b', data?: number) => {
     return;
   }
   const newValue = {[key]: data};
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...rgb.value,
     ...newValue,
-  }));
+  };
 }
 
 const inputChangeAlpha = (data?: number) => {
   if (!data || isNaN(Number(data))) {
     return;
   }
-  updateTinyColor(tinyColorRef.value.setAlpha(data));
+  tinyColorRef.value = tinyColorRef.value.setAlpha(data).clone();
 }
 
 const handlePreset = (color: string) => {
-  updateTinyColor(color);
-}
-
-const isTransparent = (color: string) => {
-  return tinycolor(color).getAlpha() === 0;
+  tinyColorRef.value = color;
 }
 </script>
 
