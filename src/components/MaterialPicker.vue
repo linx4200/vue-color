@@ -19,28 +19,28 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import tinycolor from 'tinycolor2';
 import EdIn from './common/EditableInput.vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { isValid } from '../utils/color';
 
 const props = defineProps<useTinyColorModelProps>();
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit);
 
 const rgb = computed(() => tinyColorRef.value.toRgb());
 
 function onHexChange(hex: string) {
-  if (tinycolor(hex).isValid()) {
-    updateTinyColor(hex);
+  if (isValid(hex)) {
+    tinyColorRef.value = hex;
   }
 }
 
 function onChange(key: 'r' | 'g' | 'b', value: number) {
-  updateTinyColor({
+  tinyColorRef.value = {
     ...rgb.value,
     [key]: value
-  });
+  };
 }
 </script>
 

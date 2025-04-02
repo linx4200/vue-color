@@ -46,10 +46,10 @@ const defaultColors = [
 </script>
 
 <script setup lang="ts">
-import EdIn from './common/EditableInput.vue';
-import { useTinyColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/vmodel';
 import { computed } from 'vue';
-import tinycolor from 'tinycolor2';
+import EdIn from './common/EditableInput.vue';
+import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
+import { isValid } from '../utils/color';
 
 type Props = {
   width?: number | string;
@@ -64,7 +64,7 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
 });
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit);
 
 const hex = computed(()=>tinyColorRef.value.toHexString());
 
@@ -73,13 +73,12 @@ const equal = (color: string) => {
 }
 
 const handlerClick = (color: string) => {
-  updateTinyColor(color);
+  tinyColorRef.value = color;
 }
 
 const inputChange = (hex: string) => {
-  const color = tinycolor(`${hex}`);
-  if (color.isValid()) {
-    updateTinyColor(color);
+  if (isValid(hex)) {
+    tinyColorRef.value = hex;
   }
 }
 </script>

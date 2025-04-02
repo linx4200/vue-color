@@ -6,7 +6,7 @@ import { waitForRerender } from '../../tools';
 test('The position of the picker should be correct', async () => {
   const { getByRole, rerender } = render(Hue, {
     props: {
-      hue: 180,
+      modelValue: 180,
       direction: 'horizontal',
     },
   });
@@ -16,9 +16,9 @@ test('The position of the picker should be correct', async () => {
   expect(pointerElement?.style.left).toBe('50%');
   expect(pointerElement?.style.top).toBe('0px');
 
-  rerender({ hue: 200 }); // pull to right
+  rerender({ modelValue: 200 }); // pull to right
   await waitForRerender();
-  rerender({ hue: 0 });
+  rerender({ modelValue: 0 });
   await waitForRerender();
   expect(pointerElement?.style.left).toBe('100%');
   expect(pointerElement?.style.top).toBe('0px');
@@ -26,14 +26,14 @@ test('The position of the picker should be correct', async () => {
 
   // ======= vertical =======
 
-  rerender({ direction: 'vertical', hue: 180 });
+  rerender({ direction: 'vertical', modelValue: 180 });
   await waitForRerender();
   expect(pointerElement?.style.top).toBe('50%');
   expect(pointerElement?.style.left).toBe('0px');
 
-  rerender({ direction: 'vertical', hue: 200 });
+  rerender({ direction: 'vertical', modelValue: 200 });
   await waitForRerender();
-  rerender({ direction: 'vertical', hue: 0 });
+  rerender({ direction: 'vertical', modelValue: 0 });
   await waitForRerender();
   expect(pointerElement?.style.top).toBe('0px');
   expect(pointerElement?.style.left).toBe('0px');
@@ -42,7 +42,7 @@ test('The position of the picker should be correct', async () => {
 test('Click the pointer and update color events should be emitted with correct alpha value (horizontally)', () => {
   const { getByRole, emitted } = render(Hue, {
     props: {
-      hue: 10,
+      modelValue: 10,
       direction: 'horizontal',
     },
   });
@@ -51,21 +51,21 @@ test('Click the pointer and update color events should be emitted with correct a
   const box = (slider.element() as HTMLElement).getBoundingClientRect();
   // click the middle position of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width / 2, clientY: box.top + box.height / 2 }));
-  expect(emitted()['change'][0]).toEqual([180, 170]);
+  expect(emitted()['update:modelValue'][0]).toEqual([180]);
 
   // click the left outer space of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: 0, clientY: box.top + box.height / 2 }));
-  expect(emitted()['change'][1]).toEqual([0, -10]);
+  expect(emitted()['update:modelValue'][1]).toEqual([0]);
 
   // click the right outer space of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width + 100, clientY: box.top + box.height / 2 }));
-  expect(emitted()['change'][2]).toEqual([360, 350]);
+  expect(emitted()['update:modelValue'][2]).toEqual([360]);
 });
 
 test('Click the pointer and update color events should be emitted with correct alpha value (vertically)', () => {
   const { getByRole, emitted } = render(Hue, {
     props: {
-      hue: 10,
+      modelValue: 10,
       direction: 'vertical',
     },
   });
@@ -74,15 +74,15 @@ test('Click the pointer and update color events should be emitted with correct a
   const box = (slider.element() as HTMLElement).getBoundingClientRect();
   // click the middle position of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width / 2, clientY: box.top + box.height / 2 }));
-  expect(emitted()['change'][0]).toEqual([180, 170]);
+  expect(emitted()['update:modelValue'][0]).toEqual([180]);
 
   // click the top outer space of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width / 2, clientY: - 10 }));
-  expect(emitted()['change'][1]).toEqual([360, 350]);
+  expect(emitted()['update:modelValue'][1]).toEqual([360]);
 
   // click the bottom outer space of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width / 2, clientY: box.top + box.height + 100 }));
-  expect(emitted()['change'][2]).toEqual([0, -10]);
+  expect(emitted()['update:modelValue'][2]).toEqual([0]);
 });
 
 const keyboardEventCases = [
@@ -124,7 +124,7 @@ describe('When keyboard events is fired, update color events should be emitted w
   test.each(keyboardEventCases)('$keyboardEventCode', async ({ direction, oppositeDirection, initialValue, keyboardEventCode, changedValueNormally, valueOfLimitation}) => {
     const { getByRole, emitted, rerender } = render(Hue, {
       props: {
-        hue: initialValue,
+        modelValue: initialValue,
         direction: oppositeDirection as 'horizontal' | 'vertical',
       },
     });
@@ -132,7 +132,7 @@ describe('When keyboard events is fired, update color events should be emitted w
 
     // scene 1: different direction
     slider.dispatchEvent(new KeyboardEvent('keydown', { code: keyboardEventCode }));
-    expect((emitted()['change'])).toBeUndefined();
+    expect((emitted()['update:modelValue'])).toBeUndefined();
 
     // scene 2: changes value normally
     rerender({
@@ -140,17 +140,15 @@ describe('When keyboard events is fired, update color events should be emitted w
     })
     await waitForRerender();
     slider.dispatchEvent(new KeyboardEvent('keydown', { code: keyboardEventCode }));
-    expect((emitted()['change'][0] as [number, number])[0]).toEqual(changedValueNormally);
-    expect((emitted()['change'][0] as [number, number])[1]).toBeCloseTo(changedValueNormally - initialValue);
+    expect((emitted()['update:modelValue'][0] as [number])[0]).toEqual(changedValueNormally);
 
 
     // scene 3: exceed limitation
     rerender({
-      hue: valueOfLimitation
+      modelValue: valueOfLimitation
     });
     await waitForRerender();
     slider.dispatchEvent(new KeyboardEvent('keydown', { code: keyboardEventCode }));
-    expect((emitted()['change'][1] as [number, number])[0]).toEqual(valueOfLimitation);
-    expect((emitted()['change'][1] as [number, number])[1]).toEqual(0);
+    expect((emitted()['update:modelValue'][1] as [number])[0]).toEqual(valueOfLimitation);
   });
 })

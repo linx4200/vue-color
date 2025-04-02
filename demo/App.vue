@@ -46,10 +46,10 @@ const background = computed(() => {
 });
 
 const hsva = computed(() => {
-  const hsv = tinycolor(tinyColor.value).toHsv();
+  const hsva = tinycolor(tinyColor.value).toHsv();
   const res: Record<string, number> = {};
-  for (const [key, value] of Object.entries(hsv)) {
-    res[key] = value.toFixed();
+  for (const [key, value] of Object.entries(hsva)) {
+    res[key] = value.toFixed(2);
   }
   return res;
 });

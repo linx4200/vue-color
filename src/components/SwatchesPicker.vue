@@ -58,7 +58,7 @@ const defaultColors = /*#__PURE__*/ (() => {
 </script>
 
 <script setup lang="ts">
-import { useTinyColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/vmodel';
+import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
 import { computed } from 'vue';
 
 type Props = {
@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
 });
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit);
 
 const hex = computed(() => tinyColorRef.value.toHexString());
 
@@ -79,7 +79,7 @@ const equal = (color: string) => {
 };
 
 const handlerClick = (hex: string) => {
-  updateTinyColor(hex);
+  tinyColorRef.value = hex;
 }
 </script>
 

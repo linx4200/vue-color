@@ -1,7 +1,7 @@
 <template>
   <div role="application" aria-label="Slider color picker" class="vc-slider-picker">
     <div class="hue">
-      <hue :hue="retainedHueRef" @change="setHue"></hue>
+      <hue v-model="hueRef"></hue>
     </div>
     <div class="swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
       <div
@@ -42,8 +42,8 @@ const defaultSwatches = [
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel';
-import { hueModel } from '../composable/hue';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel';
+import { retainedHueRef } from '../composable/hue';
 import Hue from './common/HueSlider.vue';
 
 type Prop = {
@@ -56,8 +56,8 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
 });
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const hueRef = retainedHueRef({ colorRef: tinyColorRef });
 
 const hsl = computed(() => tinyColorRef.value.toHsl());
 const hex = computed(() => tinyColorRef.value.toHexString());
@@ -88,11 +88,11 @@ const isActive = (swatch: { s: number, l: number }) =>{
   )
 };
 const handleSwClick = (swatch: { s: number, l: number }) => {
-  updateTinyColor({
+  tinyColorRef.value = {
     h: hsl.value.h,
     s: swatch.s,
     l: swatch.l,
-  })
+  };
 }
 </script>
 

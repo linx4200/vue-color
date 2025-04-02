@@ -32,7 +32,7 @@ const defaultColors: string[] = [
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
 
 type Props = {
   palette?: string[]
@@ -44,14 +44,14 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit);
 
 const pick = computed(() => {
   return tinyColorRef.value.toHexString().toUpperCase();
 });
 
 const handlerClick = (hex: string) => {
-  updateTinyColor(hex);
+  tinyColorRef.value = hex;
 }
 
 </script>

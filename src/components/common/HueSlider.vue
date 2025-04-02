@@ -19,7 +19,9 @@
       tabindex="0"
     >
       <div class="picker-wrap" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
-        <div class="picker"></div>
+        <slot>
+          <div class="picker"></div> <!-- fallback content -->
+        </slot>
       </div>
     </div>
   </div>

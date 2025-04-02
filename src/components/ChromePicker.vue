@@ -46,8 +46,8 @@
         <div class="fields" v-show="fieldsIndex === 1">
           <!-- hex -->
           <div class="field">
-            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="(v: string) => inputChangeHex('hex', v)" :a11y="{label: 'Hex'}"></EdIn>
-            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="(v: string) => inputChangeHex('hex8', v)" :a11y="{label: 'Hex with transparency'}"></EdIn>
+            <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
+            <EdIn v-if="alpha !== 1" label="hex" :value="tinyColorRef.toHex8String()" @change="inputChangeHex" :a11y="{label: 'Hex with transparency'}"></EdIn>
           </div>
         </div>
 
@@ -148,11 +148,10 @@ const alpha = computed(() => {
   return tinyColorRef.value.getAlpha();
 });
 
-const inputChangeHex = (type: 'hex' | 'hex8', data?: string) => {
+const inputChangeHex = (data?: string) => {
   if (!data) {
     return;
   }
-  // todo: add test cases for type
   if (isValid(data)) {
     tinyColorRef.value = data;
   }
@@ -174,12 +173,9 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
   if (!data) {
     return;
   }
-  const newValue = {[key]: data};
+  const newValue = {[key]: +data};
   if (key === 's' || key === 'l'){
     newValue[key] = (+((data as string).replace('%', ''))) / 100;
-  }
-  if (key === 'h') {
-    hueRef.value = +data;
   }
   tinyColorRef.value = {
     ...tinyColorRef.value.toHsl(),

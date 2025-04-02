@@ -3,12 +3,12 @@
     <div class="title" aria-hidden="true">{{title}}</div>
     <div class="body">
       <div class="saturation">
-        <Saturation v-model:tinyColor="tinyColorRef" :hue="retainedHueRef"></Saturation>
+        <Saturation v-model:tinyColor="tinyColorRef" :hue="hueRef"></Saturation>
       </div>
       <div class="hue">
-        <Hue direction="vertical" :hue="retainedHueRef" @change="setHue">
-          <div class="hue-pointer">
-            <i class="hue-pointer-left"></i><i class="hue-pointer-right"></i>
+        <Hue direction="vertical" v-model="hueRef">
+          <div class="hue-picker">
+            <i class="hue-picker-left"></i><i class="hue-picker-right"></i>
           </div>
         </Hue>
       </div>
@@ -65,14 +65,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import tinycolor from 'tinycolor2';
-
 import EdIn from './common/EditableInput.vue';
 import Saturation from './common/SaturationSlider.vue';
 import Hue from './common/HueSlider.vue';
 
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
-import { hueModel } from '../composable/hue.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { retainedHueRef } from '../composable/hue.ts';
+
+import { isValid } from '../utils/color';
 
 type Props = {
   title?: string;
@@ -100,8 +100,8 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 
 const emit = defineEmits(EmitEventNames.concat(['ok', 'cancel', 'reset']));
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { hueRef, setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const hueRef = retainedHueRef({ colorRef: tinyColorRef });
 
 const currentColorRef = ref(props.currentColor);
 
@@ -113,17 +113,15 @@ const hex = computed(() => {
 const rgb = computed(() => tinyColorRef.value.toRgb());
 
 const clickCurrentColor = () => {
-  updateTinyColor(currentColorRef.value);
+  tinyColorRef.value = currentColorRef.value;
 }
 
 const inputChangeHex = (data?: string) => {
   if (!data) {
     return;
   }
-  const newValue = tinycolor(data);
-  if (newValue.isValid()) {
-    newValue.setAlpha(1);
-    updateTinyColor(newValue);
+  if (isValid(data)) {
+    tinyColorRef.value = data;
   }
 };
 
@@ -132,10 +130,10 @@ const inputChangeRGBA = (key: 'r' | 'g' | 'b', data?: number) => {
     return;
   }
   const newValue = {[key]: data};
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...rgb.value,
     ...newValue,
-  }));
+  };
 }
 
 const inputChangeHSV = (key: 'h' | 's' | 'v', data?: string |  number) => {
@@ -143,13 +141,10 @@ const inputChangeHSV = (key: 'h' | 's' | 'v', data?: string |  number) => {
     return;
   }
   const newValue = {[key]: Number(data)};
-  if (key === 'h') {
-    hueRef.value = +data;
-  }
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...hsv.value,
     ...newValue,
-  }));
+  };
 }
 
 const handleOK = () => {
@@ -213,20 +208,21 @@ const handleReset = () => {
   border: 2px solid #B3B3B3;
   border-bottom: 2px solid #F0F0F0;
 }
-.hue-pointer {
+.hue-picker {
   position: relative;
 }
-.hue-pointer-left,
-.hue-pointer-right {
+.hue-picker-left,
+.hue-picker-right {
   position: absolute;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 5px 0 5px 8px;
   border-color: transparent transparent transparent #555;
+  cursor: pointer;
 }
-.hue-pointer-left:after,
-.hue-pointer-right:after {
+.hue-picker-left:after,
+.hue-picker-right:after {
   content: "";
   width: 0;
   height: 0;
@@ -238,11 +234,11 @@ const handleReset = () => {
   left: 1px;
   transform: translate(-8px, -5px);
 }
-.hue-pointer-left {
-  transform: translate(-13px, -4px);
+.hue-picker-left {
+  transform: translate(-10px, -4px);
 }
-.hue-pointer-right {
-  transform: translate(20px, -4px) rotate(180deg);
+.hue-picker-right {
+  transform: translate(21px, -4px) rotate(180deg);
 }
 
 .controls {
