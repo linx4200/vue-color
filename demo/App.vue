@@ -83,7 +83,7 @@ const textColor = computed(() => {
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <ChromePicker v-model:tinyColor="tinyColor" />
+            <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>

@@ -26,8 +26,8 @@
         </div>
       </div>
 
-      <div class="fieldsWrap" v-if="!disableFields" data-testid="fields">
-        <div class="fields" v-show="fieldsIndex === 0">
+      <div class="fieldsWrap" v-if="showFields" data-testid="fields">
+        <div class="fields" v-show="fieldsIndex === getFormatIndex('rgb')" v-if="isSupportedFormat('rgb')">
           <!-- rgba -->
           <div class="field">
             <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
@@ -43,7 +43,7 @@
           </div>
         </div>
 
-        <div class="fields" v-show="fieldsIndex === 1">
+        <div class="fields" v-show="fieldsIndex === getFormatIndex('hex')" v-if="isSupportedFormat('hex')">
           <!-- hex -->
           <div class="field">
             <EdIn v-if="alpha === 1" label="hex" :value="tinyColorRef.toHexString()" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div class="fields" v-show="fieldsIndex === 2">
+        <div class="fields" v-show="fieldsIndex === getFormatIndex('hsl')" v-if="isSupportedFormat('hsl')">
           <!-- hsla -->
           <div class="field">
             <EdIn label="h" :value="hueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
@@ -69,6 +69,7 @@
 
         <!-- btn -->
         <div
+          v-if="normalizedFormats.length > 1"
           class="toggle-btn"
           @click="toggleViews"
           @keydown.enter="toggleViews"
@@ -112,12 +113,25 @@ import { retainedHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
+type Format = 'hex' | 'rgb' | 'hsl';
 type Props = {
   disableAlpha?: boolean;
   disableFields?: boolean;
+  /**
+   * An array of color format options used to control the display of the format field.
+   *
+   * Determines both the **order** in which the format options appear and whether a format is **included or hidden**.
+   * Only supports `'hex'`, `'hsl'`, and `'rgb'`. Duplicate or invalid values will be ignored at runtime.
+   *
+   * @default ['rgb', 'hex', 'hsl']
+   */
+  formats?: Array<Format>;
 }
 
-const props = defineProps<Props & useTinyColorModelProps>();
+const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+  formats: () => ['rgb', 'hex', 'hsl']
+});
+
 const emit = defineEmits(['change'].concat(EmitEventNames));
 
 const tinyColorRef = defineColorModel(props, emit);
@@ -147,6 +161,47 @@ const rgb = computed(() => {
 const alpha = computed(() => {
   return tinyColorRef.value.getAlpha();
 });
+
+const VALID_FORMATS: Set<Format> = new Set(['hex', 'hsl', 'rgb']);
+const normalizedFormats = computed(() => {
+  const seen = new Set<Format>();
+  const result: Format[] = [];
+  const formats = props.formats;
+
+  for (const format of formats) {
+    if (VALID_FORMATS.has(format as Format)) {
+      const f = format as Format;
+      if (!seen.has(f)) {
+        seen.add(f);
+        result.push(f);
+      }
+    }
+  }
+  return result;
+});
+
+const showFields = computed(() => {
+  const { disableFields, formats } = props;
+  if (disableFields === true) {
+    return false;
+  }
+  if (!Array.isArray(formats)) {
+    return false;
+  }
+  const l = normalizedFormats.value.length;
+  if (l === 0) {
+    return false;
+  }
+  return true;
+});
+
+const isSupportedFormat = (format: Format) => {
+  return normalizedFormats.value.includes(format);
+}
+
+const getFormatIndex = (format: Format) => {
+  return normalizedFormats.value.indexOf(format);
+}
 
 const inputChangeHex = (data?: string) => {
   if (!data) {
@@ -185,12 +240,13 @@ const inputChangeHSLA = (key: 'h' | 's' | 'l' | 'a', data?: string |  number) =>
 }
 
 const toggleViews = () => {
-  if (fieldsIndex.value === 2) {
+  if (fieldsIndex.value === normalizedFormats.value.length - 1) {
     fieldsIndex.value = 0;
     return;
   }
   fieldsIndex.value ++;
 }
+
 const showHighlight = () => {
   highlight.value = true;
 }
