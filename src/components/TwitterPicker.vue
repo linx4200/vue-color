@@ -26,6 +26,7 @@
         @click="handlerClick(color)"
         role="option"
         :aria-label="'color:' + color"
+        :title="color"
         :aria-selected="equal(color)"
         @keydown.space="handlerClick(color)"
         tabindex="0"

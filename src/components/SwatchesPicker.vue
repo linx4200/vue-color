@@ -11,6 +11,7 @@
           role="option"
           :aria-label="'Color:' + c"
           :aria-selected="equal(c)"
+          :title="c"
           @keydown.space="handlerClick(c)"
           tabindex="0"
         >

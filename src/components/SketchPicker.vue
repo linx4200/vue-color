@@ -43,6 +43,7 @@
           :key="c + '-color'"
           :style="{background: c}"
           @click="handlePreset(c)"
+          :title="c"
           :aria-label="'Color:' + c"
           :aria-selected="`#${hex.toLowerCase()}` === c.toLowerCase()"
           role="option"
@@ -58,6 +59,7 @@
           :aria-selected="alpha === 0"
           role="option"
           tabindex="0"
+          :title="c"
           @keydown.space="handlePreset(c)">
           <Checkerboard />
         </div>

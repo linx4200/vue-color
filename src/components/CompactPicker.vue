@@ -10,6 +10,7 @@
         role="option"
         :aria-label="'color:' + c"
         :aria-selected="c.toUpperCase() === pick"
+        :title="c"
         @keydown.space="handlerClick(c)"
         tabindex="0"
       >
