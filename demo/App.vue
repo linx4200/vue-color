@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { effectScope, watch, reactive, computed } from 'vue';
+import { watch, computed, reactive } from 'vue';
 import tinycolor from 'tinycolor2';
 
 import {
@@ -22,11 +22,7 @@ const color = defineModel({
   default: () => reactive({r: 0, g: 0, b: 255, a: 1})
 });
 
-const scope = effectScope();
-
-scope.run(() => {
-  watch(color, () => console.log('color changed ==>', color.value));
-});
+watch(tinyColor, () => console.log('color changed ==>', tinyColor.value));
 
 function invertColor(rgb: { r: number; g: number; b: number }): string {
   const inverted = {
@@ -87,7 +83,7 @@ const textColor = computed(() => {
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
+            <ChromePicker v-model:tinyColor="tinyColor" />
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>

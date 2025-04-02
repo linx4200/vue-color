@@ -45,7 +45,8 @@ export function defineColorModel(props: useTinyColorModelProps, emit: EmitFn) {
   let isObjectOriginally: boolean;
   let originalFormat: TinyColorFormat;
 
-  const tinyColorRef = computed({get: () => {
+  const tinyColorRef = computed({
+    get: () => {
       const colorInput = props.tinyColor ?? props.modelValue;
       const value = tinycolor(colorInput);
       if (typeof originalFormat === 'undefined') {
@@ -65,10 +66,10 @@ export function defineColorModel(props: useTinyColorModelProps, emit: EmitFn) {
 
   const updateColor = (value: tinycolor.ColorInput) => {
     const newValue = tinycolor(value);
-    if (props.tinyColor) {
+    if (Object.prototype.hasOwnProperty.call(props, 'tinyColor')) {
       emit('update:tinyColor', newValue);
     }
-    if (props.modelValue) {
+    if (Object.prototype.hasOwnProperty.call(props, 'modelValue')) {
       emit('update:modelValue', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
     }
   }
