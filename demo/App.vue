@@ -11,11 +11,12 @@ import {
   MaterialPicker,
   SliderPicker,
   TwitterPicker,
-  SwatchesPicker
+  SwatchesPicker,
+  HueSlider
 } from '../src';
 
 const tinyColor = defineModel('tinycolor', {
-  default: '#F5F7FA'
+  default: tinycolor('#F5F7FA')
 });
 
 const color = defineModel({
@@ -53,6 +54,10 @@ const hsva = computed(() => {
 const textColor = computed(() => {
   return invertColor(tinycolor(tinyColor.value).toRgb());
 });
+
+const updateHue = (newHue: number) => {
+  tinyColor.value = tinycolor(tinyColor.value).spin(newHue - hsva.value.h).clone();
+}
 
 </script>
 
@@ -115,6 +120,11 @@ const textColor = computed(() => {
         </div>
 
         <div class="col">
+          <div class="picker-container">
+            <div :style="{width: '410px'}"><HueSlider :modelValue="hsva.h" @update:modelValue="updateHue" /></div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;HueSlider /&gt;</div>
+          </div>
+
           <div class="picker-container">
             <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
