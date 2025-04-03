@@ -6,7 +6,7 @@
     <div class="controls">
       <div class="sliders">
         <div class="hue">
-          <Hue v-model="hueRef" />
+          <Hue :modelValue="hueRef" @update:modelValue="updateHueRef" />
         </div>
         <div class="alpha" v-if="!disableAlpha">
           <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
@@ -87,7 +87,7 @@ import Alpha from './common/AlphaSlider.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
-import { retainedHueRef } from '../composable/hue.ts';
+import { useHueRef } from '../composable/hue.ts';
 
 import { isValid, isTransparent } from '../utils/color';
 
@@ -105,7 +105,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 const tinyColorRef = defineColorModel(props, emit);
-const hueRef = retainedHueRef({ colorRef: tinyColorRef });
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const alpha = computed(() => tinyColorRef.value.getAlpha());
 const hex = computed(() => {

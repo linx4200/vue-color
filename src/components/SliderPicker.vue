@@ -1,7 +1,7 @@
 <template>
   <div role="application" aria-label="Slider color picker" class="vc-slider-picker">
     <div class="hue">
-      <hue v-model="hueRef"></hue>
+      <Hue :modelValue="hueRef" @update:modelValue="updateHueRef" />
     </div>
     <div class="swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
       <div
@@ -44,7 +44,7 @@ const defaultSwatches = [
 <script setup lang="ts">
 import { computed } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel';
-import { retainedHueRef } from '../composable/hue';
+import { useHueRef } from '../composable/hue';
 import Hue from './common/HueSlider.vue';
 
 type Prop = {
@@ -58,7 +58,7 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
 const emit = defineEmits(EmitEventNames);
 
 const tinyColorRef = defineColorModel(props, emit);
-const hueRef = retainedHueRef({ colorRef: tinyColorRef });
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const hsl = computed(() => tinyColorRef.value.toHsl());
 const hex = computed(() => tinyColorRef.value.toHexString());

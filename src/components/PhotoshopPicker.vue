@@ -6,7 +6,7 @@
         <Saturation v-model:tinyColor="tinyColorRef" :hue="hueRef"></Saturation>
       </div>
       <div class="hue">
-        <Hue direction="vertical" v-model="hueRef">
+        <Hue direction="vertical" :modelValue="hueRef" @update:modelValue="updateHueRef">
           <div class="hue-picker">
             <i class="hue-picker-left"></i><i class="hue-picker-right"></i>
           </div>
@@ -70,7 +70,7 @@ import Saturation from './common/SaturationSlider.vue';
 import Hue from './common/HueSlider.vue';
 
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
-import { retainedHueRef } from '../composable/hue.ts';
+import { useHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
@@ -101,7 +101,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 const emit = defineEmits(EmitEventNames.concat(['ok', 'cancel', 'reset']));
 
 const tinyColorRef = defineColorModel(props, emit);
-const hueRef = retainedHueRef({ colorRef: tinyColorRef });
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const currentColorRef = ref(props.currentColor);
 

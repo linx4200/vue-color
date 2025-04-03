@@ -18,7 +18,7 @@
 
         <div class="sliders">
           <div class="hue-wrap">
-            <Hue v-model="hueRef"></Hue>
+            <Hue :modelValue="hueRef" @update:modelValue="updateHueRef"></Hue>
           </div>
           <div class="alpha-wrap" v-if="!props.disableAlpha">
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
@@ -109,7 +109,7 @@ import EdIn from './common/EditableInput.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
-import { retainedHueRef } from '../composable/hue.ts';
+import { useHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
@@ -135,7 +135,8 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 const emit = defineEmits(['change'].concat(EmitEventNames));
 
 const tinyColorRef = defineColorModel(props, emit);
-const hueRef = retainedHueRef({ colorRef: tinyColorRef });
+
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const fieldsIndex = ref(0);
 let highlight = ref(false);
