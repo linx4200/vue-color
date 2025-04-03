@@ -1,48 +1,49 @@
 <template>
-  <div role="application" aria-label="Sketch color picker" :class="[$style.wrap, disableAlpha ? $style.disableAlpha : '']">
-    <div :class="$style.saturation">
-      <Saturation :hue="retainedHueRef" v-model:tinyColor="tinyColorRef"></Saturation>
+  <div role="application" aria-label="Sketch color picker" :class="['vc-sketch-picker', disableAlpha ? 'alpha-disabled' : '']">
+    <div class="saturation">
+      <Saturation :hue="hueRef" v-model:tinyColor="tinyColorRef"></Saturation>
     </div>
-    <div :class="$style.controls">
-      <div :class="$style.sliders">
-        <div :class="$style.hue">
-          <Hue :hue="retainedHueRef" @change="setHue"/>
+    <div class="controls">
+      <div class="sliders">
+        <div class="hue">
+          <Hue :modelValue="hueRef" @update:modelValue="updateHueRef" />
         </div>
-        <div :class="$style.alpha" v-if="!disableAlpha">
+        <div class="alpha" v-if="!disableAlpha">
           <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
         </div>
       </div>
-      <div :class="$style.color">
-        <div :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" :class="$style.activeColor" :style="{background: tinyColorRef.toRgbString()}"></div>
+      <div class="color">
+        <div :aria-label="`Current color is ${tinyColorRef.toRgbString()}`" class="active-color" :style="{background: tinyColorRef.toRgbString()}"></div>
         <Checkerboard />
       </div>
     </div>
-    <div :class="$style.field" v-if="!disableFields">
+    <div class="field" v-if="!disableFields">
       <!-- rgba -->
-      <div :class="$style.fieldDouble">
+      <div class="field_double">
         <EdIn label="hex" :value="hex" @change="inputChangeHex" :a11y="{label: 'Hex'}"></EdIn>
       </div>
-      <div :class="$style.fieldSingle">
+      <div class="field_single">
         <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
       </div>
-      <div :class="$style.fieldSingle">
+      <div class="field_single">
         <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
       </div>
-      <div :class="$style.fieldSingle">
+      <div class="field_single">
         <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
       </div>
-      <div :class="$style.fieldSingle" v-if="!disableAlpha">
+      <div class="field_single" v-if="!disableAlpha">
         <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="inputChangeAlpha" :a11y="{label: 'Transparency'}"></EdIn>
       </div>
     </div>
-    <div :class="$style.presets" role="listbox" aria-label="A color preset, pick one to set as current color">
+    <div class="presets" role="listbox" aria-label="A color preset, pick one to set as current color">
       <template v-for="c in props.presetColors">
         <div
           v-if="!isTransparent(c)"
-          :class="$style.presetColor"
+          class="preset-color"
           :key="c + '-color'"
           :style="{background: c}"
           @click="handlePreset(c)"
+          :title="c"
           :aria-label="'Color:' + c"
           :aria-selected="`#${hex.toLowerCase()}` === c.toLowerCase()"
           role="option"
@@ -52,12 +53,13 @@
         <div
           v-else
           :key="c"
-          :class="$style.presetColor"
+          class="preset-color"
           @click="handlePreset(c)"
           aria-label="Color: transparency"
           :aria-selected="alpha === 0"
           role="option"
           tabindex="0"
+          :title="c"
           @keydown.space="handlePreset(c)">
           <Checkerboard />
         </div>
@@ -77,7 +79,6 @@ const presetColorsOfSketch = [
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import tinycolor from 'tinycolor2';
 
 import EdIn from './common/EditableInput.vue';
 import Saturation from './common/SaturationSlider.vue';
@@ -85,8 +86,10 @@ import Hue from './common/HueSlider.vue';
 import Alpha from './common/AlphaSlider.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel.ts';
-import { hueModel } from '../composable/hue.ts';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { useHueRef } from '../composable/hue.ts';
+
+import { isValid, isTransparent } from '../utils/color';
 
 type Props = {
   presetColors?: string[];
@@ -101,8 +104,8 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
 });
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const alpha = computed(() => tinyColorRef.value.getAlpha());
 const hex = computed(() => {
@@ -120,9 +123,8 @@ const inputChangeHex = (data?: string) => {
   if (!data) {
     return;
   }
-  const newValue = tinycolor(data);
-  if (newValue.isValid()) {
-    updateTinyColor(newValue);
+  if (isValid(data)) {
+    tinyColorRef.value = data;
   }
 };
 
@@ -131,30 +133,26 @@ const inputChangeRGBA = (key: 'r' | 'g' | 'b', data?: number) => {
     return;
   }
   const newValue = {[key]: data};
-  updateTinyColor(tinycolor({
+  tinyColorRef.value = {
     ...rgb.value,
     ...newValue,
-  }));
+  };
 }
 
 const inputChangeAlpha = (data?: number) => {
   if (!data || isNaN(Number(data))) {
     return;
   }
-  updateTinyColor(tinyColorRef.value.setAlpha(data));
+  tinyColorRef.value = tinyColorRef.value.setAlpha(data).clone();
 }
 
 const handlePreset = (color: string) => {
-  updateTinyColor(color);
-}
-
-const isTransparent = (color: string) => {
-  return tinycolor(color).getAlpha() === 0;
+  tinyColorRef.value = color;
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-sketch-picker {
   position: relative;
   width: 200px;
   padding: 10px 10px 0;
@@ -180,8 +178,8 @@ const isTransparent = (color: string) => {
   flex: 1;
 }
 
-.sliders ::global(.vc-hue),
-.sliders ::global(.vc-alpha-gradient) {
+.hue :deep(.container),
+.alpha :deep(.gradient) {
   border-radius: 2px;
 }
 
@@ -206,7 +204,7 @@ const isTransparent = (color: string) => {
   border-radius: 3px;
 }
 
-.activeColor {
+.active-color {
   position: absolute;
   top: 0;
   left: 0;
@@ -217,7 +215,7 @@ const isTransparent = (color: string) => {
   z-index: 2;
 }
 
-.color :global(.vc-checkerboard) {
+.color :deep(.vc-checkerboard) {
   background-size: auto;
 }
 
@@ -226,7 +224,7 @@ const isTransparent = (color: string) => {
   padding-top: 4px;
 }
 
-.field :global(.vc-input-input) {
+.field :deep(.vc-input-input) {
   width: 90%;
   padding: 4px 0 3px 10%;
   border: none;
@@ -234,7 +232,7 @@ const isTransparent = (color: string) => {
   font-size: 10px;
 }
 
-.field :global(.vc-input-label) {
+.field :deep(.vc-input-label) {
   display: block;
   text-align: center;
   font-size: 11px;
@@ -243,12 +241,12 @@ const isTransparent = (color: string) => {
   padding-bottom: 4px;
 }
 
-.fieldSingle {
+.field_single {
   flex: 1;
   padding-left: 6px;
 }
 
-.fieldDouble {
+.field_double {
   flex: 2;
 }
 
@@ -260,7 +258,7 @@ const isTransparent = (color: string) => {
   border-top: 1px solid #eee;
 }
 
-.presetColor {
+.preset-color {
   border-radius: 3px;
   overflow: hidden;
   position: relative;
@@ -273,12 +271,12 @@ const isTransparent = (color: string) => {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
 }
 
-.presetColor :global(.vc-checkerboard) {
+.preset-color :deep(.vc-checkerboard) {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
   border-radius: 3px;
 }
 
-.disableAlpha .color {
+.alpha-disabled .color {
   height: 10px;
 }
 </style>

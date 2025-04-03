@@ -40,20 +40,14 @@ export type useTinyColorModelProps = {
 
 export const EmitEventNames = ['update:tinyColor', 'update:modelValue'];
 
-/**
- * To support `v-model:tinyColor="color"`
- * @param props
- * @param emit
- * @returns a tinycolor instance wrapped by `computed` and a function to invoke emit;
- */
-export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
+export function defineColorModel(props: useTinyColorModelProps, emit: EmitFn) {
 
   let isObjectOriginally: boolean;
   let originalFormat: TinyColorFormat;
 
   const tinyColorRef = computed({
     get: () => {
-      const colorInput = props.modelValue ?? props.tinyColor;
+      const colorInput = props.tinyColor ?? props.modelValue;
       const value = tinycolor(colorInput);
       if (typeof originalFormat === 'undefined') {
         originalFormat = value.getFormat() as TinyColorFormat;
@@ -65,23 +59,20 @@ export function useTinyColorModel(props: useTinyColorModelProps, emit: EmitFn) {
       }
       return value;
     },
-    set: (newValue: tinycolor.Instance) => {
+    set: (newValue: tinycolor.ColorInput) => {
       updateColor(newValue);
     }
-  });
+});
 
   const updateColor = (value: tinycolor.ColorInput) => {
     const newValue = tinycolor(value);
-    if (props.tinyColor) {
-      emit('update:tinyColor', newValue.clone());
+    if (Object.prototype.hasOwnProperty.call(props, 'tinyColor')) {
+      emit('update:tinyColor', newValue);
     }
-    if (props.modelValue) {
+    if (Object.prototype.hasOwnProperty.call(props, 'modelValue')) {
       emit('update:modelValue', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
     }
   }
 
-  return {
-    colorRef: tinyColorRef,
-    updateColor,
-  };
+  return tinyColorRef;
 }

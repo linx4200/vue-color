@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import ChromePicker from '../../src/components/ChromePicker.vue';
+import { waitForRerender } from '../tools';
 
 test('props.disableAlpha', async () => {
   const { getByRole } = render(ChromePicker, {
@@ -23,6 +24,39 @@ test('props.disableFields', async () => {
     },
   });
   await expect.element(getByTestId('fields')).not.toBeInTheDocument();
+});
+
+test('props.formats', async () => {
+  const { getByTestId, getByRole, rerender } = render(ChromePicker, {
+    props: {
+      formats: [] as Array<'rgb' | 'hex' | 'hsl'>
+    },
+  });
+  await expect.element(getByTestId('fields')).not.toBeInTheDocument();
+
+  rerender({
+    // @ts-expect-error test wrong format
+    formats: ['a']
+  });
+  await waitForRerender();
+  await expect.element(getByTestId('fields')).not.toBeInTheDocument();
+
+  rerender({
+    // @ts-expect-error test wrong format
+    formats: ['rgb', 'a']
+  });
+  await waitForRerender();
+  expect(getByTestId('fields').element().children.length).toBe(1);
+
+  rerender({
+    formats: ['hex', 'rgb']
+  });
+  await waitForRerender();
+  // hex + rgb + btn
+  expect(getByTestId('fields').element().children.length).toBe(3);
+  await expect.element(getByRole('textbox', { name: 'Red' })).not.toBeInTheDocument();
+  await expect.element(getByRole('textbox', { name: 'Hex' })).toBeVisible();
+
 });
 
 test('toggle button works fine', async () => {

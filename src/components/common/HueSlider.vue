@@ -1,6 +1,11 @@
 <template>
-  <div :class="['vc-hue', directionClass, $style.wrap]">
-    <div :class="$style.container"
+  <div class="vc-hue-slider">
+    <div
+      :class="{
+        container: true,
+        horizontal: props.direction === 'horizontal',
+        vertical: props.direction === 'vertical',
+      }"
       ref="container"
       @mousedown="handleMouseDown"
       @touchmove="handleChange"
@@ -13,15 +18,17 @@
       aria-label="Hue"
       tabindex="0"
     >
-      <div :class="$style.pointer" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
-        <div :class="['vc-hue-picker', $style.picker]"></div>
+      <div class="picker-wrap" :style="{top: pointerTop, left: pointerLeft}" role="presentation">
+        <slot>
+          <div class="picker"></div> <!-- fallback content -->
+        </slot>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ref, useTemplateRef, useCssModule } from 'vue';
+import { watch, computed, ref, useTemplateRef } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
@@ -29,36 +36,25 @@ import { throttle } from '../../utils/throttle.ts';
 // because it may lost hue value in some cases:
 // saturation is 0, lightness is 0 or 100, value is 0
 
-const classes = useCssModule();
-
 type Props = {
   direction?: 'horizontal' | 'vertical';
-  hue?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  hue: 0,
   direction: 'horizontal'
 });
 
-const emit = defineEmits(['change']);
+const hue = defineModel({
+  default: 0
+});
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
 const containerRef = useTemplateRef('container');
 
-const hue = computed(() => props.hue);
-
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
   if (newHue !== 0 && newHue - oldHue < 0) pullDirection.value = 'left';
-})
-
-const directionClass = computed(() => {
-  return {
-    [classes.horizontal]: props.direction === 'horizontal',
-    [classes.vertical]: props.direction === 'vertical'
-  }
 });
 
 const pointerTop = computed(() => {
@@ -111,7 +107,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
       h = 0;
     } else {
       percent = -(top * 100 / containerHeight) + 100;
-      h = (360 * percent / 100);
+      h = Math.round(360 * percent / 100);
     }
 
     if (hue.value !== h) {
@@ -124,7 +120,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
       h = 360
     } else {
       percent = left * 100 / containerWidth
-      h = (360 * percent / 100)
+      h =  Math.round(360 * percent / 100)
     }
     if (hue.value !== h) {
       emitChange(h);
@@ -133,7 +129,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
 }
 
 function emitChange(h: number) {
-  emit('change', h, h - hue.value);
+  hue.value = h;
 }
 
 const throttledHandleChange = throttle(handleChange);
@@ -195,14 +191,13 @@ function handleKeyDown(e: KeyboardEvent) {
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-hue-slider {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
-  border-radius: 2px;
 }
 .horizontal {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
@@ -211,23 +206,23 @@ function handleKeyDown(e: KeyboardEvent) {
   background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
 }
 .container {
-  cursor: pointer;
-  margin: 0 2px;
+  cursor: crosshair;
   position: relative;
   height: 100%;
+  border-radius: 2px
 }
-.pointer {
+.picker-wrap {
   z-index: 2;
   position: absolute;
 }
 .picker {
-  cursor: pointer;
+  cursor: col-resize;
   margin-top: 1px;
   width: 4px;
   border-radius: 1px;
   height: 8px;
   box-shadow: 0 0 2px rgba(0, 0, 0, .6);
   background: #fff;
-  transform: translateX(-2px) ;
+  transform: translateX(-2px);
 }
 </style>

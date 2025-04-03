@@ -1,7 +1,7 @@
 <!-- eslint-disable vuejs-accessibility/no-static-element-interactions -->
 <template>
   <div
-    :class="['vc-saturation', $style.bg]"
+    class="vc-saturation-slider bg"
     :style="{background: bgColor}"
     ref="container"
     @mousedown="handleMouseDown"
@@ -10,11 +10,11 @@
     role="application"
     aria-label="Saturation and brightness picker"
   >
-    <div :class="[$style.bg, $style.white]"></div>
-    <div :class="[$style.bg, $style.black]"></div>
+    <div class="bg white"></div>
+    <div class="bg black"></div>
 
     <div
-      :class="$style.pointer"
+      class="picker-wrap"
       :style="{top: pointerTop, left: pointerLeft}"
       role="slider"
       tabindex="0"
@@ -25,16 +25,15 @@
       :aria-valuetext="`saturation: ${hsv.s.toFixed(0)}%, brightness: ${hsv.v.toFixed(0)}%`"
       @keydown="handleKeyDown"
     >
-      <div :class="['vc-saturation-circle', $style.circle]"></div>
+      <div class="picker"></div>
     </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import tinycolor from 'tinycolor2';
-import { computed, useTemplateRef } from 'vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/vmodel.ts';
+import { computed, useTemplateRef, ref } from 'vue';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
@@ -48,20 +47,33 @@ type Props = {
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 const props = defineProps<Props & useTinyColorModelProps>();
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+
+/** Record the location where the user clicks */
+const pointerLeftRef = ref(0);
+
+const tinyColorRef = defineColorModel(props, emit);
 
 const hsv = computed(() => {
   return tinyColorRef.value.toHsv();
 });
 
+const hue = computed(() => {
+  return props.hue ?? hsv.value.h;
+});
+
 const bgColor = computed(() => {
-  return `hsl(${props.hue ?? hsv.value.h}, 100%, 50%)`;
+  return `hsl(${hue.value}, 100%, 50%)`;
 });
 
 const pointerTop = computed(() => {
   return (-(hsv.value.v * 100) + 1) + 100 + '%';
 });
 const pointerLeft = computed(() => {
+  // 1. Because when v = 0.01 tinycolor conversion will be inaccurate, use the click position
+  // 2. Because the hue value is lost when v = 0 (as expected), the clicked position is used
+  if (hsv.value.v <= 0.01) {
+    return pointerLeftRef.value * 100 + '%';
+  }
   return hsv.value.s * 100 + '%';
 });
 
@@ -80,27 +92,41 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   const containerWidth = container.clientWidth
   const containerHeight = container.clientHeight
 
-  const {x: xOffset, y: yOffset } = getAbsolutePosition(container);
-  const {x: pageX, y: pageY } = getPageXYFromEvent(e);
+  const { x: xOffset, y: yOffset } = getAbsolutePosition(container);
+  const { x: pageX, y: pageY } = getPageXYFromEvent(e);
 
   const left = clamp(pageX - xOffset, 0, containerWidth);
   const top = clamp(pageY - yOffset, 0, containerHeight);
 
   const saturation = left / containerWidth;
-  const brightness = clamp(-(top / containerHeight) + 1, 0, 1);
+  const brightness = clamp(1 - (top / containerHeight), 0, 1);
+
+  pointerLeftRef.value = saturation;
+
+  // s and v is multiplied by 100 due to prevention of dithering
+  let s = Math.round(saturation * 100);
+  let v = Math.round(brightness * 100);
+
+  // "1" is treated as percentage number in tinycolor
+  if (s === 1) {
+    s = 0.01;
+  }
+  if (v === 1) {
+    v = 0.01;
+  }
 
   onChange({
-    h: hsv.value.h,
-    s: saturation,
-    v: brightness,
+    h: hue.value,
+    s,
+    v,
     a: hsv.value.a,
   });
 }
 
 function onChange (param: { h: number, s: number, v: number, a: number }) {
-  // tiny color internally doesn't handle saturation and value of HSV mutation
+  // tiny color internally doesn't handle saturation and brightness of HSV mutation
   // so, need to create a new tiny color instance
-  updateTinyColor(tinycolor(param));
+  tinyColorRef.value = param;
 }
 
 const throttledHandleChange = throttle(handleChange, 20);
@@ -159,12 +185,11 @@ function handleKeyDown(e: KeyboardEvent) {
     };
   }
 }
-
 </script>
 
-<style module>
+<style scoped>
 .bg {
-  cursor: pointer;
+  cursor: crosshair;
   position: absolute;
   top: 0;
   left: 0;
@@ -175,17 +200,18 @@ function handleKeyDown(e: KeyboardEvent) {
 .white {
   background: linear-gradient(to right, #fff, rgba(255,255,255,0));
 }
+
 .black {
   background: linear-gradient(to top, #000, rgba(0,0,0,0));
 }
 
-.pointer {
+.picker-wrap {
   cursor: pointer;
   position: absolute;
 }
 
-.circle {
-  cursor: head;
+.picker {
+  cursor: move;
   width: 4px;
   height: 4px;
   box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);

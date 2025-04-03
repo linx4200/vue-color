@@ -53,11 +53,11 @@ const backgroundImage = computed(() => `url(${getCheckerboard(props.white, props
 </script>
 
 <template>
-  <div :class="[$style.checkerboard, 'vc-checkerboard']" :style="{ backgroundImage }"></div>
+  <div class="vc-checkerboard" :style="{ backgroundImage }"></div>
 </template>
 
-<style module>
-.checkerboard {
+<style scoped>
+.vc-checkerboard {
   position: absolute;
   top: 0px;
   right: 0px;

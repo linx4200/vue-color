@@ -1,9 +1,9 @@
 <template>
-  <div role="application" aria-label="Swatches color picker" :class="$style.wrap" :data-pick="hex">
-    <div :class="$style.box" role="listbox" aria-label="Pick a color" tabindex="0">
-      <div :class="$style.colorGroup" v-for="(group, $idx) in palette" :key="$idx">
+  <div role="application" aria-label="Swatches color picker" class="vc-swatches-picker" :data-pick="hex">
+    <div class="box" role="listbox" aria-label="Pick a color" tabindex="0">
+      <div class="colorGroup" v-for="(group, $idx) in palette" :key="$idx">
         <div
-          :class="[$style.color, {[$style.colorWhite]: c === '#FFFFFF' }]"
+          :class="['color', {'color_white': c === '#FFFFFF' }]"
           v-for="c in group" :key="c"
           :data-color="c"
           :style="{background: c}"
@@ -11,10 +11,11 @@
           role="option"
           :aria-label="'Color:' + c"
           :aria-selected="equal(c)"
+          :title="c"
           @keydown.space="handlerClick(c)"
           tabindex="0"
         >
-          <div :class="$style.pick" v-show="equal(c)">
+          <div class="picker" v-show="equal(c)">
             <svg style="width: 24px; height:24px;" viewBox="0 0 24 24">
               <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
             </svg>
@@ -58,7 +59,7 @@ const defaultColors = /*#__PURE__*/ (() => {
 </script>
 
 <script setup lang="ts">
-import { useTinyColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/vmodel';
+import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
 import { computed } from 'vue';
 
 type Props = {
@@ -70,7 +71,7 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
 });
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit);
 
 const hex = computed(() => tinyColorRef.value.toHexString());
 
@@ -79,12 +80,12 @@ const equal = (color: string) => {
 };
 
 const handlerClick = (hex: string) => {
-  updateTinyColor(hex);
+  tinyColorRef.value = hex;
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-swatches-picker {
   width: 320px;
   height: 240px;
   overflow-y: scroll;
@@ -115,15 +116,15 @@ const handlerClick = (hex: string) => {
   -webkit-border-radius: 2px 2px 0 0;
   border-radius: 2px 2px 0 0;
 }
-.colorWhite {
+.color_white {
   border: 1px solid #DDD;
 }
-.pick {
+.picker {
   fill: rgb(255, 255, 255);
   margin-left: 8px;
   display: block;
 }
-.colorWhite .pick {
+.color_white .picker {
   fill: rgb(51, 51, 51);
 }
 </style>

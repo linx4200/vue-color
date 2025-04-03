@@ -74,11 +74,10 @@ test('Click the pointer and update color events should be emitted with correct v
 
   // out of container
   containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: box.width + 10, clientY: box.height + 10 }));
-  // todo: hue is lost again
   expect(emitted()['update:modelValue'][1]).toEqual([{h: 0, a: 1, s: 0, v: 0}]);
 
+  // out of container
   containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: -10, clientY: -10 }));
-  // todo: hue is lost again
   expect(emitted()['update:modelValue'][2]).toEqual([{h: 0, a: 1, s: 0, v: 1}]);
 });
 

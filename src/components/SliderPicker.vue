@@ -1,26 +1,27 @@
 <template>
-  <div role="application" aria-label="Slider color picker" :class="$style.wrap">
-    <div :class="$style.hue">
-      <hue :hue="retainedHueRef" @change="setHue"></hue>
+  <div role="application" aria-label="Slider color picker" class="vc-slider-picker">
+    <div class="hue">
+      <Hue :modelValue="hueRef" @update:modelValue="updateHueRef" />
     </div>
-    <div :class="$style.swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
+    <div class="swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
       <div
         v-for="(swatch, index) in normalizedSwatches"
-        :class="$style.swatch"
+        class="swatch"
         :key="index"
         data-index="index"
         @click="handleSwClick(swatch)"
-        :aria-label="'Color:' + hex"
         role="option"
+        :aria-label="'Color:' + hex"
+        :title="hex"
         @keydown.space="handleSwClick(swatch)"
         :aria-selected="isActive(swatch)"
         tabindex="0"
       >
         <div
           :class="{
-            [$style.swatchPicker]: true,
-            [$style.swatchPickerActive]: isActive(swatch),
-            [$style.swatchPickerWhite]: swatch.l === 1
+            'picker': true,
+            'picker_active': isActive(swatch),
+            'picker_white': swatch.l === 1
           }"
           :style="{background: 'hsl(' + hsl.h + ', ' + swatch.s * 100 + '%, ' + swatch.l * 100 + '%)'}"
         ></div>
@@ -42,8 +43,8 @@ const defaultSwatches = [
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useTinyColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/vmodel';
-import { hueModel } from '../composable/hue';
+import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel';
+import { useHueRef } from '../composable/hue';
 import Hue from './common/HueSlider.vue';
 
 type Prop = {
@@ -56,8 +57,8 @@ const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
 });
 const emit = defineEmits(EmitEventNames);
 
-const { colorRef: tinyColorRef, updateColor: updateTinyColor } = useTinyColorModel(props, emit);
-const { setHue, retainedHueRef } = hueModel(tinyColorRef, updateTinyColor);
+const tinyColorRef = defineColorModel(props, emit);
+const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const hsl = computed(() => tinyColorRef.value.toHsl());
 const hex = computed(() => tinyColorRef.value.toHexString());
@@ -88,16 +89,16 @@ const isActive = (swatch: { s: number, l: number }) =>{
   )
 };
 const handleSwClick = (swatch: { s: number, l: number }) => {
-  updateTinyColor({
+  tinyColorRef.value = {
     h: hsl.value.h,
     s: swatch.s,
     l: swatch.l,
-  })
+  };
 }
 </script>
 
-<style module>
-.wrap {
+<style scoped>
+.vc-slider-picker {
   position: relative;
   width: 410px;
 }
@@ -105,7 +106,7 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
   height: 12px;
   position: relative;
 }
-.hue :global(.vc-hue-picker) {
+.hue :deep(.picker) {
   width: 14px;
   height: 14px;
   border-radius: 6px;
@@ -125,27 +126,27 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
 .swatch:first-child {
   margin-right: 1px;
 }
-.swatch:first-child .swatchPicker {
+.swatch:first-child .picker {
   border-radius: 2px 0px 0px 2px;
 }
 .swatch:last-child {
   margin-right: 0;
 }
-.swatch:last-child .swatchPicker {
+.swatch:last-child .picker {
   border-radius: 0px 2px 2px 0px;
 }
-.swatchPicker {
+.picker {
   cursor: pointer;
   height: 12px;
 }
-.swatch:nth-child(n) .swatchPicker.swatchPickerActive {
+.swatch:nth-child(n) .picker_active {
   transform: scaleY(1.8);
   border-radius: 3.6px/2px;
 }
-.swatchPickerWhite {
+.picker_white {
   box-shadow: inset 0 0 0 1px #ddd;
 }
-.swatchPickerActive.swatchPickerWhite {
+.picker_active.picker_white {
   box-shadow: inset 0 0 0 0.6px #ddd;
 }
 </style>

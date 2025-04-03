@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import { effectScope, watch, reactive, computed } from 'vue';
+import { watch, computed, reactive } from 'vue';
 import tinycolor from 'tinycolor2';
 
-import Chrome from '../src/components/ChromePicker.vue';
-import Compact from '../src/components/CompactPicker.vue';
-import Grayscale from '../src/components/GrayscalePicker.vue';
-import Material from '../src/components/MaterialPicker.vue';
-import Photoshop from '../src/components/PhotoshopPicker.vue';
-import Sketch from '../src/components/SketchPicker.vue';
-import Slider from '../src/components/SliderPicker.vue';
-import Swatches from '../src/components/SwatchesPicker.vue';
-import Twitter from '../src/components/TwitterPicker.vue';
+import {
+  ChromePicker,
+  SketchPicker,
+  PhotoshopPicker,
+  CompactPicker,
+  GrayscalePicker,
+  MaterialPicker,
+  SliderPicker,
+  TwitterPicker,
+  SwatchesPicker,
+  HueSlider
+} from '../src';
 
 const tinyColor = defineModel('tinycolor', {
-  default: '#F5F7FA'
+  default: tinycolor('#F5F7FA')
 });
 
 const color = defineModel({
   default: () => reactive({r: 0, g: 0, b: 255, a: 1})
 });
 
-const scope = effectScope();
-
-scope.run(() => {
-  watch(color, () => console.log('color changed ==>', color.value));
-});
+watch(tinyColor, () => console.log('color changed ==>', tinyColor.value));
 
 function invertColor(rgb: { r: number; g: number; b: number }): string {
   const inverted = {
@@ -44,10 +43,10 @@ const background = computed(() => {
 });
 
 const hsva = computed(() => {
-  const hsv = tinycolor(tinyColor.value).toHsv();
+  const hsva = tinycolor(tinyColor.value).toHsv();
   const res: Record<string, number> = {};
-  for (const [key, value] of Object.entries(hsv)) {
-    res[key] = value.toFixed();
+  for (const [key, value] of Object.entries(hsva)) {
+    res[key] = value.toFixed(2);
   }
   return res;
 });
@@ -55,6 +54,10 @@ const hsva = computed(() => {
 const textColor = computed(() => {
   return invertColor(tinycolor(tinyColor.value).toRgb());
 });
+
+const updateHue = (newHue: number) => {
+  tinyColor.value = tinycolor(tinyColor.value).spin(newHue - hsva.value.h).clone();
+}
 
 </script>
 
@@ -79,58 +82,63 @@ const textColor = computed(() => {
     <div :style="{flex: 0.8}">
       <div class="row">
         <div class="col">
-          <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}" :aria-hidden="true">
+          <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}">
             {{ hex }}<br />
             {{ color }}<br />
             {{ hsva }}
           </div>
           <div class="picker-container">
-            <Chrome v-model:tinyColor="tinyColor" v-model="color" />
+            <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
         <div class="picker-container">
-          <div><Sketch v-model:tinyColor="tinyColor" v-model="color" /></div>
+          <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
         </div>
 
         <div class="picker-container">
-          <div><Photoshop v-model:tinyColor="tinyColor" v-model="color" :hasResetButton="true" /></div>
+          <div><PhotoshopPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
       <div class="row" :style="{marginTop: '5%'}">
         <div class="col">
           <div class="picker-container">
-            <div><Compact v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><CompactPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
           </div>
           <div class="picker-container">
-            <div><Grayscale v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><GrayscalePicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
           </div>
           <div class="picker-container">
-            <div><Material v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><MaterialPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
-            <div><Slider v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div :style="{width: '410px'}"><HueSlider :modelValue="hsva.h" @update:modelValue="updateHue" /></div>
+            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;HueSlider /&gt;</div>
+          </div>
+
+          <div class="picker-container">
+            <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
           </div>
 
           <div class="picker-container">
-            <div><Twitter v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><TwitterPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
-            <div><Swatches v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><SwatchesPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
           </div>
         </div>
@@ -231,6 +239,7 @@ const textColor = computed(() => {
 .current-color {
   padding: 10px;
   width: 240px;
+  height: 100px;
   line-height: 1.5;
 }
 </style>
