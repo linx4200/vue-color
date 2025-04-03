@@ -199,6 +199,7 @@ const handleReset = () => {
 .saturation :deep(.picker) {
   width: 12px;
   height: 12px;
+  transform: translate(-6px, -6px);
 }
 .hue {
   position: relative;
