@@ -3,13 +3,14 @@ import { render } from 'vitest-browser-vue';
 import SliderPicker from '../../src/components/SliderPicker.vue';
 import { waitForRerender } from '../tools';
 
-test('render with various swatches', async () => {
+test('render with various swatches and props.alpha', async () => {
   const { getByRole, rerender } = render(SliderPicker, {
     props: {
-      swatches: ['0.1', '0.4', '0.7'] as ({ s: number, l: number} | string)[]
-    }
+      swatches: ['0.1', '0.4', '0.7']
+    } as { swatches?: ({ s: number, l: number} | string)[], alpha?: boolean }
   });
   expect(getByRole('option').elements().length).toBe(3);
+  await expect.element(getByRole('slider', { name: 'Transparency' })).not.toBeInTheDocument();
 
   rerender({
     swatches: [{ s: 0.1, l: 0.2 }, { s: 0.1, l: 0.4 }, { s: 0.1, l: 0.6 }, { s: 0.1, l: 0.8 }]
@@ -17,6 +18,18 @@ test('render with various swatches', async () => {
   await waitForRerender();
 
   expect(getByRole('option').elements().length).toBe(4);
+
+  rerender({
+    swatches: []
+  });
+  await waitForRerender();
+  await expect.element(getByRole('listbox')).not.toBeInTheDocument();
+
+  rerender({
+    alpha: true
+  });
+  await waitForRerender();
+  await expect.element(getByRole('slider', { name: 'Transparency' })).toBeInTheDocument();
 });
 
 test('render with certain inputs', async () => {

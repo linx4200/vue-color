@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watch, computed, reactive } from 'vue';
-import tinycolor from 'tinycolor2';
 
 import {
   ChromePicker,
@@ -12,8 +11,12 @@ import {
   SliderPicker,
   TwitterPicker,
   SwatchesPicker,
-  HueSlider
+  HueSlider,
+  tinycolor
+// } from '../dist/vue-color.js';
 } from '../src';
+
+// import '../dist/vue-color.css'
 
 const tinyColor = defineModel('tinycolor', {
   default: tinycolor('#F5F7FA')
@@ -126,7 +129,7 @@ const updateHue = (newHue: number) => {
           </div>
 
           <div class="picker-container">
-            <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
+            <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" :alpha="true" /></div>
             <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
           </div>
 

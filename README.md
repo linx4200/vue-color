@@ -22,7 +22,7 @@ A collection of efficient and customizable color pickers built with [Vue 3](http
 
 - **TypeScript Ready** – Full typings for better DX.
 
-<!-- - SSR-Friendly – Works seamlessly with server-side rendering frameworks. -->
+- **SSR-Friendly** – Works seamlessly with server-side rendering frameworks.
 
 - **Optimized for Accessibility** – Built with keyboard navigation and screen readers in mind.
 
