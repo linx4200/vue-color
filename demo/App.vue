@@ -68,13 +68,13 @@ const updateHue = (newHue: number) => {
   <div class="color-background" :style="[background]"></div>
   <div class="wrapper">
     <div>
-      <div class="title roboto" :style="{color: textColor}">
+      <div class="title text" :style="{color: textColor}">
         <h1>Vue-color</h1><span class="tag">v3.0</span>
       </div>
 
-      <main class="intro roboto" :style="{color: textColor}">
+      <main class="intro text" :style="{color: textColor}">
         A collection of efficient color pickers designed for modern web development.
-        <ul class="feature-list roboto" :style="{color: textColor, opacity: 0.75}">
+        <ul class="feature-list text" :style="{color: textColor, opacity: 0.75}">
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>
@@ -85,64 +85,64 @@ const updateHue = (newHue: number) => {
     <div :style="{flex: 0.8}">
       <div class="row">
         <div class="col">
-          <div class="roboto current-color" :style="{color: textColor, opacity: 0.5}">
+          <div class="text current-color" :style="{color: textColor, opacity: 0.5}">
             {{ hex }}<br />
             {{ color }}<br />
             {{ hsva }}
           </div>
           <div class="picker-container">
             <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
         <div class="picker-container">
           <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
+          <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
         </div>
 
         <div class="picker-container">
           <div><PhotoshopPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-          <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
+          <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
       <div class="row" :style="{marginTop: '5%'}">
         <div class="col">
           <div class="picker-container">
             <div><CompactPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
           </div>
           <div class="picker-container">
             <div><GrayscalePicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
           </div>
           <div class="picker-container">
             <div><MaterialPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
             <div :style="{width: '410px'}"><HueSlider :modelValue="hsva.h" @update:modelValue="updateHue" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;HueSlider /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;HueSlider /&gt;</div>
           </div>
 
           <div class="picker-container">
             <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" :alpha="true" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
           </div>
 
           <div class="picker-container">
             <div><TwitterPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
           <div class="picker-container">
             <div><SwatchesPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title roboto" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
+            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
           </div>
         </div>
       </div>
@@ -150,13 +150,9 @@ const updateHue = (newHue: number) => {
   </div>
 </template>
 
-<style scope>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-</style>
-
 <style scoped>
-.roboto {
-  font-family: "Roboto", serif;
+.text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: "wdth" 100;
