@@ -28,13 +28,14 @@ const color = defineModel({
 
 watch(tinyColor, () => console.log('color changed ==>', tinyColor.value));
 
-function invertColor(rgb: { r: number; g: number; b: number }): string {
+function invertColor(rgba: { r: number; g: number; b: number, a: number }): string {
   const inverted = {
-    r: 255 - rgb.r,
-    g: 255 - rgb.g,
-    b: 255 - rgb.b
+    r: 255 - rgba.r,
+    g: 255 - rgba.g,
+    b: 255 - rgba.b,
+    a: rgba.a
   };
-  return `rgb(${inverted.r}, ${inverted.g}, ${inverted.b})`;
+  return `rgba(${inverted.r}, ${inverted.g}, ${inverted.b}, ${inverted.a})`;
 }
 
 const hex = computed(() => {
@@ -81,6 +82,15 @@ const updateHue = (newHue: number) => {
           <li>✅ Optimized for Accessibility</li>
         </ul>
       </main>
+      <a
+        class="get-started text"
+        href="https://github.com/linx4200/vue-color#-installation"
+        :style="{'background-color': textColor.replace('1)', '0.75)'), color: hex}"
+        role="button"
+        aria-label="Get started with installation on GitHub"
+      >
+        Get Started &#20; 🚀
+      </a>
     </div>
     <div :style="{flex: 0.8}">
       <div class="row">
@@ -224,6 +234,23 @@ const updateHue = (newHue: number) => {
   padding-left: 0px;
   list-style: none;
   font-size: 18px;
+}
+
+.get-started {
+  display: inline-block;
+  width: 120px;
+  height: 24px;
+  padding: 8px 12px;
+  line-height: 24px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.get-started:hover {
+  opacity: 0.8;
 }
 
 .picker-container {
