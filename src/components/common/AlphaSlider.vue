@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue';
+import { computed, useTemplateRef, onUnmounted } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
@@ -114,6 +114,10 @@ function handleKeydown(e: KeyboardEvent) {
     colorRef.value = colorRef.value.setAlpha(newValue).clone();
   }
 }
+
+onUnmounted(() => {
+  unbindEventListeners();
+});
 </script>
 
 <style scoped>

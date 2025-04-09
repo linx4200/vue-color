@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ref, useTemplateRef } from 'vue';
+import { watch, computed, ref, useTemplateRef, onUnmounted } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
@@ -189,6 +189,10 @@ function handleKeyDown(e: KeyboardEvent) {
     emitChange(newValue);
   }
 }
+
+onUnmounted(() => {
+  unbindEventListeners();
+});
 </script>
 
 <style scoped>
