@@ -114,10 +114,6 @@ const color = defineModel({
 </script>
 ```
 
-Using `defineModel` together with `v-model`, the color variable is **two-way bound** to the internal state of the picker component.
-
-Whenever the color changes inside the `<ChromePicker>`, the bound color value is automatically updated.
-
 The `v-model` of `vue-color` accepts a variety of color formats as input. **It will preserve the format you provide**, which is especially useful if you need format consistency throughout your app.
 
 ```ts
