@@ -18,7 +18,7 @@ import {
 
 // import '../dist/vue-color.css'
 
-const tinyColor = defineModel('tinycolor', {
+const tinyColor = defineModel('tinyColor', {
   default: tinycolor('#F5F7FA')
 });
 
