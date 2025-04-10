@@ -82,20 +82,20 @@ import { ChromePicker, CompactPicker, HueSlider /** ...etc  */ } from 'vue-color
 | Component Name | Docs |
 | ------- | ------- |
 |  ChromePicker  |  [View](./docs/components/ChromePicker.md)  |
-|  CompactPicker   |    |
-|  GrayscalePicker   |    |
-|  MaterialPicker   |    |
-|  PhotoshopPicker   |    |
-|  SketchPicker   |    |
-|  SliderPicker   |    |
-|  SwatchesPicker   |    |
-|  TwitterPicker   |    |
-|  HueSlider   |    |
-|  AlphaSlider   |    |
+|  CompactPicker   | [View](./docs/components/CompactPicker.md)   |
+|  GrayscalePicker   | [View](./docs/components/GrayscalePicker.md)   |
+|  MaterialPicker   |  -  |
+|  PhotoshopPicker   | [View](./docs/components/PhotoshopPicker.md)   |
+|  SketchPicker   |  [View](./docs/components/SketchPicker.md)  |
+|  SliderPicker   | [View](./docs/components/SliderPicker.md)   |
+|  SwatchesPicker   | [View](./docs/components/SwatchesPicker.md)   |
+|  TwitterPicker   |  [View](./docs/components/TwitterPicker.md)  |
+|  HueSlider   |  [View](./docs/components/HueSlider.md)  |
+|  AlphaSlider   |  -  |
 
 ### Props & Events
 
-All color picker components in `vue-color` share a set of common props and events for handling color updates and synchronization.
+All color picker components (expect for `<HueSlider />`) in `vue-color` share a set of common props and events for handling color updates and synchronization.
 Below we'll take `<ChromePicker />` as an example to illustrate how to work with `v-model`.
 
 #### `v-model`

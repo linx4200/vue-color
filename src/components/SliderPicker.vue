@@ -58,7 +58,6 @@ import Hue from './common/HueSlider.vue';
 import AlphaSlider from './common/AlphaSlider.vue';
 
 type Prop = {
-  /** lightness values */
   swatches?: ({ s: number, l: number} | string)[];
   alpha?: boolean;
 }
