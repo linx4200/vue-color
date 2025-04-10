@@ -132,7 +132,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   formats: () => ['rgb', 'hex', 'hsl']
 });
 
-const emit = defineEmits(['change'].concat(EmitEventNames));
+const emit = defineEmits(EmitEventNames);
 
 const tinyColorRef = defineColorModel(props, emit);
 

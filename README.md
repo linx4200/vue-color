@@ -73,11 +73,25 @@ const color = defineModel({
 
 ### All Available Pickers
 
-| Color Picker   | Component | Individual API Reference |
-| -------- | ------- | ------- |
-| Chrome  |  `<ChromePicker />`  |  -  |
-|  |     |    |
-|     |     |    |
+All color pickers listed below can be imported as named exports from `vue-color`.
+
+```ts
+import { ChromePicker, CompactPicker, HueSlider /** ...etc  */ } from 'vue-color';
+```
+
+| Component Name | Docs |
+| ------- | ------- |
+|  ChromePicker  |  [View](./docs/components/ChromePicker.md)  |
+|  CompactPicker   |    |
+|  GrayscalePicker   |    |
+|  MaterialPicker   |    |
+|  PhotoshopPicker   |    |
+|  SketchPicker   |    |
+|  SliderPicker   |    |
+|  SwatchesPicker   |    |
+|  TwitterPicker   |    |
+|  HueSlider   |    |
+|  AlphaSlider   |    |
 
 ### Props & Events
 
