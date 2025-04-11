@@ -3,7 +3,16 @@
     <div class="hue">
       <Hue :modelValue="hueRef" @update:modelValue="updateHueRef" />
     </div>
-    <div class="swatches" role="listbox" aria-label="Color segments in different shades of one color" tabindex="0">
+    <div class="alpha" v-if="props.alpha">
+      <AlphaSlider v-model:tinyColor="tinyColorRef" />
+    </div>
+    <div
+      v-if="normalizedSwatches.length > 0"
+      class="swatches"
+      role="listbox"
+      aria-label="Color segments in different shades of one color"
+      tabindex="0"
+    >
       <div
         v-for="(swatch, index) in normalizedSwatches"
         class="swatch"
@@ -46,14 +55,15 @@ import { computed } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel';
 import { useHueRef } from '../composable/hue';
 import Hue from './common/HueSlider.vue';
+import AlphaSlider from './common/AlphaSlider.vue';
 
 type Prop = {
-  /** lightness values */
   swatches?: ({ s: number, l: number} | string)[];
+  alpha?: boolean;
 }
 
 const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
-  swatches: () => defaultSwatches
+  swatches: () => defaultSwatches,
 });
 const emit = defineEmits(EmitEventNames);
 
@@ -106,13 +116,18 @@ const handleSwClick = (swatch: { s: number, l: number }) => {
   height: 12px;
   position: relative;
 }
-.hue :deep(.picker) {
+.hue :deep(.picker), .alpha :deep(.picker) {
   width: 14px;
   height: 14px;
   border-radius: 6px;
   transform: translate(-7px, -2px);
   background-color: rgb(248, 248, 248);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+}
+.alpha {
+  height: 12px;
+  position: relative;
+  margin-top: 20px;
 }
 .swatches {
   display: flex;

@@ -10,3 +10,5 @@ export { default as TwitterPicker } from './components/TwitterPicker.vue';
 export { default as HueSlider } from './components/HueSlider.vue';
 
 export { default as AlphaSlider } from './components/common/AlphaSlider.vue';
+
+export { default as tinycolor } from 'tinycolor2';

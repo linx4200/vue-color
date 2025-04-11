@@ -132,7 +132,7 @@ const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
   formats: () => ['rgb', 'hex', 'hsl']
 });
 
-const emit = defineEmits(['change'].concat(EmitEventNames));
+const emit = defineEmits(EmitEventNames);
 
 const tinyColorRef = defineColorModel(props, emit);
 
@@ -264,7 +264,7 @@ const hideHighlight = () => {
   box-shadow: 0 0 2px rgba(0,0,0,.3), 0 4px 8px rgba(0,0,0,.3);
   box-sizing: initial;
   width: 225px;
-  font-family: Menlo;
+  font-family: Menlo, Consolas, 'Courier New', monospace;
   background-color: #fff;
 }
 .controls {

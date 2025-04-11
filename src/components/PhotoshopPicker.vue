@@ -168,7 +168,7 @@ const handleReset = () => {
   box-shadow: 0 0 0 1px rgba(0,0,0,.25), 0 8px 16px rgba(0,0,0,.15);
   box-sizing: initial;
   width: 513px;
-  font-family: Roboto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 .fields_disabled {
   width: 390px;

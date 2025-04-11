@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, ref } from 'vue';
+import { computed, useTemplateRef, ref, onUnmounted } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
@@ -185,6 +185,10 @@ function handleKeyDown(e: KeyboardEvent) {
     };
   }
 }
+
+onUnmounted(() => {
+  unbindEventListeners();
+});
 </script>
 
 <style scoped>
@@ -214,7 +218,7 @@ function handleKeyDown(e: KeyboardEvent) {
   cursor: move;
   width: 4px;
   height: 4px;
-  box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);
+  box-shadow: 0 0 0 1.6px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);
   border-radius: 50%;
   transform: translate(-2px, -2px);
 }

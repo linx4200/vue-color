@@ -49,7 +49,7 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   width: 98px;
   height: 98px;
   padding: 16px;
-  font-family: "Roboto";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   position: relative;
   border-radius: 2px;
   box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);

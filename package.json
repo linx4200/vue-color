@@ -1,6 +1,6 @@
 {
   "name": "vue-color",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "type": "module",
   "files": [
     "dist"
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/linx4200/vue-color"
+    "url": "git+https://github.com/linx4200/vue-color.git"
   },
   "author": "Xinran <liuxinran1008@gmail.com>, xiaokai <kexiaokai@gmail.com>",
   "peerDependencies": {
