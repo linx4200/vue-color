@@ -89,7 +89,7 @@ const updateHue = (newHue: number) => {
         role="button"
         aria-label="Get started with installation on GitHub"
       >
-        Get Started &#20; 🚀
+        Get Started &nbsp; 🚀
       </a>
     </div>
     <div :style="{flex: 0.8}">

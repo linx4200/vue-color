@@ -7,7 +7,7 @@ import pluginVueA11y from "eslint-plugin-vuejs-accessibility";
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {files: ["src/**/*.{js,mjs,cjs,ts,vue}","demo/**/*.{js,mjs,cjs,ts,vue}"]},
-  {ignores: ["node_modules", "dist", "coverage"]},
+  {ignores: ["node_modules", "dist", "coverage", "demo/dist"]},
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
