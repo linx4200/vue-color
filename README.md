@@ -80,13 +80,13 @@ var colors = { r: 255, g: 0, b: 0 }
 new Vue({
   el: '#app',
   components: {
-    'material-picker': material,
-    'compact-picker': compact,
-    'swatches-picker': swatches,
-    'slider-picker': slider,
-    'sketch-picker': sketch,
-    'chrome-picker': chrome,
-    'photoshop-picker': photoshop
+    'material-picker': Material,
+    'compact-picker': Compact,
+    'swatches-picker': Swatches,
+    'slider-picker': Slider,
+    'sketch-picker': Sketch,
+    'chrome-picker': Chrome,
+    'photoshop-picker': Photoshop
   },
   data () {
     return {
@@ -100,7 +100,6 @@ new Vue({
 `colors` accepts either a string of a hex color '#333' or a object of rgb or hsl values `{ r: 51, g: 51, b: 51 }` or `{ h: 0, s: 0, l: .10 }`, whatever [tinycolor2](https://www.npmjs.com/package/tinycolor2) accepts as an input.
 
 ```html
-<!-- suppose you have the data 'colors' in your component -->
 <material-picker v-model="colors" />
 <compact-picker v-model="colors" />
 <swatches-picker v-model="colors" />
@@ -115,6 +114,8 @@ OR
 ```html
 <chrome-picker :value="colors" @input="updateValue"></chrome-picker>
 ```
+
+> ⚠️ Note: vue-color components require a `v-model` or `:value` binding to work properly.
 
 In some cases you can give the component a predefined set of colors with the property `presetColors` (for `Sketch` only) or `palette` (for `Compact` and `Grayscale`), by simply passing it an array with the color values as strings in any css compatible format.
 
