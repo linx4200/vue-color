@@ -54,7 +54,7 @@ test('Click the pointer and update color events should be emitted with correct a
   expect(emitted()['update:modelValue'][0]).toEqual([180]);
 
   // click the left outer space of the slider
-  slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: 0, clientY: box.top + box.height / 2 }));
+  slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: -10, clientY: box.top + box.height / 2 }));
   expect(emitted()['update:modelValue'][1]).toEqual([0]);
 
   // click the right outer space of the slider
