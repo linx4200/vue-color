@@ -2811,7 +2811,7 @@ var _color2 = _interopRequireDefault(_color);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var VueColor = {
-  version: '2.8.1',
+  version: '2.8.2',
   Compact: _Compact2.default,
   Grayscale: _Grayscale2.default,
   Twitter: _Twitter2.default,
