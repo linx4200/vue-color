@@ -43,6 +43,13 @@ test('props.formats', async () => {
 
   rerender({
     // @ts-expect-error test wrong format
+    formats: 'a'
+  });
+  await waitForRerender();
+  await expect.element(getByTestId('fields')).not.toBeInTheDocument();
+
+  rerender({
+    // @ts-expect-error test wrong format
     formats: ['rgb', 'a']
   });
   await waitForRerender();

@@ -72,13 +72,23 @@ test('Click the pointer and update color events should be emitted with correct v
   containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height / 4 }));
   expect(emitted()['update:modelValue'][0]).toEqual([{h: 100, a: 1, s: 0.25, v: 0.75}]);
 
+  // special handling when reaching to the bottom edge of the container
+  containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height - 1 }));
+  expect((emitted()['update:modelValue'][1] as [{s: number}])[0].s).toBeCloseTo(0.25);
+  expect((emitted()['update:modelValue'][1] as [{v: number}])[0].v).toBeCloseTo(0.01);
+
+  // special handling when reaching to the left edge of the container
+  containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: 1, clientY: box.top + box.height / 4 }));
+  expect((emitted()['update:modelValue'][2] as [{s: number}])[0].s).toBeCloseTo(0.01);
+  expect((emitted()['update:modelValue'][2] as [{v: number}])[0].v).toBeCloseTo(0.75);
+
   // out of container
   containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: box.width + 10, clientY: box.height + 10 }));
-  expect(emitted()['update:modelValue'][1]).toEqual([{h: 0, a: 1, s: 0, v: 0}]);
+  expect(emitted()['update:modelValue'][3]).toEqual([{h: 0, a: 1, s: 0, v: 0}]);
 
   // out of container
   containerELE.dispatchEvent(new MouseEvent('touchstart', { button: 0, clientX: -10, clientY: -10 }));
-  expect(emitted()['update:modelValue'][2]).toEqual([{h: 0, a: 1, s: 0, v: 1}]);
+  expect(emitted()['update:modelValue'][4]).toEqual([{h: 0, a: 1, s: 0, v: 1}]);
 });
 
 
