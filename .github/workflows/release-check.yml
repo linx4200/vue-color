@@ -10,8 +10,8 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run tests and collect coverage
+  check:
+    name: Run some checks before releasing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
