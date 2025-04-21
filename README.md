@@ -30,9 +30,9 @@ Explore the components in action: 👉 [Open Live Demo](https://linx4200.github.
 ## 📦 Installation
 
 ```bash
-npm install vue-color@next
+npm install vue-color
 # or
-yarn add vue-color@next
+yarn add vue-color
 ```
 
 ## 🚀 Quick Start
