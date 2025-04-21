@@ -6,7 +6,7 @@
 </p>
 
 ![Vue 3](https://img.shields.io/badge/Vue-3.0-brightgreen)
-![size](https://img.shields.io/bundlephobia/minzip/vue-color)
+![Package Size](https://img.shields.io/bundlephobia/minzip/vue-color)
 ![Test Coverage](https://codecov.io/gh/linx4200/vue-color/branch/main/graph/badge.svg)
 
 A collection of efficient and customizable color pickers built with [Vue 3](https://vuejs.org/), designed for modern web development.
