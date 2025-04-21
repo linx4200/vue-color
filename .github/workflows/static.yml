@@ -4,7 +4,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["next/3.x"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,7 +40,7 @@ jobs:
       # 3. Build the Vite demo project
       - name: Build demo
         run: npm run demo:build
-  
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -49,6 +49,7 @@ jobs:
         with:
           # Upload entire repository
           path: './demo/dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

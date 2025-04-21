@@ -1,15 +1,13 @@
 # 🎨 Vue Color v3.0
 
 <p>
-  <a href="https://www.npmjs.com/package/vue-color"><img src="https://img.shields.io/npm/v/vue-color.svg?label=npm" alt="NPM version" /></a>
-  <a href="https://www.npmjs.com/package/vue-color/v/next"><img src="https://img.shields.io/npm/v/vue-color/next?label=npm%20@next&color=orange" alt="NPM next version" /></a>
-  <img src="https://img.shields.io/badge/Vue-3.0-brightgreen" alt="Vue 3" />
+  <a href="https://www.npmjs.com/package/vue-color"><img src="https://img.shields.io/npm/dm/vue-color.svg" alt="NPM monthly downloads" /></a>
+  <a href="https://github.com/linx4200/vue-color"><img src="https://img.shields.io/github/stars/linx4200/vue-color?style=social" alt="Github stars" /></a>
 </p>
 
-![GitHub stars](https://img.shields.io/github/stars/linx4200/vue-color?style=social)
+![Vue 3](https://img.shields.io/badge/Vue-3.0-brightgreen)
 ![size](https://img.shields.io/bundlephobia/minzip/vue-color)
-![Downloads](https://img.shields.io/npm/dm/vue-color.svg)
-![Test Coverage](https://codecov.io/gh/linx4200/vue-color/branch/next/3.x/graph/badge.svg)
+![Test Coverage](https://codecov.io/gh/linx4200/vue-color/branch/main/graph/badge.svg)
 
 A collection of efficient and customizable color pickers built with [Vue 3](https://vuejs.org/), designed for modern web development.
 
