@@ -58,5 +58,8 @@
   "dependencies": {
     "material-colors": "^1.2.6",
     "tinycolor2": "^1.6.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
