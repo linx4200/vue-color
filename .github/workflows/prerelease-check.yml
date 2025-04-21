@@ -1,0 +1,43 @@
+name: Pre-release Checks
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # run on pull_request events that target the main branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    name: Run a few checks to make sure the release goes smoothly.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Demo Build
+        run: npm run demo:build
+
+      - name: Check if version is published
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view vue-color@$VERSION > /dev/null 2>&1; then
+            echo "Version $VERSION already exists. Skipping publish."
+            exit 1
+          fi

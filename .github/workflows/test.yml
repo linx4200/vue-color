@@ -1,7 +1,17 @@
 name: Run tests and upload coverage
 
 on:
-  push
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # run on pull_request events that target the main branch
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
