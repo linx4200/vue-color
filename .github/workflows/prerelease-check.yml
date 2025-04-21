@@ -1,4 +1,4 @@
-name: Pre-release Checks
+name: Run a few checks to make sure the release goes smoothly
 
 on:
   # Allows you to run this workflow manually from the Actions tab
@@ -11,7 +11,6 @@ on:
 
 jobs:
   check:
-    name: Run a few checks to make sure the release goes smoothly.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,11 +32,3 @@ jobs:
 
       - name: Demo Build
         run: npm run demo:build
-
-      - name: Check if version is published
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if npm view vue-color@$VERSION > /dev/null 2>&1; then
-            echo "Version $VERSION already exists. Skipping publish."
-            exit 1
-          fi

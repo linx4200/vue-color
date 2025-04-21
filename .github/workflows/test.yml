@@ -15,7 +15,6 @@ on:
 
 jobs:
   test:
-    name: Run tests and collect coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
