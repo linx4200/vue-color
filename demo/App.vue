@@ -238,7 +238,7 @@ const updateHue = (newHue: number) => {
 
 .get-started {
   display: inline-block;
-  width: 120px;
+  width: 124px;
   height: 24px;
   padding: 8px 12px;
   line-height: 24px;
