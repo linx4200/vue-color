@@ -168,6 +168,12 @@ import {ChromePicker } from 'vue-color';
 </script>
 ```
 
+## 🧩 FAQ / Issue Guide
+
+| Error / Symptom | Related Issue |
+|--------|----------------|
+| `TS2742: The inferred type of 'default' cannot be named without a reference to ...` (commonly triggered when using `pnpm`) | [#278](https://github.com/linx4200/vue-color/issues/278) |
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please open issues or pull requests as needed.

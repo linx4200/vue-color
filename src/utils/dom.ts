@@ -5,7 +5,7 @@ export const getPageXYFromEvent = (e: MouseEvent | TouchEvent) => {
     res.x = e.pageX;
     res.y = e.pageY;
   }
-  if (e instanceof TouchEvent) {
+  if (typeof TouchEvent !== 'undefined' && e instanceof TouchEvent) {
     res.x = (e.touches ? e.touches[0].pageX : e.changedTouches ? e.changedTouches[0].pageX : 0);
     res.y = (e.touches ? e.touches[0].pageY : e.changedTouches ? e.changedTouches[0].pageY : 0);
   }
