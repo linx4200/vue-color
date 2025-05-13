@@ -53,7 +53,7 @@
     "vite": "^6.3.4",
     "vitest": "^3.0.5",
     "vitest-browser-vue": "^0.1.0",
-    "vue-tsc": "^2.2.0"
+    "vue-tsc": "^2.2.10"
   },
   "dependencies": {
     "material-colors": "^1.2.6",
