@@ -16,7 +16,9 @@ import {
 // } from '../dist/vue-color.js';
 } from '../src';
 
-// import '../dist/vue-color.css'
+// import '../dist/vue-color.css';
+
+import ThemeToggle from './components/ThemeToggle.vue';
 
 const tinyColor = defineModel('tinyColor', {
   default: tinycolor('#F5F7FA')
@@ -80,6 +82,7 @@ const updateHue = (newHue: number) => {
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>
           <li>✅ Optimized for Accessibility</li>
+          <li class="dark-mode"><span>✅ Supports Dark Theme</span><ThemeToggle style="margin-left: 10px;" :color="textColor" /></li>
         </ul>
       </main>
       <a
@@ -201,6 +204,7 @@ const updateHue = (newHue: number) => {
 
 .title {
   display: flex;
+  margin-bottom: 18px;
 }
 
 .title h1 {
@@ -225,15 +229,20 @@ const updateHue = (newHue: number) => {
 
 .intro {
   font-size: 20px;
-  line-height: 1.5;
+  line-height: 1.8;
   width: 300px;
 }
 
 .feature-list {
-  line-height: 1.6;
+  line-height: 1.8;
   padding-left: 0px;
   list-style: none;
   font-size: 18px;
+}
+
+.dark-mode {
+  display: flex;
+  align-items: center;
 }
 
 .get-started {
