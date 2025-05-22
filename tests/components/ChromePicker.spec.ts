@@ -64,6 +64,15 @@ test('props.formats', async () => {
   await expect.element(getByRole('textbox', { name: 'Red' })).not.toBeInTheDocument();
   await expect.element(getByRole('textbox', { name: 'Hex' })).toBeVisible();
 
+  rerender({
+    formats: ['hsl']
+  });
+  await waitForRerender();
+  expect(getByTestId('fields').element().children.length).toBe(1);
+  await expect.element(getByRole('textbox', { name: 'Red' })).not.toBeInTheDocument();
+  await expect.element(getByRole('textbox', { name: 'Hex' })).not.toBeInTheDocument();
+  await expect.element(getByRole('textbox', { name: 'Hue' })).toBeVisible();
+
 });
 
 test('toggle button works fine', async () => {
