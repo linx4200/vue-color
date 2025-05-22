@@ -19,7 +19,7 @@ import ThemeToggle from './components/ThemeToggle.vue';
 // import '../dist/vue-color.css';
 
 const DEFAULT_COLOR = '#F5F7FA';
-const DEFAULT_COLOR_DARK = '#333';
+const DEFAULT_COLOR_DARK = '#004035';
 
 const tinyColor = defineModel('tinyColor', {
   default: tinycolor(DEFAULT_COLOR)
