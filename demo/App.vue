@@ -15,13 +15,14 @@ import {
   tinycolor
 // } from '../dist/vue-color.js';
 } from '../src';
-
+import ThemeToggle from './components/ThemeToggle.vue';
 // import '../dist/vue-color.css';
 
-import ThemeToggle from './components/ThemeToggle.vue';
+const DEFAULT_COLOR = '#F5F7FA';
+const DEFAULT_COLOR_DARK = '#333';
 
 const tinyColor = defineModel('tinyColor', {
-  default: tinycolor('#F5F7FA')
+  default: tinycolor(DEFAULT_COLOR)
 });
 
 const color = defineModel({
@@ -65,6 +66,14 @@ const updateHue = (newHue: number) => {
   tinyColor.value = tinycolor(tinyColor.value).spin(newHue - hsva.value.h).clone();
 }
 
+const onModeChange = (isDark: boolean) => {
+  if (isDark) {
+    tinyColor.value = tinycolor(DEFAULT_COLOR_DARK);
+  } else {
+    tinyColor.value = tinycolor(DEFAULT_COLOR);
+  }
+}
+
 </script>
 
 <template>
@@ -82,7 +91,7 @@ const updateHue = (newHue: number) => {
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>
           <li>✅ Optimized for Accessibility</li>
-          <li class="dark-mode"><span>✅ Supports Dark Theme</span><ThemeToggle style="margin-left: 10px;" :color="textColor" /></li>
+          <li class="dark-mode"><span>✅ Supports Dark Theme</span><ThemeToggle style="margin-left: 10px;" :color="textColor" @change="onModeChange" /></li>
         </ul>
       </main>
       <a

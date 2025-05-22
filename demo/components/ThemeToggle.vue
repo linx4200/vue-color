@@ -25,6 +25,7 @@ type Props = {
   color: string;
 }
 const props = defineProps<Props>();
+const emit = defineEmits(['change']);
 
 const lightColor = tinycolor(props.color).lighten(80);
 const darkColor = tinycolor(props.color).lighten(10);
@@ -33,7 +34,8 @@ const isDark = ref(false);
 
 const toggleTheme = () => {
   isDark.value = !isDark.value;
-  document.body.classList.toggle('dark', isDark.value);
+  document.documentElement.classList.toggle('dark', isDark.value);
+  emit('change', isDark.value);
 }
 
 </script>

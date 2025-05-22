@@ -157,9 +157,12 @@ const handlePreset = (color: string) => {
   width: 200px;
   padding: 10px 10px 0;
   box-sizing: initial;
-  background: #fff;
+  background: var(--vc-body-bg);
   border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .15), 0 8px 16px rgba(0, 0, 0, .15);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+  font-family: Menlo, Consolas, 'Courier New', monospace;
 }
 
 .saturation {
@@ -201,7 +204,8 @@ const handlePreset = (color: string) => {
   position: relative;
   margin-top: 4px;
   margin-left: 4px;
-  border-radius: 3px;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
 .active-color {
@@ -210,8 +214,9 @@ const handlePreset = (color: string) => {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15), inset 0 0 4px rgba(0, 0, 0, .25);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, .15),
+    inset 0 0 4px rgba(0, 0, 0, .25);
   z-index: 2;
 }
 
@@ -228,17 +233,19 @@ const handlePreset = (color: string) => {
   width: 90%;
   padding: 4px 0 3px 10%;
   border: none;
-  box-shadow: inset 0 0 0 1px #ccc;
+  box-shadow: inset 0 0 0 1px var(--vc-input-border);
+  background-color: var(--vc-input-bg);
+  color: var(--vc-input-text);
   font-size: 10px;
 }
 
 .field :deep(.vc-input-label) {
   display: block;
-  text-align: center;
-  font-size: 11px;
-  color: #222;
   padding-top: 3px;
   padding-bottom: 4px;
+  color: var(--vc-sketch-input-label);
+  font-size: 11px;
+  text-align: center;
 }
 
 .field_single {
@@ -255,7 +262,7 @@ const handlePreset = (color: string) => {
   margin-left: -10px;
   padding-left: 10px;
   padding-top: 10px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--vc-sketch-presets-border);
 }
 
 .preset-color {

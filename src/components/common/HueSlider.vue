@@ -216,17 +216,17 @@ onUnmounted(() => {
   border-radius: 2px
 }
 .picker-wrap {
-  z-index: 2;
   position: absolute;
+  z-index: 2;
 }
 .picker {
-  cursor: col-resize;
   margin-top: 1px;
   width: 4px;
-  border-radius: 1px;
   height: 8px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .6);
-  background: #fff;
+  border-radius: 1px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+  background: var(--vc-picker-bg);
+  cursor: col-resize;
   transform: translateX(-2px);
 }
 </style>

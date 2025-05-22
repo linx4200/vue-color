@@ -163,25 +163,29 @@ const handleReset = () => {
 
 <style scoped>
 .vc-photoshop-picker {
-  background: #DCDCDC;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.25), 0 8px 16px rgba(0,0,0,.15);
-  box-sizing: initial;
   width: 513px;
+  background: var(--vc-ps-bg);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 8px 16px rgba(0, 0, 0, 0.15);
+  box-sizing: initial;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 .fields_disabled {
   width: 390px;
 }
 .title {
-  background-image: linear-gradient(-180deg, #F0F0F0 0%, #D4D4D4 100%);
-  border-bottom: 1px solid #B1B1B1;
-  box-shadow: inset 0 1px 0 0 rgba(255,255,255,.2), inset 0 -1px 0 0 rgba(0,0,0,.02);
   height: 23px;
-  line-height: 24px;
+  background-image: linear-gradient(-180deg, var(--vc-ps-title-bg-gradient-start) 0%, var(--vc-ps-title-bg-gradient-end) 100%);
+  border-bottom: 1px solid var(--vc-ps-title-border);
   border-radius: 4px 4px 0 0;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.02);
+  color: var(--vc-ps-title-color);
   font-size: 13px;
-  color: #4D4D4D;
+  line-height: 24px;
   text-align: center;
 }
 .body {
@@ -192,8 +196,8 @@ const handleReset = () => {
   width: 256px;
   height: 256px;
   position: relative;
-  border: 2px solid #B3B3B3;
-  border-bottom: 2px solid #F0F0F0;
+  border: 2px solid var(--vc-ps-slider-border);
+  border-bottom: 2px solid var(--vc-ps-slider-border-bottom);
   overflow: hidden;
 }
 .saturation :deep(.picker) {
@@ -206,8 +210,8 @@ const handleReset = () => {
   height: 256px;
   width: 19px;
   margin-left: 10px;
-  border: 2px solid #B3B3B3;
-  border-bottom: 2px solid #F0F0F0;
+  border: 2px solid var(--vc-ps-slider-border);
+  border-bottom: 2px solid var(--vc-ps-slider-border-bottom);
 }
 .hue-picker {
   position: relative;
@@ -219,7 +223,7 @@ const handleReset = () => {
   height: 0;
   border-style: solid;
   border-width: 5px 0 5px 8px;
-  border-color: transparent transparent transparent #555;
+  border-color: transparent transparent transparent var(--vs-ps-picker-border-dark);
   cursor: pointer;
 }
 .hue-picker-left:after,
@@ -229,7 +233,7 @@ const handleReset = () => {
   height: 0;
   border-style: solid;
   border-width: 4px 0 4px 6px;
-  border-color: transparent transparent transparent #fff;
+  border-color: transparent transparent transparent var(--vs-ps-picker-border-white);
   position: absolute;
   top: 1px;
   left: 1px;
@@ -256,34 +260,37 @@ const handleReset = () => {
   flex: 1;
 }
 .action-btn {
-  cursor: pointer;
-  background-image: linear-gradient(-180deg, #FFFFFF 0%, #E6E6E6 100%);
-  border: 1px solid #878787;
-  border-radius: 2px;
   height: 20px;
-  box-shadow: 0 1px 0 0 #EAEAEA;
+  margin-bottom: 10px;
+  background-image: linear-gradient(-180deg, var(--vc-ps-btn-gradient-start) 0%, var(--vc-ps-btn-gradient-end) 100%);
+  border: 1px solid var(--vc-ps-btn-border);
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 var(--vc-ps-btn-shadow);
+  cursor: pointer;
+  color: var(--vc-ps-btn-color);
   font-size: 14px;
-  color: #000;
   line-height: 20px;
   text-align: center;
-  margin-bottom: 10px;
 }
 .preview {
   width: 60px;
 }
 .preview-swatches {
-  border: 1px solid #B3B3B3;
-  border-bottom: 1px solid #F0F0F0;
+  border: 1px solid var(--vc-ps-slider-border);
+  border-bottom: 1px solid var(--vc-ps-slider-border-bottom);
   margin-bottom: 2px;
   margin-top: 1px;
 }
 .preview-color {
   height: 34px;
-  box-shadow: inset 1px 0 0 #000, inset -1px 0 0 #000, inset 0 1px 0 #000;
+  box-shadow:
+    inset 1px 0 var(--vc-ps-preview-border),
+    inset -1px 0 var(--vc-ps-preview-border),
+    inset 0 1px var(--vc-ps-preview-border);
 }
 .preview-label {
+  color: var(--vc-ps-label);
   font-size: 14px;
-  color: #000;
   text-align: center;
 }
 
@@ -294,23 +301,28 @@ const handleReset = () => {
   position: relative;
 }
 .fields :deep(.vc-input-input) {
-  margin-left: 40%;
   width: 40%;
   height: 18px;
-  border: 1px solid #888888;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.1), 0 1px 0 0 #ECECEC;
-  margin-bottom: 5px;
-  font-size: 13px;
-  padding-left: 3px;
+  margin-left: 40%;
   margin-right: 10px;
+  margin-bottom: 5px;
+  padding-left: 3px;
+  border: 1px solid var(--vc-ps-input-border);
+  box-shadow:
+    inset 0 1px 1px var(--vc-ps-input-shadow-dark),
+    0 1px 0 0 var(--vc-ps-input-shadow-light);
+  background-color: var(--vc-input-bg);
+  color: var(--vc-ps-label);
+  font-size: 13px;
 }
 .fields :deep(.vc-input-label), .fields :deep(.vc-input-desc) {
-  top: 0;
-  text-transform: uppercase;
-  font-size: 13px;
-  height: 18px;
-  line-height: 22px;
   position: absolute;
+  top: 0;
+  height: 18px;
+  color: var(--vc-ps-label);
+  font-size: 13px;
+  line-height: 22px;
+  text-transform: uppercase;
 }
 .fields :deep(.vc-input-label) {
   left: 0;
@@ -326,14 +338,16 @@ const handleReset = () => {
 }
 
 .hex :deep(.vc-input-input) {
-  margin-left: 20%;
   width: 80%;
   height: 18px;
-  border: 1px solid #888888;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.1), 0 1px 0 0 #ECECEC;
+  margin-left: 20%;
   margin-bottom: 6px;
-  font-size: 13px;
   padding-left: 3px;
+  border: 1px solid var(--vc-ps-input-border);
+  box-shadow:
+    inset 0 1px 1px var(--vc-ps-input-shadow-dark),
+    0 1px 0 0 var(--vc-ps-input-shadow-light);
+  font-size: 13px;
 }
 .hex :deep(.vc-input-label) {
   position: absolute;

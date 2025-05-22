@@ -1,3 +1,5 @@
+import './styles/variables.css';
+
 export { default as ChromePicker } from './components/ChromePicker.vue';
 export { default as CompactPicker } from './components/CompactPicker.vue';
 export { default as GrayscalePicker } from './components/GrayscalePicker.vue';
