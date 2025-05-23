@@ -9,7 +9,5 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
-    assignees:
-      - "linx4200"
     reviewers:
       - "linx4200"

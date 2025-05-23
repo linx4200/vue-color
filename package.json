@@ -20,9 +20,11 @@
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
+    "postinstall": "cd demo/vue2 && npm install",
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
-    "demo": "vite demo",
-    "demo:build": "vite build demo",
+    "demo": "vite demo/vue3",
+    "demo:vue2": "vite demo/vue2",
+    "demo:build": "vite build demo/vue3",
     "test": "vitest --workspace=vitest.workspace.ts",
     "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"

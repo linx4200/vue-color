@@ -1,0 +1,11 @@
+{
+  "name": "vue-color-demo-vue2",
+  "version": "1.0.0",
+  "description": "Demo page for testing compatibility of Vue 2.7",
+  "dependencies": {
+    "vue": "^2.7.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.3.3"
+  }
+}
