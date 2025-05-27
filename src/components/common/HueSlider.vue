@@ -6,7 +6,7 @@
         horizontal: props.direction === 'horizontal',
         vertical: props.direction === 'vertical',
       }"
-      ref="container"
+      ref="containerRef"
       @mousedown="handleMouseDown"
       @touchmove="handleChange"
       @touchstart="handleChange"
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ref, useTemplateRef, onUnmounted } from 'vue';
+import { watch, computed, ref, onUnmounted } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
@@ -50,7 +50,8 @@ const hue = defineModel({
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref(null);
 
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';

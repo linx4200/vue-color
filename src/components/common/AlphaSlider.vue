@@ -6,7 +6,7 @@
     <div class="gradient" :style="{background: gradientColor}"></div>
     <div
         class="slider"
-        ref="container"
+        ref="containerRef"
         @mousedown="handleMouseDown"
         @touchmove="handleChange"
         @touchstart="handleChange"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, onUnmounted } from 'vue';
+import { ref, computed, onUnmounted } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
@@ -51,7 +51,8 @@ const gradientColor = computed(() => {
 
 const alpha = computed(() => colorRef.value.getAlpha());
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref(null);
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   if (!skip) {

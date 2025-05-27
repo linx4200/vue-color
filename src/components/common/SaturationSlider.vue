@@ -3,7 +3,7 @@
   <div
     class="vc-saturation-slider bg"
     :style="{background: bgColor}"
-    ref="container"
+    ref="containerRef"
     @mousedown="handleMouseDown"
     @touchmove="handleChange"
     @touchstart="handleChange"
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, ref, onUnmounted } from 'vue';
+import { computed, ref, onUnmounted } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
@@ -77,7 +77,8 @@ const pointerLeft = computed(() => {
   return hsv.value.s * 100 + '%';
 });
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref(null);
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   if(!skip) {
