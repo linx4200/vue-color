@@ -23,7 +23,10 @@ import EdIn from './common/EditableInput.vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
 import { isValid } from '../utils/color';
 
-const props = defineProps<useTinyColorModelProps>();
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Props extends useTinyColorModelProps {
+}
+const props = defineProps<Props>();
 const emit = defineEmits(EmitEventNames);
 
 const tinyColorRef = defineColorModel(props, emit);

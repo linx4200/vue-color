@@ -32,7 +32,13 @@ import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '.
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-const props = defineProps<useTinyColorModelProps>();
+// disabling this rule because of supporting backward compatibility of Vue 2.7
+// see more: https://github.com/vuejs/core/issues/4294#issuecomment-1718745105
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Props extends useTinyColorModelProps {
+};
+
+const props = defineProps<Props>();
 const emit = defineEmits(EmitEventNames);
 
 const colorRef = defineColorModel(props, emit);

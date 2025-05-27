@@ -33,7 +33,7 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
   }
 }
 
-export type useTinyColorModelProps = {
+export interface useTinyColorModelProps {
   tinyColor?: tinycolor.ColorInput;
   modelValue?: tinycolor.ColorInput;
 }

@@ -114,7 +114,7 @@ import { useHueRef } from '../composable/hue.ts';
 import { isValid } from '../utils/color';
 
 type Format = 'hex' | 'rgb' | 'hsl';
-type Props = {
+interface Props extends useTinyColorModelProps {
   disableAlpha?: boolean;
   disableFields?: boolean;
   /**
@@ -126,9 +126,9 @@ type Props = {
    * @default ['rgb', 'hex', 'hsl']
    */
   formats?: Array<Format>;
-}
+};
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   formats: () => ['rgb', 'hex', 'hsl']
 });
 

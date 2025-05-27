@@ -35,11 +35,11 @@ const defaultColors: string[] = [
 import { computed } from 'vue';
 import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
 
-type Props = {
+interface Props extends useTinyColorModelProps {
   palette?: string[]
 };
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   palette: () => defaultColors
 });
 

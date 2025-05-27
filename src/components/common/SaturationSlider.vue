@@ -38,7 +38,7 @@ import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-type Props = {
+interface Props extends useTinyColorModelProps {
   /** Use this hue value to render background first.
    * Second priority is the hue value from `v-model` or `v-model:tineColor`.
    * */
@@ -46,7 +46,7 @@ type Props = {
 }
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
-const props = defineProps<Props & useTinyColorModelProps>();
+const props = defineProps<Props>();
 
 /** Record the location where the user clicks */
 const pointerLeftRef = ref(0);

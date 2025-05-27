@@ -74,7 +74,7 @@ import { useHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
-type Props = {
+interface Props extends useTinyColorModelProps {
   title?: string;
   disableFields?: boolean;
   hasResetButton?: boolean;
@@ -84,9 +84,9 @@ type Props = {
   newLabel?: string;
   currentLabel?: string;
   currentColor?: string;
-}
+};
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   title: 'Color picker',
   disableFields: false,
   hasResetButton: false,

@@ -52,13 +52,13 @@ import EdIn from './common/EditableInput.vue';
 import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
 import { isValid } from '../utils/color';
 
-type Props = {
+interface Props extends useTinyColorModelProps {
   width?: number | string;
   presetColors?: string[];
   triangle?: 'hide' | 'top-left' | 'top-right';
-}
+};
 
-const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   width: 276,
   presetColors: () => defaultColors,
   triangle: 'top-left'

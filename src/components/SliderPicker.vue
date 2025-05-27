@@ -57,12 +57,12 @@ import { useHueRef } from '../composable/hue';
 import Hue from './common/HueSlider.vue';
 import AlphaSlider from './common/AlphaSlider.vue';
 
-type Prop = {
+interface Props extends useTinyColorModelProps {
   swatches?: ({ s: number, l: number} | string)[];
   alpha?: boolean;
 }
 
-const props = withDefaults(defineProps<useTinyColorModelProps & Prop>(), {
+const props = withDefaults(defineProps<Props>(), {
   swatches: () => defaultSwatches,
 });
 const emit = defineEmits(EmitEventNames);

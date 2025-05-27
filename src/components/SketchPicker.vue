@@ -91,13 +91,13 @@ import { useHueRef } from '../composable/hue.ts';
 
 import { isValid, isTransparent } from '../utils/color';
 
-type Props = {
+interface Props extends useTinyColorModelProps {
   presetColors?: string[];
   disableAlpha?: boolean;
   disableFields?: boolean;
 }
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   presetColors: () => presetColorsOfSketch,
   disableAlpha: false,
   disableFields: false
