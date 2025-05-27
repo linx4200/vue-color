@@ -51,7 +51,7 @@ const hue = defineModel({
 const pullDirection = ref<'right' | 'left' | undefined>();
 
 // No using `useTemplateRef` because of vue 2.7 compatibility
-const containerRef = ref(null);
+const containerRef = ref<HTMLElement | null>(null);
 
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
@@ -89,8 +89,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
     /* v8 ignore next 2 */
     return
   }
-  const containerWidth = container.clientWidth
-  const containerHeight = container.clientHeight
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
 
   const {x: xOffset, y: yOffset } = getAbsolutePosition(container);
   const {x: pageX, y: pageY } = getPageXYFromEvent(e);

@@ -52,7 +52,7 @@ const gradientColor = computed(() => {
 const alpha = computed(() => colorRef.value.getAlpha());
 
 // No using `useTemplateRef` because of vue 2.7 compatibility
-const containerRef = ref(null);
+const containerRef = ref<HTMLElement | null>(null);
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   if (!skip) {
@@ -65,7 +65,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
     /* v8 ignore next 2 */
     return
   }
-  const containerWidth = container.clientWidth
+  const containerWidth = container.clientWidth;
 
   const { x: xOffset } = getAbsolutePosition(container);
   const { x: pageX } = getPageXYFromEvent(e);

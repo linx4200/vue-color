@@ -78,7 +78,7 @@ const pointerLeft = computed(() => {
 });
 
 // No using `useTemplateRef` because of vue 2.7 compatibility
-const containerRef = ref(null);
+const containerRef = ref<HTMLElement | null>(null);
 
 function handleChange (e: MouseEvent | TouchEvent, skip = false) {
   if(!skip) {
@@ -90,8 +90,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
     /* v8 ignore next 2 */
     return;
   }
-  const containerWidth = container.clientWidth
-  const containerHeight = container.clientHeight
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
 
   const { x: xOffset, y: yOffset } = getAbsolutePosition(container);
   const { x: pageX, y: pageY } = getPageXYFromEvent(e);
