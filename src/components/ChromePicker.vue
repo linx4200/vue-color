@@ -100,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed, ref } from 'vue';
 
 import Saturation from './common/SaturationSlider.vue';
@@ -108,13 +109,13 @@ import Alpha from './common/AlphaSlider.vue';
 import EdIn from './common/EditableInput.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 import { useHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
 type Format = 'hex' | 'rgb' | 'hsl';
-interface Props extends useTinyColorModelProps {
+type Props = {
   disableAlpha?: boolean;
   disableFields?: boolean;
   /**
@@ -126,11 +127,16 @@ interface Props extends useTinyColorModelProps {
    * @default ['rgb', 'hex', 'hsl']
    */
   formats?: Array<Format>;
+  tinyColor?: tinycolor.ColorInput;
+  modelValue?: tinycolor.ColorInput;
+  value?: tinycolor.ColorInput;
 };
 
 const props = withDefaults(defineProps<Props>(), {
   formats: () => ['rgb', 'hex', 'hsl']
 });
+
+console.log('==props==>', props);
 
 const emit = defineEmits(EmitEventNames);
 

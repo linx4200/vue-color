@@ -38,15 +38,18 @@ import { throttle } from '../../utils/throttle.ts';
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
+  // Avoiding `defineModel` for Vue 2.7 compatibility
+  modelValue?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  direction: 'horizontal'
+  direction: 'horizontal',
+  modelValue: 0
 });
 
-const hue = defineModel({
-  default: 0
-});
+const emit = defineEmits(['update:modelValue'])
+
+const hue = ref(props.modelValue);
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
@@ -131,6 +134,7 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
 
 function emitChange(h: number) {
   hue.value = h;
+  emit('update:modelValue', h);
 }
 
 const throttledHandleChange = throttle(handleChange);

@@ -33,20 +33,19 @@
 
 <script setup lang="ts">
 import { computed, ref, onUnmounted } from 'vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames, colorModelProps } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-interface Props extends useTinyColorModelProps {
+const emit = defineEmits(['change'].concat(EmitEventNames));
+const props = defineProps({
   /** Use this hue value to render background first.
    * Second priority is the hue value from `v-model` or `v-model:tineColor`.
    * */
-  hue?: number;
-}
-
-const emit = defineEmits(['change'].concat(EmitEventNames));
-const props = defineProps<Props>();
+  hue: Number,
+  ...colorModelProps
+});
 
 /** Record the location where the user clicks */
 const pointerLeftRef = ref(0);

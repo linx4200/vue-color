@@ -26,16 +26,20 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { ref, computed, onUnmounted } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
 // disabling this rule because of supporting backward compatibility of Vue 2.7
 // see more: https://github.com/vuejs/core/issues/4294#issuecomment-1718745105
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props extends useTinyColorModelProps {
+interface Props {
+  tinyColor?: tinycolor.ColorInput;
+  modelValue?: tinycolor.ColorInput;
+  value?: tinycolor.ColorInput;
 };
 
 const props = defineProps<Props>();
