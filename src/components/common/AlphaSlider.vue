@@ -33,12 +33,19 @@ import { defineColorModel, EmitEventNames } from '../../composable/colorModel.ts
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-// disabling this rule because of supporting backward compatibility of Vue 2.7
-// see more: https://github.com/vuejs/core/issues/4294#issuecomment-1718745105
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface Props {
+type Props = {
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
   tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
   modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
   value?: tinycolor.ColorInput;
 };
 

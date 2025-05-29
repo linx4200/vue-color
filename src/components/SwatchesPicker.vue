@@ -59,11 +59,31 @@ const defaultColors = /*#__PURE__*/ (() => {
 </script>
 
 <script setup lang="ts">
-import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
+import tinycolor from 'tinycolor2';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel';
 import { computed } from 'vue';
 
-interface Props extends useTinyColorModelProps {
+type Props = {
+  /**
+   * A 2D array of color strings grouped by color families.
+   * Each inner array represents one vertical color column.
+   * Defaults to a Material Design palette (`material-colors`).
+   */
   palette?: string[][];
+
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
 }
 
 const props = withDefaults(defineProps<Props>(), {

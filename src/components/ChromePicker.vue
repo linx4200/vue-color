@@ -116,7 +116,14 @@ import { isValid } from '../utils/color';
 
 type Format = 'hex' | 'rgb' | 'hsl';
 type Props = {
+  /**
+   * Whether to disable the alpha (transparency) channel in the UI.
+   * When set to true, the color picker will not display or allow adjustment of alpha values.
+   */
   disableAlpha?: boolean;
+  /**
+   * Whether to disable all input fields in the UI.
+   */
   disableFields?: boolean;
   /**
    * An array of color format options used to control the display of the format field.
@@ -127,16 +134,24 @@ type Props = {
    * @default ['rgb', 'hex', 'hsl']
    */
   formats?: Array<Format>;
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
   tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
   modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
   value?: tinycolor.ColorInput;
 };
 
 const props = withDefaults(defineProps<Props>(), {
   formats: () => ['rgb', 'hex', 'hsl']
-});
-
-console.log('==props==>', props);
+})
 
 const emit = defineEmits(EmitEventNames);
 

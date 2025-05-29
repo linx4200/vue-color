@@ -32,20 +32,35 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed, ref, onUnmounted } from 'vue';
-import { defineColorModel, EmitEventNames, colorModelProps } from '../../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-const emit = defineEmits(['change'].concat(EmitEventNames));
-const props = defineProps({
+type Props = {
   /** Use this hue value to render background first.
    * Second priority is the hue value from `v-model` or `v-model:tineColor`.
    * */
-  hue: Number,
-  ...colorModelProps
-});
+  hue: number;
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+}
+
+const emit = defineEmits(['change'].concat(EmitEventNames));
+const props = defineProps<Props>();
 
 /** Record the location where the user clicks */
 const pointerLeftRef = ref(0);

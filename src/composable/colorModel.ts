@@ -1,8 +1,5 @@
 import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
-import { isVue2 } from '../utils/version';
-
-const IS_VUE_2 = isVue2();
 
 type TinyColorFormat = 'name' | 'hex8' | 'hex' | 'prgb' | 'rgb' | 'hsv' | 'hsl';
 
@@ -36,35 +33,41 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
   }
 }
 
-type colorModelProps = {
+/**
+ * Props used to bind color values via v-model in Vue 3 and Vue 2.7.
+ *
+ * ⚠️ Note: Due to a known limitation in Vue 2.7 (see https://github.com/vuejs/core/issues/4294#issuecomment-1025210436),
+ * `defineProps` does not support type extension. As a result, this type definition is currently duplicated
+ * where needed instead of being reused via extends.
+ */
+export interface defineColorModelProps {
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
   tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
   modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
   value?: tinycolor.ColorInput;
 }
 
-// todo: 1. 注释  2. 关注 TS 类型 3. 单测  4. value 只有 vue2 才加
-export const colorModelProps = {
-  tinyColor: [tinycolor, String, Object],
-  modelValue: [tinycolor, String, Object],
-  value: [tinycolor, String, Object],
-}
+// todo: 3. 单测
 
-// todo: input 只有 vue2 才加
 export const EmitEventNames = ['update:tinyColor', 'update:modelValue', 'input'];
 
-export function defineColorModel(props: colorModelProps, emit: EmitFn) {
+export function defineColorModel(props: defineColorModelProps, emit: EmitFn) {
 
   let isObjectOriginally: boolean;
   let originalFormat: TinyColorFormat;
 
   const tinyColorRef = computed({
     get: () => {
-      let colorInput = props.tinyColor ?? props.modelValue;
-      console.log('==colorInput===>', colorInput);
-      if (IS_VUE_2 && typeof colorInput === 'undefined') {
-        // backward compatible for v-model in Vue 2.7
-        colorInput = props.value;
-      }
+      const colorInput = props.tinyColor ?? props.modelValue ?? props.value;
       const value = tinycolor(colorInput);
       if (typeof originalFormat === 'undefined') {
         originalFormat = value.getFormat() as TinyColorFormat;
@@ -90,7 +93,7 @@ export function defineColorModel(props: colorModelProps, emit: EmitFn) {
       emit('update:modelValue', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
     }
     // backward compatible for v-model in Vue 2.7
-    if (IS_VUE_2 && Object.prototype.hasOwnProperty.call(props, 'value')) {
+    if (Object.prototype.hasOwnProperty.call(props, 'value')) {
       emit('input', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
     }
   }
