@@ -43,7 +43,7 @@ type Props = {
   /** Use this hue value to render background first.
    * Second priority is the hue value from `v-model` or `v-model:tineColor`.
    * */
-  hue: number;
+  hue?: number;
   /**
    * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
    */
