@@ -19,6 +19,7 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
         return color.toHsv();
       }
       default: {
+        /* v8 ignore next 2 */
         return null;
       }
     }
@@ -56,7 +57,7 @@ export interface defineColorModelProps {
   value?: tinycolor.ColorInput;
 }
 
-// todo: 3. 单测
+// todo: 单测: 单独的 vue2 测试环境，再建一个独立文件选几个典型的组件测试测试 v-model
 
 export const EmitEventNames = ['update:tinyColor', 'update:modelValue', 'input'];
 
