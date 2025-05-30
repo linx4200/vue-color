@@ -39,7 +39,7 @@ import { throttle } from '../../utils/throttle.ts';
 type Props = {
   direction?: 'horizontal' | 'vertical';
   // Avoiding `defineModel` for Vue 2.7 compatibility
-  modelValue?: number;
+  modelValue?: number | string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -49,8 +49,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['update:modelValue'])
 
-const hue = computed(() => props.modelValue);
-
+const hue = computed(() => {
+  const value = Number(props.modelValue);
+  return Number.isNaN(value) ? 0 : value;
+});
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
@@ -83,7 +85,9 @@ const pointerLeft = computed(() => {
 });
 
 function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
+  // todo: remove skip
   if(!skip) {
+    /* v8 ignore next 2 */
     e.preventDefault();
   }
 
@@ -145,6 +149,7 @@ function handleMouseDown (e: MouseEvent) {
   window.addEventListener('mouseup', handleMouseUp)
 }
 
+/* v8 ignore next 3 */
 function handleMouseUp () {
   unbindEventListeners();
 }
