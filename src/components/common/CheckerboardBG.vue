@@ -22,7 +22,6 @@ const props = withDefaults(defineProps<Props>(), {
  */
 function renderCheckerboard (c1: string, c2: string, size: number) {
   // Won't render in server
-  // todo: check ssr
   /* v8 ignore next 3 */
   if (typeof document === 'undefined') {
     return null
