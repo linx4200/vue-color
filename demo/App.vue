@@ -29,7 +29,7 @@ const color = defineModel({
   default: () => reactive({r: 0, g: 0, b: 255, a: 1})
 });
 
-watch(tinyColor, () => console.log('color changed ==>', tinyColor.value));
+watch(tinyColor, () => console.log('changed ==>', tinyColor.value));
 
 function invertColor(rgba: { r: number; g: number; b: number, a: number }): string {
   const inverted = {

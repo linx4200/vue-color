@@ -49,7 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['update:modelValue'])
 
-const hue = ref(props.modelValue);
+const hue = computed(() => props.modelValue);
+
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
@@ -132,9 +133,8 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
   }
 }
 
-function emitChange(h: number) {
-  hue.value = h;
-  emit('update:modelValue', h);
+function emitChange(newHue: number) {
+  emit('update:modelValue', newHue);
 }
 
 const throttledHandleChange = throttle(handleChange);
