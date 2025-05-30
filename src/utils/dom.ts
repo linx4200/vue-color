@@ -6,8 +6,8 @@ export const getPageXYFromEvent = (e: MouseEvent | TouchEvent) => {
     res.y = e.pageY;
   }
   if (typeof TouchEvent !== 'undefined' && e instanceof TouchEvent) {
-    res.x = (e.touches ? e.touches[0].pageX : e.changedTouches ? e.changedTouches[0].pageX : 0);
-    res.y = (e.touches ? e.touches[0].pageY : e.changedTouches ? e.changedTouches[0].pageY : 0);
+    res.x = (e.touches?.[0] ? e.touches[0].pageX : e.changedTouches?.[0] ? e.changedTouches[0].pageX : 0);
+    res.y = (e.touches?.[0] ? e.touches[0].pageY : e.changedTouches?.[0] ? e.changedTouches[0].pageY : 0);
   }
   return res;
 }

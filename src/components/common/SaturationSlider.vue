@@ -5,8 +5,7 @@
     :style="{background: bgColor}"
     ref="containerRef"
     @mousedown="handleMouseDown"
-    @touchmove="handleChange"
-    @touchstart="handleChange"
+    @touchstart="handleMouseDown"
     role="application"
     aria-label="Saturation and brightness picker"
   >
@@ -94,14 +93,12 @@ const pointerLeft = computed(() => {
 // No using `useTemplateRef` because of vue 2.7 compatibility
 const containerRef = ref<HTMLElement | null>(null);
 
-function handleChange (e: MouseEvent | TouchEvent, skip = false) {
-  if(!skip) {
-    e.preventDefault();
-  }
-  var container = containerRef.value;
+function handleChange (e: MouseEvent | TouchEvent) {
+
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    /* v8 ignore next 2 */
     return;
   }
   const containerWidth = container.clientWidth;
@@ -146,10 +143,21 @@ function onChange (param: { h: number, s: number, v: number, a: number }) {
 
 const throttledHandleChange = throttle(handleChange, 20);
 
-function handleMouseDown () {
-  window.addEventListener('mousemove', throttledHandleChange)
-  window.addEventListener('mouseup', throttledHandleChange)
-  window.addEventListener('mouseup', handleMouseUp)
+function handleMouseDown (e: MouseEvent | TouchEvent) {
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
+  if (!container) {
+    return;
+  }
+  if (e.type.startsWith('mouse')) {
+    container.addEventListener('mousemove', throttledHandleChange)
+    container.addEventListener('mouseup', throttledHandleChange)
+    container.addEventListener('mouseup', handleMouseUp)
+  } else if (e.type.startsWith('touch')) {
+    container.addEventListener('touchmove', throttledHandleChange)
+    container.addEventListener('touchend', throttledHandleChange)
+    container.addEventListener('touchend', handleMouseUp)
+  }
 }
 
 function handleMouseUp () {
@@ -157,9 +165,18 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', throttledHandleChange);
-  window.removeEventListener('mouseup', throttledHandleChange);
-  window.removeEventListener('mouseup', handleMouseUp);
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
+  if (!container) {
+    return;
+  }
+  container.removeEventListener('mousemove', throttledHandleChange);
+  container.removeEventListener('mouseup', throttledHandleChange);
+  container.removeEventListener('mouseup', handleMouseUp);
+
+  container.removeEventListener('touchmove', throttledHandleChange);
+  container.removeEventListener('touchend', throttledHandleChange);
+  container.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -214,6 +231,8 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
+  /** preventing default (scroll) behavior */
+  touch-action: none;
 }
 
 .white {
