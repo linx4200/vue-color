@@ -96,17 +96,12 @@ const throttledHandleChange = throttle(handleChange);
 
 function handleMouseDown (e: MouseEvent | TouchEvent) {
   handleChange(e);
-  const container = containerRef.value;
-  /* v8 ignore next 3 */
-  if (!container) {
-    return;
-  }
   if (e.type.startsWith('mouse')) {
-    container.addEventListener('mousemove', throttledHandleChange);
-    container.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousemove', throttledHandleChange);
+    window.addEventListener('mouseup', handleMouseUp);
   } else {
-    container.addEventListener('touchmove', throttledHandleChange)
-    container.addEventListener('touchend', handleMouseUp);
+    window.addEventListener('touchmove', throttledHandleChange)
+    window.addEventListener('touchend', handleMouseUp);
   }
 }
 
@@ -116,16 +111,11 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  const container = containerRef.value;
-  /* v8 ignore next 3 */
-  if (!container) {
-    return;
-  }
-  container.removeEventListener('mousemove', throttledHandleChange);
-  container.removeEventListener('mouseup', handleMouseUp);
+  window.removeEventListener('mousemove', throttledHandleChange);
+  window.removeEventListener('mouseup', handleMouseUp);
 
-  container.removeEventListener('touchmove', throttledHandleChange);
-  container.removeEventListener('touchend', handleMouseUp);
+  window.removeEventListener('touchmove', throttledHandleChange);
+  window.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeydown(e: KeyboardEvent) {

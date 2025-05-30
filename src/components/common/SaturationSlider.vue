@@ -144,19 +144,14 @@ function onChange (param: { h: number, s: number, v: number, a: number }) {
 const throttledHandleChange = throttle(handleChange, 20);
 
 function handleMouseDown (e: MouseEvent | TouchEvent) {
-  const container = containerRef.value;
-  /* v8 ignore next 3 */
-  if (!container) {
-    return;
-  }
   if (e.type.startsWith('mouse')) {
-    container.addEventListener('mousemove', throttledHandleChange)
-    container.addEventListener('mouseup', throttledHandleChange)
-    container.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mousemove', throttledHandleChange)
+    window.addEventListener('mouseup', throttledHandleChange)
+    window.addEventListener('mouseup', handleMouseUp)
   } else if (e.type.startsWith('touch')) {
-    container.addEventListener('touchmove', throttledHandleChange)
-    container.addEventListener('touchend', throttledHandleChange)
-    container.addEventListener('touchend', handleMouseUp)
+    window.addEventListener('touchmove', throttledHandleChange)
+    window.addEventListener('touchend', throttledHandleChange)
+    window.addEventListener('touchend', handleMouseUp)
   }
 }
 
@@ -165,18 +160,13 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  const container = containerRef.value;
-  /* v8 ignore next 3 */
-  if (!container) {
-    return;
-  }
-  container.removeEventListener('mousemove', throttledHandleChange);
-  container.removeEventListener('mouseup', throttledHandleChange);
-  container.removeEventListener('mouseup', handleMouseUp);
+  window.removeEventListener('mousemove', throttledHandleChange);
+  window.removeEventListener('mouseup', throttledHandleChange);
+  window.removeEventListener('mouseup', handleMouseUp);
 
-  container.removeEventListener('touchmove', throttledHandleChange);
-  container.removeEventListener('touchend', throttledHandleChange);
-  container.removeEventListener('touchend', handleMouseUp);
+  window.removeEventListener('touchmove', throttledHandleChange);
+  window.removeEventListener('touchend', throttledHandleChange);
+  window.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeyDown(e: KeyboardEvent) {

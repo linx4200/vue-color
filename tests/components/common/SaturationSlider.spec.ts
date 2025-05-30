@@ -72,28 +72,28 @@ test('Click the pointer and update color events should be emitted with correct v
   vi.useFakeTimers();
 
   containerELE.dispatchEvent(new MouseEvent('touchstart'));
-  containerELE.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height / 4 }));
+  window.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height / 4 }));
   expect(emitted()['update:modelValue'][0]).toEqual([{h: 100, a: 1, s: 0.25, v: 0.75}]);
 
   // special handling when reaching to the bottom edge of the container
-  containerELE.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height - 1 }));
+  window.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.left + box.width / 4, clientY: box.top + box.height - 1 }));
   vi.advanceTimersByTime(20);
   expect((emitted()['update:modelValue'][1] as [{s: number}])[0].s).toBeCloseTo(0.25);
   expect((emitted()['update:modelValue'][1] as [{v: number}])[0].v).toBeCloseTo(0.01);
 
   // special handling when reaching to the left edge of the container
-  containerELE.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: 1, clientY: box.top + box.height / 4 }));
+  window.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: 1, clientY: box.top + box.height / 4 }));
   vi.advanceTimersByTime(20);
   expect((emitted()['update:modelValue'][2] as [{s: number}])[0].s).toBeCloseTo(0.01);
   expect((emitted()['update:modelValue'][2] as [{v: number}])[0].v).toBeCloseTo(0.75);
 
   // out of container
-  containerELE.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.width + 10, clientY: box.height + 10 }));
+  window.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: box.width + 10, clientY: box.height + 10 }));
   vi.advanceTimersByTime(20);
   expect(emitted()['update:modelValue'][3]).toEqual([{h: 0, a: 1, s: 0, v: 0}]);
 
   // out of container
-  containerELE.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: -10, clientY: -10 }));
+  window.dispatchEvent(new MouseEvent('touchmove', { button: 0, clientX: -10, clientY: -10 }));
   vi.advanceTimersByTime(20);
   expect(emitted()['update:modelValue'][4]).toEqual([{h: 0, a: 1, s: 0, v: 1}]);
 
@@ -111,15 +111,16 @@ test('When touch or mouse events are finished, should remove all event listeners
   } });
 
   const containerELE = getByRole('application').element();
+  const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
   containerELE.dispatchEvent(new MouseEvent('touchstart'));
-  const removeEventListenerSpy = vi.spyOn(containerELE, 'removeEventListener');
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(0);
 
-  containerELE.dispatchEvent(new MouseEvent('touchend'));
+  window.dispatchEvent(new MouseEvent('touchend'));
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(6);
 
   containerELE.dispatchEvent(new MouseEvent('mousedown'));
-  containerELE.dispatchEvent(new MouseEvent('mouseup'));
+  window.dispatchEvent(new MouseEvent('mouseup'));
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(12);
 });
 

@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import Alpha from '../../../src/components/common/AlphaSlider.vue';
 
@@ -50,6 +50,27 @@ test('Click the pointer and update color events should be emitted with correct a
 
   expect(emitted()).toHaveProperty('update:modelValue');
   expect(emitted()['update:modelValue'][2]).toEqual([{ r: 100, g: 100, b: 100, a: 1 }]);
+});
+
+test('When touch or mouse events are finished, should remove all event listeners', () => {
+  const { getByRole } = render(Alpha, {
+    props: {
+      modelValue: { r: 100, g: 100, b: 100, a: 0.3 }
+    },
+  });
+
+  const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
+  const containerELE = getByRole('slider').element();
+  containerELE.dispatchEvent(new MouseEvent('touchstart'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(0);
+
+  window.dispatchEvent(new MouseEvent('touchend'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(4);
+
+  containerELE.dispatchEvent(new MouseEvent('mousedown'));
+  window.dispatchEvent(new MouseEvent('mouseup'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(8);
 });
 
 test('When up and down keyboard events are fired then update color events should be emitted with correct alpha value', async () => {

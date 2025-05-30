@@ -98,16 +98,17 @@ test('When touch or mouse events are finished, should remove all event listeners
     },
   });
 
+  const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
   const containerELE = getByRole('slider').element();
   containerELE.dispatchEvent(new MouseEvent('touchstart'));
-  const removeEventListenerSpy = vi.spyOn(containerELE, 'removeEventListener');
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(0);
 
-  containerELE.dispatchEvent(new MouseEvent('touchend'));
+  window.dispatchEvent(new MouseEvent('touchend'));
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(4);
 
   containerELE.dispatchEvent(new MouseEvent('mousedown'));
-  containerELE.dispatchEvent(new MouseEvent('mouseup'));
+  window.dispatchEvent(new MouseEvent('mouseup'));
   expect(removeEventListenerSpy).toHaveBeenCalledTimes(8);
 });
 
