@@ -8,8 +8,7 @@
       }"
       ref="containerRef"
       @mousedown="handleMouseDown"
-      @touchmove="handleChange"
-      @touchstart="handleChange"
+      @touchstart="handleMouseDown"
       @keydown="handleKeyDown"
       role="slider"
       :aria-valuenow="hue"
@@ -84,17 +83,12 @@ const pointerLeft = computed(() => {
   }
 });
 
-function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
-  // todo: remove skip
-  if(!skip) {
-    /* v8 ignore next 2 */
-    e.preventDefault();
-  }
+function handleChange (e: MouseEvent | TouchEvent) {
 
   const container = containerRef.value;
+  /* v8 ignore next 4 */
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    /* v8 ignore next 2 */
     return
   }
   const containerWidth = container.clientWidth;
@@ -143,10 +137,20 @@ function emitChange(newHue: number) {
 
 const throttledHandleChange = throttle(handleChange);
 
-function handleMouseDown (e: MouseEvent) {
-  handleChange(e, true)
-  window.addEventListener('mousemove', throttledHandleChange)
-  window.addEventListener('mouseup', handleMouseUp)
+function handleMouseDown (e: MouseEvent | TouchEvent) {
+  handleChange(e);
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
+  if (!container) {
+    return;
+  }
+  if (e.type.startsWith('mouse')) {
+    container.addEventListener('mousemove', throttledHandleChange);
+    container.addEventListener('mouseup', handleMouseUp);
+  } else {
+    container.addEventListener('touchmove', throttledHandleChange)
+    container.addEventListener('touchend', handleMouseUp);
+  }
 }
 
 /* v8 ignore next 3 */
@@ -155,8 +159,16 @@ function handleMouseUp () {
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', throttledHandleChange)
-  window.removeEventListener('mouseup', handleMouseUp)
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
+  if (!container) {
+    return;
+  }
+  container.removeEventListener('mousemove', throttledHandleChange);
+  container.removeEventListener('mouseup', handleMouseUp);
+
+  container.removeEventListener('touchmove', throttledHandleChange);
+  container.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -212,6 +224,8 @@ onUnmounted(() => {
   right: 0px;
   bottom: 0px;
   left: 0px;
+  /** preventing default (scroll) behavior */
+  touch-action: none;
 }
 .horizontal {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
