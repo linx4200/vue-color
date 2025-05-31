@@ -1,7 +1,7 @@
 {
   "name": "vue-color-demo-vue2",
   "version": "1.0.0",
-  "description": "Demo page for testing compatibility of Vue 2.7",
+  "description": "Vue-color demo project for testing compatibility of Vue 2.7",
   "dependencies": {
     "vue": "^2.7.16"
   },
@@ -9,7 +9,6 @@
     "@vitejs/plugin-vue2": "^2.3.3"
   },
   "scripts": {
-    "build": "vite build --config vite.build.config.ts"
-
+    "demo": "vite"
   }
 }

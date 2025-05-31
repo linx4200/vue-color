@@ -1,16 +1,18 @@
-import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue2';
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  // cacheDir: 'node_modules/.vite/vue2',
-  clearScreen: false,
+  resolve: {
+    alias: {
+      'vue': path.resolve(__dirname, 'node_modules/vue/dist/vue.runtime.esm.js')
+    }
+  },
   build: {
-    // outDir: 'dist/vue2',  // different output dir
     lib: {
-      entry: resolve(__dirname, '../../src/index.ts'),
+      entry: 'index.ts',
       name: 'VueColor',
       // the proper extensions will be added
       fileName: 'vue-color',
