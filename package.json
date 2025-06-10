@@ -44,7 +44,7 @@
     "@vitest/browser": "^3.0.5",
     "@vitest/coverage-v8": "^3.0.5",
     "eslint": "^9.21.0",
-    "eslint-plugin-vue": "^9.32.0",
+    "eslint-plugin-vue": "^10.2.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "globals": "^16.0.0",
     "playwright": "^1.50.1",
