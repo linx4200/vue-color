@@ -1,7 +1,22 @@
 <script lang="ts">
 import { parseSearchParams } from './utils';
 const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'material', 'slider', 'twitter', 'swatches', 'hue'] as const;
-const manualEnabledPickers = parseSearchParams(location.search).picker?.split(',');
+const searchParams = parseSearchParams(location.search);
+const manualEnabledPickers = searchParams.picker?.split(',');
+
+function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number }): string {
+  const invert = (val: number, alpha: number) => alpha === 0 ? 0 : 255 - val;
+  const inverted = {
+    r: invert(r, a),
+    g: invert(g, a),
+    b: invert(b, a),
+    a: a < 0.5 ? 1 - a : a
+  };
+  return `rgba(${inverted.r}, ${inverted.g}, ${inverted.b}, ${inverted.a})`;
+}
+
+const hasInitialColor = !!searchParams.hex;
+const initialColor = `#${searchParams.hex ?? 'F5F7FA'}`;
 </script>
 
 <script setup lang="ts">
@@ -34,24 +49,20 @@ pickers.forEach((picker) => {
 });
 
 const tinyColor = defineModel('tinyColor', {
-  default: tinycolor('#000000')
+  default: tinycolor(initialColor)
 });
 
 const color = defineModel({
-  default: () => reactive({r: 0, g: 0, b: 0, a: 1})
+  default: () => {
+    if (hasInitialColor) {
+      return initialColor;
+    }
+    // #F5F7FA
+    return reactive({r: 245, g: 247, b: 250, a: 1})
+  }
 });
 
 watch(color, () => console.log('changed ==>', color.value));
-
-function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number }): string {
-  const inverted = {
-    r: 255 - r,
-    g: 255 - g,
-    b: 255 - b,
-    a: a < 0.5 ? 1 - a : a
-  };
-  return `rgba(${inverted.r}, ${inverted.g}, ${inverted.b}, ${inverted.a})`;
-}
 
 const hex = computed(() => {
   return tinycolor(tinyColor.value).toHex8String();
@@ -122,9 +133,7 @@ const updateHue = (newHue: number) => {
         </div>
 
         <div class="picker-container" v-if="showStatus.sketch">
-          <!-- todo -->
-          <!-- <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div> -->
-          <div><SketchPicker v-model="color" /></div>
+          <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title text">&lt;SketchPicker /&gt;</div>
         </div>
 
@@ -278,6 +287,7 @@ const updateHue = (newHue: number) => {
 .picker-title {
   margin-top: 10px;
   font-size: 14px;
+  opacity: 0.5;
 }
 
 .current-color {
