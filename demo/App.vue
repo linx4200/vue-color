@@ -1,3 +1,9 @@
+<script lang="ts">
+import { parseSearchParams } from './utils';
+const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'material', 'slider', 'twitter', 'swatches', 'hue'] as const;
+const manualEnabledPickers = parseSearchParams(location.search).picker?.split(',');
+</script>
+
 <script setup lang="ts">
 import { watch, computed, reactive } from 'vue';
 
@@ -18,22 +24,31 @@ import {
 
 // import '../dist/vue-color.css'
 
+const showStatus: Record<(typeof pickers)[number], boolean> = {} as Record<(typeof pickers)[number], boolean>;
+pickers.forEach((picker) => {
+  if (!manualEnabledPickers || manualEnabledPickers.length === 0) {
+    showStatus[picker] = true;
+  } else {
+    showStatus[picker] = manualEnabledPickers.indexOf(picker) > -1;
+  }
+});
+
 const tinyColor = defineModel('tinyColor', {
-  default: tinycolor('#F5F7FA')
+  default: tinycolor('#000000')
 });
 
 const color = defineModel({
-  default: () => reactive({r: 0, g: 0, b: 255, a: 1})
+  default: () => reactive({r: 0, g: 0, b: 0, a: 1})
 });
 
-watch(tinyColor, () => console.log('color changed ==>', tinyColor.value));
+watch(color, () => console.log('changed ==>', color.value));
 
-function invertColor(rgba: { r: number; g: number; b: number, a: number }): string {
+function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number }): string {
   const inverted = {
-    r: 255 - rgba.r,
-    g: 255 - rgba.g,
-    b: 255 - rgba.b,
-    a: rgba.a
+    r: 255 - r,
+    g: 255 - g,
+    b: 255 - b,
+    a: a < 0.5 ? 1 - a : a
   };
   return `rgba(${inverted.r}, ${inverted.g}, ${inverted.b}, ${inverted.a})`;
 }
@@ -69,11 +84,11 @@ const updateHue = (newHue: number) => {
   <div class="color-background" :style="[background]"></div>
   <div class="wrapper">
     <div>
-      <div class="title text" :style="{color: textColor}">
+      <div class="title text">
         <h1>Vue-color</h1><span class="tag">v3.0</span>
       </div>
 
-      <main class="intro text" :style="{color: textColor}">
+      <main class="intro text">
         A collection of efficient color pickers designed for modern web development.
         <ul class="feature-list text" :style="{color: textColor, opacity: 0.75}">
           <li>✅ Modular & Tree-Shakable</li>
@@ -95,64 +110,66 @@ const updateHue = (newHue: number) => {
     <div :style="{flex: 0.8}">
       <div class="row">
         <div class="col">
-          <div class="text current-color" :style="{color: textColor, opacity: 0.5}">
+          <div class="text current-color">
             {{ hex }}<br />
             {{ color }}<br />
             {{ hsva }}
           </div>
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.chrome">
             <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;ChromePicker /&gt;</div>
+            <div class="picker-title text">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
-        <div class="picker-container">
-          <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-          <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SketchPicker /&gt;</div>
+        <div class="picker-container" v-if="showStatus.sketch">
+          <!-- todo -->
+          <!-- <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div> -->
+          <div><SketchPicker v-model="color" /></div>
+          <div class="picker-title text">&lt;SketchPicker /&gt;</div>
         </div>
 
-        <div class="picker-container">
+        <div class="picker-container" v-if="showStatus.photoshop">
           <div><PhotoshopPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-          <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;PhotoshopPicker /&gt;</div>
+          <div class="picker-title text">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
       <div class="row" :style="{marginTop: '5%'}">
         <div class="col">
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.compact">
             <div><CompactPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;CompactPicker /&gt;</div>
+            <div class="picker-title text">&lt;CompactPicker /&gt;</div>
           </div>
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.grayscale">
             <div><GrayscalePicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;GrayscalePicker /&gt;</div>
+            <div class="picker-title text">&lt;GrayscalePicker /&gt;</div>
           </div>
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.material">
             <div><MaterialPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;MaterialPicker /&gt;</div>
+            <div class="picker-title text">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.hue">
             <div :style="{width: '410px'}"><HueSlider :modelValue="hsva.h" @update:modelValue="updateHue" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;HueSlider /&gt;</div>
+            <div class="picker-title text">&lt;HueSlider /&gt;</div>
           </div>
 
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.slider">
             <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" :alpha="true" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SliderPicker /&gt;</div>
+            <div class="picker-title text">&lt;SliderPicker /&gt;</div>
           </div>
 
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.twitter">
             <div><TwitterPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;TwitterPicker /&gt;</div>
+            <div class="picker-title text">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
-          <div class="picker-container">
+          <div class="picker-container" v-if="showStatus.swatches">
             <div><SwatchesPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
-            <div class="picker-title text" :style="{color: textColor, opacity: 0.5}">&lt;SwatchesPicker /&gt;</div>
+            <div class="picker-title text">&lt;SwatchesPicker /&gt;</div>
           </div>
         </div>
       </div>
@@ -166,6 +183,7 @@ const updateHue = (newHue: number) => {
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: "wdth" 100;
+  color: v-bind(textColor);
 }
 
 .placeholder {
