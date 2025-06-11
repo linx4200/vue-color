@@ -1,6 +1,7 @@
 import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
 
+/** extracted from function `inputToRGB` of tinycolor2 */
 type TinyColorFormat = 'name' | 'hex8' | 'hex' | 'prgb' | 'rgb' | 'hsv' | 'hsl';
 
 const transformToOriginalInputFormat = (color: tinycolor.Instance, originalFormat?: TinyColorFormat, isObjectOriginally = false) => {
@@ -25,7 +26,13 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
     }
   } else {
     // transform back to the original format
-    let newValue = color.toString(originalFormat);
+    // Only 'hex' with alpha needs to be handled specifically
+    // tinycolor2 handles alpha correctly for all other formats internally.
+    let format = originalFormat;
+    if (originalFormat === 'hex' && color.getAlpha() < 1) {
+      format = 'hex8';
+    }
+    let newValue = color.toString(format);
     try {
       newValue = JSON.parse(newValue);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,13 +75,17 @@ export function defineColorModel(props: defineColorModelProps, emit: EmitFn) {
 
   const tinyColorRef = computed({
     get: () => {
-      const colorInput = props.tinyColor ?? props.modelValue ?? props.value;
+      const { modelValue } = props;
+      // todo: test props.value
+      const colorInput = props.tinyColor ?? modelValue ?? props.value;
       const value = tinycolor(colorInput);
       if (typeof originalFormat === 'undefined') {
-        originalFormat = value.getFormat() as TinyColorFormat;
+        if (typeof modelValue !== 'undefined') {
+          originalFormat = tinycolor(modelValue).getFormat() as TinyColorFormat;
+        }
       }
       if (typeof isObjectOriginally === 'undefined') {
-        if (typeof props.modelValue === 'object') {
+        if (typeof modelValue === 'object') {
           isObjectOriginally = true;
         }
       }
