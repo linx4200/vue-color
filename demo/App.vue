@@ -19,7 +19,7 @@ function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number
 }
 
 const hasInitialColor = !!searchParams.hex;
-const initialColor = `#${searchParams.hex ?? 'DEFAULT_COLOR'}`;
+const initialColor = `#${searchParams.hex ?? DEFAULT_COLOR}`;
 </script>
 
 <script setup lang="ts">
@@ -79,7 +79,7 @@ const hsva = computed(() => {
   const hsva = tinycolor(tinyColor.value).toHsv();
   const res: Record<string, number> = {};
   for (const [key, value] of Object.entries(hsva)) {
-    res[key] = value.toFixed(2);
+    res[key] = Number(value.toFixed(2));
   }
   return res;
 });
@@ -105,14 +105,14 @@ const onModeChange = (isDark: boolean) => {
 <template>
   <div class="color-background" :style="[background]"></div>
   <div class="wrapper">
-    <div>
+    <div class="fixed-side">
       <div class="title text">
-        <h1>Vue-color</h1><span class="tag">v3.0</span>
+        <h1>Vue-color<span class="tag">v3.0</span></h1>
       </div>
 
       <main class="intro text">
         A collection of efficient color pickers designed for modern web development.
-        <ul class="feature-list text" :style="{color: textColor, opacity: 0.75}">
+        <ul class="feature-list text">
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>
@@ -130,65 +130,65 @@ const onModeChange = (isDark: boolean) => {
         Get Started &nbsp; 🚀
       </a>
     </div>
-    <div :style="{flex: 0.8}">
+    <div class="picker-containers">
       <div class="row">
         <div class="col">
           <div class="text current-color">
             {{ hex }}<br />
-            {{ color }}<br />
-            {{ hsva }}
+            {{ tinyColor.toRgbString() }}<br />
+            {{ tinyColor.toHsvString() }}
           </div>
-          <div class="picker-container" v-if="showStatus.chrome">
+          <div v-if="showStatus.chrome">
             <ChromePicker v-model:tinyColor="tinyColor" v-model="color" />
             <div class="picker-title text">&lt;ChromePicker /&gt;</div>
           </div>
         </div>
 
-        <div class="picker-container" v-if="showStatus.sketch">
+        <div class="col" v-if="showStatus.sketch">
           <div><SketchPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title text">&lt;SketchPicker /&gt;</div>
         </div>
 
-        <div class="picker-container" v-if="showStatus.photoshop">
+        <div class="col" v-if="showStatus.photoshop">
           <div><PhotoshopPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
           <div class="picker-title text">&lt;PhotoshopPicker /&gt;</div>
         </div>
       </div>
-      <div class="row" :style="{marginTop: '5%'}">
+      <div class="row">
         <div class="col">
-          <div class="picker-container" v-if="showStatus.compact">
+          <div v-if="showStatus.compact">
             <div><CompactPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;CompactPicker /&gt;</div>
           </div>
-          <div class="picker-container" v-if="showStatus.grayscale">
+          <div v-if="showStatus.grayscale">
             <div><GrayscalePicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;GrayscalePicker /&gt;</div>
           </div>
-          <div class="picker-container" v-if="showStatus.material">
+          <div v-if="showStatus.material">
             <div><MaterialPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;MaterialPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
-          <div class="picker-container" v-if="showStatus.hue">
+          <div v-if="showStatus.hue">
             <div :style="{width: '410px'}"><HueSlider :modelValue="hsva.h" @update:modelValue="updateHue" /></div>
             <div class="picker-title text">&lt;HueSlider /&gt;</div>
           </div>
 
-          <div class="picker-container" v-if="showStatus.slider">
+          <div v-if="showStatus.slider">
             <div><SliderPicker v-model:tinyColor="tinyColor" v-model="color" :alpha="true" /></div>
             <div class="picker-title text">&lt;SliderPicker /&gt;</div>
           </div>
 
-          <div class="picker-container" v-if="showStatus.twitter">
+          <div v-if="showStatus.twitter">
             <div><TwitterPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;TwitterPicker /&gt;</div>
           </div>
         </div>
 
         <div class="col">
-          <div class="picker-container" v-if="showStatus.swatches">
+          <div v-if="showStatus.swatches">
             <div><SwatchesPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;SwatchesPicker /&gt;</div>
           </div>
@@ -211,31 +211,36 @@ const onModeChange = (isDark: boolean) => {
   display: block;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: space-evenly;
-  padding: 50px 0;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .color-background {
-  width: 100vw;
-  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: -1;
+}
+
+.wrapper {
+  display: flex;
+  padding: 50px 0 0 50px;
+}
+
+.fixed-side {
+  width: 300px;
+}
+
+.picker-containers {
+  flex: 1;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 50px;
 }
 
 .title {
@@ -244,6 +249,7 @@ const onModeChange = (isDark: boolean) => {
 }
 
 .title h1 {
+  position: relative;
   display: inline-block;
   font-size: 60px;
   font-weight: bold;
@@ -251,16 +257,17 @@ const onModeChange = (isDark: boolean) => {
 }
 
 .tag {
+  position: absolute;
+  top: 0;
+  right: -20%;
   display: block;
-  font-size: 16px;
-  width: 30px;
-  height: 20px;
-  border-radius: 6px;
-  text-align: center;
-  background-color: #42B883;
   padding: 2px 4px;
-  margin-left: 10px;
+  border-radius: 6px;
   color: #fff;
+  background-color: #42B883;
+  font-size: 16px;
+  font-weight:lighter;
+  text-align: center;
 }
 
 .intro {
@@ -274,6 +281,7 @@ const onModeChange = (isDark: boolean) => {
   padding-left: 0px;
   list-style: none;
   font-size: 18px;
+  opacity: 0.75;
 }
 
 .dark-mode {
@@ -298,20 +306,16 @@ const onModeChange = (isDark: boolean) => {
   opacity: 0.8;
 }
 
-.picker-container {
-  margin-left: 5%;
-}
-
 .picker-title {
   margin-top: 10px;
+  margin-bottom: 20px;
   font-size: 14px;
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .current-color {
-  padding: 10px;
-  width: 240px;
-  height: 100px;
-  line-height: 1.5;
+  margin-bottom: 10px;
+  line-height: 1.7;
+  opacity: 0.75;
 }
 </style>
