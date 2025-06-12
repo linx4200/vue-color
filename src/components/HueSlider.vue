@@ -27,11 +27,11 @@ const thumbColor = computed(() => {
 .vc-hue-wrap :deep(.picker) {
   width: 20px;
   height: 20px;
+  margin: 0;
   border-radius: 50%;
   box-shadow: none;
-  margin: 0;
-  transform: translateX(-12px) translateY(-8px);
   border: 2px white solid;
   background-color: v-bind('thumbColor');
+  transform: translateX(-12px) translateY(-8px);
 }
 </style>

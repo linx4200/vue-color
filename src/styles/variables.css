@@ -1,0 +1,92 @@
+:root {
+  --vc-picker-bg: #f8f8f8;
+
+  --vc-body-bg: #fff;
+
+  --vc-input-bg: #fff;
+  --vc-input-text: #333;
+  --vc-input-label: #969696;
+  --vc-input-border: #dadada;
+
+  --vc-chrome-toggle-btn-highlighted: #eee;
+
+  --vc-ps-bg: #dcdcdc;
+  --vc-ps-title-bg-gradient-start: #f0f0f0;
+  --vc-ps-title-bg-gradient-end: #d4d4d4;
+  --vc-ps-title-border: #B1B1B1;
+  --vc-ps-title-color: #4d4d4d;
+  --vc-ps-slider-border: #b3b3b3;
+  --vc-ps-slider-border-bottom: #f0f0f0;
+  --vs-ps-picker-border-dark: #555;
+  --vs-ps-picker-border-white: #fff;
+
+  --vc-ps-btn-gradient-start: #fff;
+  --vc-ps-btn-gradient-end: #e6e6e6;
+  --vc-ps-btn-border: #878787;
+  --vc-ps-btn-shadow: #EAEAEA;
+  --vc-ps-btn-color: #000;
+
+  --vc-ps-preview-border: #000;
+  --vc-ps-label: #000;
+
+  --vc-ps-input-border: #888;
+  --vc-ps-input-shadow-dark: rgba(0,0,0,.1);
+  --vc-ps-input-shadow-light: #ececec;
+
+  --vc-sketch-input-label: #222;
+  --vc-sketch-presets-border: #eee;
+
+  --vc-twitter-input-bg: #fff;
+  --vc-twitter-input-border: #f0f0f0;
+  --vc-twitter-input-color: #666;
+  --vc-twitter-hash-bg: #f0f0f0;
+  --vc-twitter-hash-color: #98A1A4;
+}
+
+:root.dark {
+  --vc-body-bg: #424242;
+
+  --vc-picker-bg: #d0d0d0;
+
+  --vc-input-bg: #2c2c2c;
+  --vc-input-text: #d0d0d0;
+  --vc-input-label: #bbbbbb;
+  --vc-input-border: #555555;
+
+  --vc-chrome-toggle-btn-highlighted: #5c5c5c;
+
+  --vc-sketch-input-label: #bbbbbb;
+  --vc-sketch-presets-border: #5a5a5a;
+
+  --vc-twitter-input-border: #383838;
+  --vc-twitter-input-color: #bbbbbb;
+  --vc-twitter-hash-bg: #383838;
+  --vc-twitter-hash-color: #a0acaf;
+  --vc-twitter-input-bg: #555;
+
+  --vc-ps-bg: #424242;
+
+  --vc-ps-title-bg-gradient-start: #4e4e4e;
+  --vc-ps-title-bg-gradient-end: #3a3a3a;
+  --vc-ps-title-border: #5a5a5a;
+  --vc-ps-title-color: #bbbbbb;
+
+  --vc-ps-slider-border: #5c5c5c;
+  --vc-ps-slider-border-bottom: #4a4a4a;
+
+  --vs-ps-picker-border-dark: #b8b8b8;
+  --vs-ps-picker-border-white: #bbbbbb;
+
+  --vc-ps-btn-gradient-start: #505050;
+  --vc-ps-btn-gradient-end: #3a3a3a;
+  --vc-ps-btn-border: #6a6a6a;
+  --vc-ps-btn-shadow: #2a2a2a;
+  --vc-ps-btn-color: #bbbbbb;
+
+  --vc-ps-preview-border: #3a3a3a;
+  --vc-ps-label: #bbbbbb;
+
+  --vc-ps-input-border: #666666;
+  --vc-ps-input-shadow-dark: rgba(0, 0, 0, 0.45);
+  --vc-ps-input-shadow-light: #2d2d2d;
+}

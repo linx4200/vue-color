@@ -46,22 +46,25 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
 
 <style scoped>
 .vc-material-picker {
+  position: relative;
   width: 98px;
   height: 98px;
   padding: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  position: relative;
   border-radius: 2px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);
-  background-color: #fff;
+  box-shadow:
+  0 2px 10px rgba(0, 0, 0, 0.12),
+  0 2px 5px rgba(0, 0, 0, 0.16);
+  background-color: var(--vc-body-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 .vc-material-picker :deep(.vc-input-input) {
   width: 100%;
-  margin-top: 12px;
-  font-size: 15px;
-  color: #333;
   height: 30px;
+  margin-top: 12px;
+  background-color: var(--vc-body-bg);
+  color: var(--vc-input-text);
+  font-size: 15px;
 }
 
 .vc-material-picker :deep(.vc-input-label) {
@@ -69,7 +72,7 @@ function onChange(key: 'r' | 'g' | 'b', value: number) {
   top: 0;
   left: 0;
   font-size: 11px;
-  color: #999;
+  color: var(--vc-input-label);
 }
 
 .hex {

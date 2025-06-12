@@ -25,7 +25,9 @@ Explore the components in action: 👉 [Open Live Demo](https://linx4200.github.
 
 - **SSR-Friendly** – Compatible with Nuxt and other SSR frameworks
 
-- **Optimized for Accessibility** – Built with keyboard navigation and screen readers in mind.
+- **Optimized for Accessibility** – Built with keyboard navigation and screen readers in mind
+
+- **Dark Mode Support** – Built-in dark theme
 
 ## 📦 Installation
 
@@ -166,6 +168,16 @@ Since `vue-color` relies on DOM interaction, components must be rendered client-
 import { ClientOnly } from '#components';
 import {ChromePicker } from 'vue-color';
 </script>
+```
+
+### Dark Mode Support
+
+By default, `vue-color` uses CSS variables defined under the :root scope. To enable dark mode, simply add a `.dark` class to your HTML element:
+
+```html
+<html class="dark">
+  <!-- your app -->
+</html>
 ```
 
 ## 🧩 FAQ / Issue Guide

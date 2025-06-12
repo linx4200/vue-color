@@ -60,8 +60,10 @@ const handlerClick = (hex: string) => {
   width: 245px;
   border-radius: 2px;
   box-sizing: border-box;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);
-  background-color: #fff;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.12),
+    0 2px 5px rgba(0, 0, 0, 0.16);
+  background-color: var(--vc-body-bg);
 }
 .colors {
   overflow: hidden;

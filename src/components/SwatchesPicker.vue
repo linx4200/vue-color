@@ -89,8 +89,10 @@ const handlerClick = (hex: string) => {
   width: 320px;
   height: 240px;
   overflow-y: scroll;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16);
+  background-color: var(--vc-body-bg);
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.12),
+    0 2px 5px rgba(0, 0, 0, 0.16);
  }
 .box {
   padding: 16px 0 6px 16px;
@@ -106,9 +108,8 @@ const handlerClick = (hex: string) => {
   box-sizing: border-box;
   width: 40px;
   height: 24px;
-  cursor: pointer;
-  background: #880e4f;
   margin-bottom: 1px;
+  cursor: pointer;
   overflow: hidden;
   -ms-border-radius: 2px 2px 0 0;
   -moz-border-radius: 2px 2px 0 0;
@@ -117,12 +118,12 @@ const handlerClick = (hex: string) => {
   border-radius: 2px 2px 0 0;
 }
 .color_white {
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
 }
 .picker {
-  fill: rgb(255, 255, 255);
-  margin-left: 8px;
   display: block;
+  fill: #fff;
+  margin-left: 8px;
 }
 .color_white .picker {
   fill: rgb(51, 51, 51);

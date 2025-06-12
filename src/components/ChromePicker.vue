@@ -88,7 +88,7 @@
               style="width:24px; height:24px"
               viewBox="0 0 24 24"
             >
-              <path fill="#333" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
+              <path fill="currentColor" d="M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z" />
             </svg>
           </div>
           <div class="toggle-icon_highlighted" v-show="highlight" role="presentation"></div>
@@ -254,18 +254,17 @@ const showHighlight = () => {
 const hideHighlight = () => {
   highlight.value = false;
 }
-
 </script>
 
 <style scoped>
 .vc-chrome-picker {
-  background: #fff;
-  border-radius: 2px;
-  box-shadow: 0 0 2px rgba(0,0,0,.3), 0 4px 8px rgba(0,0,0,.3);
-  box-sizing: initial;
   width: 225px;
+  box-sizing: initial;
+  border-radius: 2px;
+  box-shadow:
+    0 0 2px rgba(0, 0, 0, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.3);
   font-family: Menlo, Consolas, 'Courier New', monospace;
-  background-color: #fff;
 }
 .controls {
   display: flex;
@@ -310,20 +309,21 @@ const hideHighlight = () => {
   position: relative;
 }
 .toggle-icon {
+  position: relative;
   margin-right: -4px;
   margin-top: 12px;
   cursor: pointer;
-  position: relative;
   z-index: 2;
+  color: var(--vc-input-text);
 }
 .toggle-icon_highlighted {
   position: absolute;
   width: 24px;
   height: 28px;
-  background: #eee;
-  border-radius: 4px;
   top: 10px;
   left: 12px;
+  background: var(--vc-chrome-toggle-btn-highlighted);
+  border-radius: 4px;
 }
 .hue-wrap {
   position: relative;
@@ -345,12 +345,11 @@ const hideHighlight = () => {
   height: 12px;
   border-radius: 6px;
   transform: translate(-6px, -2px);
-  background-color: rgb(248, 248, 248);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 }
 .body {
   padding: 16px 16px 12px;
-  background-color: #fff;
+  background-color: var(--vc-body-bg);
 }
 
 .saturation {
@@ -367,23 +366,24 @@ const hideHighlight = () => {
 }
 
 .fields :deep(.vc-input-input) {
-  font-size: 11px;
-  color: #333;
   width: 100%;
+  height: 21px;
   border-radius: 2px;
   border: none;
-  box-shadow: inset 0 0 0 1px #dadada;
-  height: 21px;
+  box-shadow: inset 0 0 0 1px var(--vc-input-border);
+  background-color: var(--vc-input-bg);
+  color: var(--vc-input-text);
+  font-size: 11px;
   text-align: center;
 }
 .fields :deep(.vc-input-label) {
-  text-transform: uppercase;
-  font-size: 11px;
-  line-height: 11px;
-  color: #969696;
-  text-align: center;
   display: block;
   margin-top: 12px;
+  font-size: 11px;
+  color: var(--vc-input-label);
+  line-height: 11px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .alpha-disabled :deep(.active-color) {

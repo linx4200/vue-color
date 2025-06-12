@@ -86,20 +86,20 @@ const inputChange = (hex: string) => {
 
 <style scoped>
 .vc-twitter-picker {
-  background: #fff;
+  position: relative;
+  background: var(--vc-body-bg);
   border: 0 solid rgba(0, 0, 0, 0.25);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
-  position: relative;
 }
 
 .triangle {
+  position: absolute;
   width: 0px;
   height: 0px;
   border-style: solid;
   border-width: 0 9px 10px 9px;
-  border-color: transparent transparent #fff transparent;
-  position: absolute;
+  border-color: transparent transparent var(--vc-body-bg) transparent;
 }
 
 .triangle_shadow {
@@ -120,18 +120,19 @@ const inputChange = (hex: string) => {
 }
 
 .vc-twitter-picker :deep(.vc-input-input) {
-  width: 100px;
-  font-size: 14px;
-  color: #666;
-  border: 0px;
-  outline: none;
-  height: 28px;
-  box-shadow: inset 0 0 0 1px #F0F0F0;
-  box-sizing: content-box;
-  border-radius: 0 4px 4px 0;
   float: left;
+  width: 100px;
+  height: 28px;
   padding: 1px;
   padding-left: 8px;
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--vc-twitter-input-border);
+  box-sizing: content-box;
+  border: 0px;
+  border-radius: 0 4px 4px 0;
+  background-color: var(--vc-twitter-input-bg);
+  color: var(--vc-twitter-input-color);
+  font-size: 14px;
 }
 
 .vc-twitter-picker :deep(.vc-editable-input) span {
@@ -139,15 +140,15 @@ const inputChange = (hex: string) => {
 }
 
 .hash {
-  background: #F0F0F0;
-  height: 30px;
-  width: 30px;
-  border-radius: 4px 0 0 4px;
   float: left;
-  color: #98A1A4;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 4px 0 0 4px;
+  background: var(--vc-twitter-hash-bg);
+  color: var(--vc-twitter-hash-color);
 }
 
 .swatch {
