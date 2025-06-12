@@ -11,19 +11,21 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "moduleDetection": "force",
+    // "moduleDetection": "force",
     "noEmit": true,
     "jsx": "preserve",
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
   },
   "include": [
     "./**/*.ts", "./**/*.tsx", "./**/*.vue",
     "../src/**/*.ts", "../src/**/*.tsx", "../src/**/*.vue",
+    "../tests/**/*.ts"
   ]
 }

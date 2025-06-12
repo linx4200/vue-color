@@ -75,9 +75,9 @@ export function defineColorModel(props: defineColorModelProps, emit: EmitFn) {
 
   const tinyColorRef = computed({
     get: () => {
-      const { modelValue } = props;
-      // todo: test props.value
-      const colorInput = props.tinyColor ?? modelValue ?? props.value;
+      // props.value is used to be compatible for v-model in Vue 2.7
+      const modelValue = props.modelValue ?? props.value
+      const colorInput = props.tinyColor ?? modelValue;
       const value = tinycolor(colorInput);
       if (typeof originalFormat === 'undefined') {
         if (typeof modelValue !== 'undefined') {
