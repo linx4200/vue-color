@@ -7,9 +7,6 @@ const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'mater
 const searchParams = parseSearchParams(location.search);
 const manualEnabledPickers = searchParams.picker?.split(',');
 
-const DEFAULT_COLOR = 'F5F7FA';
-const DEFAULT_COLOR_DARK = '#004035';
-
 function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number }): string {
   const invert = (val: number, alpha: number) => alpha === 0 ? 0 : 255 - val;
   const inverted = {
