@@ -71,10 +71,6 @@ const hex = computed(() => {
   return tinycolor(tinyColor.value).toHex8String();
 });
 
-const background = computed(() => {
-  return {'background-color': hex.value}
-});
-
 const hsva = computed(() => {
   const hsva = tinycolor(tinyColor.value).toHsv();
   const res: Record<string, number> = {};
@@ -103,11 +99,10 @@ const onModeChange = (isDark: boolean) => {
 </script>
 
 <template>
-  <div class="color-background" :style="[background]"></div>
   <div class="wrapper">
     <div class="fixed-side">
       <div class="title text">
-        <h1>Vue-color<span class="tag">v3.0</span></h1>
+        <h1>Vue-color</h1>
       </div>
 
       <main class="intro text">
@@ -207,22 +202,10 @@ const onModeChange = (isDark: boolean) => {
   color: v-bind(textColor);
 }
 
-.placeholder {
-  display: block;
-}
-
-.color-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
 .wrapper {
   display: flex;
-  padding: 50px 0 0 50px;
+  padding: 3%;
+  background-color: v-bind(hex);
 }
 
 .fixed-side {
@@ -239,35 +222,19 @@ const onModeChange = (isDark: boolean) => {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 50px;
-  margin-bottom: 50px;
+  gap: 3%;
+  margin-bottom: 3%;
 }
 
 .title {
-  display: flex;
-  margin-bottom: 18px;
+  margin-bottom: 3%;
 }
 
 .title h1 {
-  position: relative;
   display: inline-block;
   font-size: 60px;
   font-weight: bold;
   margin: 0;
-}
-
-.tag {
-  position: absolute;
-  top: 0;
-  right: -20%;
-  display: block;
-  padding: 2px 4px;
-  border-radius: 6px;
-  color: #fff;
-  background-color: #42B883;
-  font-size: 16px;
-  font-weight:lighter;
-  text-align: center;
 }
 
 .intro {
