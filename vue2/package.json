@@ -7,14 +7,24 @@
     "vue": "^2.7.16"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@testing-library/vue": "^5.9.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.3",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue2": "^2.3.3",
+    "babel-jest": "^30.0.0",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "ts-node": "^10.9.2",
     "vite": "^6.3.5"
   },
   "scripts": {
     "build": "vite build",
-    "demo": "vite demo"
+    "demo": "vite demo",
+    "test": "jest"
   },
   "dependencies": {
     "material-colors": "^1.2.6",
