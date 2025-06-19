@@ -15,8 +15,10 @@
     "@types/node": "^24.0.3",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue2": "^2.3.3",
-    "babel-jest": "^30.0.0",
-    "jest": "^30.0.0",
+    "@vue/vue2-jest": "^29.2.6",
+    "babel-jest": "^29.0.0",
+    "canvas": "^3.1.0",
+    "jest": "^29.0.0",
     "jest-environment-jsdom": "^30.0.0",
     "ts-node": "^10.9.2",
     "vite": "^6.3.5"

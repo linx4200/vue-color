@@ -22,6 +22,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+
+    "paths": {
+      "@components/*": ["../src/components/*"],
+    }
   },
   "include": [
     "./**/*.ts", "./**/*.tsx", "./**/*.vue",
