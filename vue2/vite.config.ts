@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue2';
+
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -8,23 +9,17 @@ const __dirname = dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  // clearScreen: false,
-  // server: {
-  //   fs: {
-  //     // 允许访问的文件系统目录
-  //     allow: [
-  //       // 项目根目录
-  //       resolve(__dirname),
-  //       // 上级目录
-  //       resolve(__dirname, '../src'),
-  //       resolve(__dirname, '../tests')
-  //     ]
-  //   }
-  // },
   plugins: [vue()],
+  resolve: {
+    alias: {
+      'tinycolor2': resolve(__dirname, 'node_modules/tinycolor2/esm/tinycolor.js'),
+      'material-colors': resolve(__dirname, 'node_modules/material-colors/dist/colors.es2015.js')
+    }
+  },
   build: {
+    outDir: '../dist/vue2',
     lib: {
-      entry: 'index.ts',
+      entry: '../src/index.ts',
       name: 'VueColor',
       // the proper extensions will be added
       fileName: 'vue-color',

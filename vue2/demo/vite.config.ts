@@ -11,9 +11,23 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [vue()],
   resolve: {
-    alias: {
-      'tinycolor2': resolve(__dirname, '../node_modules/tinycolor2/esm/tinycolor.js'),
-      'material-colors': resolve(__dirname, '../node_modules/material-colors/dist/colors.es2015.js')
-    }
+    alias: [
+      {
+        find: 'tinycolor2',
+        replacement: resolve(__dirname, '../node_modules/tinycolor2/esm/tinycolor.js'),
+      },
+      {
+        find:'material-colors',
+        replacement: resolve(__dirname, '../node_modules/material-colors/dist/colors.es2015.js'),
+      },
+      {
+        find: /^vue-color\/vue2$/,
+        replacement: resolve(__dirname, '../../dist/vue2/vue-color.js')
+      },
+      {
+        find: /^vue-color\/vue2\/style.css$/,
+        replacement: resolve(__dirname, '../../dist/vue2/vue-color.css')
+      }
+    ]
   }
 })

@@ -13,9 +13,9 @@ import {
   // SwatchesPicker,
   // HueSlider,
   tinycolor
-} from '../../src';
-// import ThemeToggle from './components/ThemeToggle.vue';
-// import '../dist/vue-color.css';
+} from 'vue-color/vue2';
+
+import 'vue-color/vue2/style.css';
 
 // const DEFAULT_COLOR = '#F5F7FA';
 // const DEFAULT_COLOR_DARK = '#004035';
