@@ -155,7 +155,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(EmitEventNames);
 
-const tinyColorRef = defineColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit, 'chrome');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
@@ -181,7 +181,7 @@ const rgb = computed(() => {
 });
 
 const alpha = computed(() => {
-  return tinyColorRef.value.getAlpha();
+  return tinyColorRef.value.getAlpha().toFixed(2);
 });
 
 const VALID_FORMATS: Set<Format> = new Set(['hex', 'hsl', 'rgb']);

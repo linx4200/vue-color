@@ -103,7 +103,7 @@ type Props = {
    * When true, users cannot adjust transparency.
    */
   disableAlpha?: boolean;
-   /**
+  /**
    * Whether to hide all input fields (Hex, RGBA).
    * Only the visual picker and preset colors will be available.
    */
@@ -134,7 +134,8 @@ const emit = defineEmits(['change'].concat(EmitEventNames));
 const tinyColorRef = defineColorModel(props, emit);
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
-const alpha = computed(() => tinyColorRef.value.getAlpha());
+const alpha = computed(() => tinyColorRef.value.getAlpha().toFixed(2));
+
 const hex = computed(() => {
   let hex;
   if (alpha.value < 1) {
