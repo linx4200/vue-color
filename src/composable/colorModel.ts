@@ -42,6 +42,7 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hasActualValueOwnProperty = (obj: Record<any, any>, keyName: string) => {
   if (Object.prototype.hasOwnProperty.call(obj, keyName)) {
     if (typeof obj[keyName] !== 'undefined') {
@@ -92,12 +93,9 @@ export function defineColorModel(props: defineColorModelProps, emit: EmitFn, nam
 
       const { modelValue, tinyColor, value } = props;
 
-      // todo: 检查 value 不能和其他两个同时存在
-
       // props.value is used to be compatible for v-model in Vue 2.7
       const colorInput = tinyColor ?? modelValue ?? value;
 
-      // todo: check if it will be erased in production
       log(logName, 'Received modelValue:', modelValue, 'tinyColor:', tinyColor, 'value:', value);
 
       if (isUndefined(originalFormat)) {
@@ -127,15 +125,15 @@ export function defineColorModel(props: defineColorModelProps, emit: EmitFn, nam
   const updateColor = (value: tinycolor.ColorInput) => {
     log(logName, 'got updated value`', value);
 
-    let newValue = tinycolor(value);
+    const tinycolorValue = tinycolor(value);
 
     if (hasActualValueOwnProperty(props, 'tinyColor')) {
-      log(logName, 'emit `update:tinyColor`', newValue);
-      emit('update:tinyColor', newValue);
+      log(logName, 'emit `update:tinyColor`', tinycolorValue);
+      emit('update:tinyColor', tinycolorValue);
     }
 
     if (hasActualValueOwnProperty(props, 'modelValue')) {
-      newValue = transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally);
+      const newValue = transformToOriginalInputFormat(tinycolorValue, originalFormat, isObjectOriginally);
 
       log(logName, 'emit `update:modelValue`', newValue);
       emit('update:modelValue', newValue);
@@ -143,7 +141,7 @@ export function defineColorModel(props: defineColorModelProps, emit: EmitFn, nam
 
     // backward compatible for v-model in Vue 2.7
     if (hasActualValueOwnProperty(props, 'value')) {
-      newValue = transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally);
+      const newValue = transformToOriginalInputFormat(tinycolorValue, originalFormat, isObjectOriginally);
 
       log(logName, 'emit `input`', newValue);
       emit('input', newValue);

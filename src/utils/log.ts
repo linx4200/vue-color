@@ -1,6 +1,6 @@
 const isDebug = !!import.meta.env.VITE_DEBUG;
 
-const _log = (category: string, ...msg: string[]) => {
+const _log = (category: string, ...msg: unknown[]) => {
   const prefix = `[${category.toUpperCase()}]`;
   console.log(prefix, msg);
 }

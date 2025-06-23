@@ -1,6 +1,7 @@
 import { expect, test, describe } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import CompactPicker from '../../src/components/CompactPicker.vue';
+import { tinycolor } from '../../src/index';
 
 test('render with different palette', async () => {
   const { getByRole } = render(CompactPicker, {
@@ -18,10 +19,10 @@ test('render with different palette', async () => {
 });
 
 test('click one of the color in the palette', async () => {
-  const { getByRole, emitted } = render(CompactPicker, {
+  const { getByRole, emitted, rerender } = render(CompactPicker, {
     props: {
       modelValue: '#a83292'
-    }
+    } as { modelValue?: string, tinyColor?: tinycolor.ColorInput }
   });
   const options = getByRole('option');
   await options.nth(3).click();
@@ -31,6 +32,12 @@ test('click one of the color in the palette', async () => {
   // press Space bar
   options.nth(4).element().dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
   expect((emitted()['update:modelValue'][1] as [string])[0]).toBe('#FE9200'.toLowerCase());
+
+  rerender({
+    tinyColor: tinycolor('#333')
+  });
+  await options.nth(7).click();
+  expect((emitted()['update:tinyColor'][0] as [tinycolor.Instance])[0].toHexString().toUpperCase()).toBe('#A4DD00');
 });
 
 describe('The output value should follow the same format as the input value', async () => {
