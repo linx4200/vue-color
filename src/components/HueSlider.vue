@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import HueSlider from './common/HueSlider.vue';
-import { computed, defineProps, defineEmits } from 'vue';
+import { computed } from 'vue';
 
 const emit = defineEmits(['input', 'update:modelValue']);
 

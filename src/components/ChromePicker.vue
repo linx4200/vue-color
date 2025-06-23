@@ -181,7 +181,7 @@ const rgb = computed(() => {
 });
 
 const alpha = computed(() => {
-  return tinyColorRef.value.getAlpha().toFixed(2);
+  return Number(tinyColorRef.value.getAlpha().toFixed(2));
 });
 
 const VALID_FORMATS: Set<Format> = new Set(['hex', 'hsl', 'rgb']);
