@@ -1,5 +1,6 @@
 import { computed, type EmitFn } from 'vue';
 import tinycolor from 'tinycolor2';
+import { log } from '../utils/log';
 
 /** extracted from function `inputToRGB` of tinycolor2 */
 type TinyColorFormat = 'name' | 'hex8' | 'hex' | 'prgb' | 'rgb' | 'hsv' | 'hsl';
@@ -41,6 +42,17 @@ const transformToOriginalInputFormat = (color: tinycolor.Instance, originalForma
   }
 }
 
+const hasActualValueOwnProperty = (obj: Record<any, any>, keyName: string) => {
+  if (Object.prototype.hasOwnProperty.call(obj, keyName)) {
+    if (typeof obj[keyName] !== 'undefined') {
+      return true;
+    }
+  }
+  return false;
+}
+
+const isUndefined = (value: unknown) => typeof value === 'undefined';
+
 /**
  * Props used to bind color values via v-model in Vue 3 and Vue 2.7.
  *
@@ -68,45 +80,73 @@ export interface defineColorModelProps {
 
 export const EmitEventNames = ['update:tinyColor', 'update:modelValue', 'input'];
 
-export function defineColorModel(props: defineColorModelProps, emit: EmitFn) {
+export function defineColorModel(props: defineColorModelProps, emit: EmitFn, name?: string) {
 
   let isObjectOriginally: boolean;
   let originalFormat: TinyColorFormat;
 
+  const logName = name ?? 'unknown';
+
   const tinyColorRef = computed({
     get: () => {
+
+      const { modelValue, tinyColor, value } = props;
+
+      // todo: 检查 value 不能和其他两个同时存在
+
       // props.value is used to be compatible for v-model in Vue 2.7
-      const modelValue = props.modelValue ?? props.value
-      const colorInput = props.tinyColor ?? modelValue;
-      const value = tinycolor(colorInput);
-      if (typeof originalFormat === 'undefined') {
-        if (typeof modelValue !== 'undefined') {
+      const colorInput = tinyColor ?? modelValue ?? value;
+
+      // todo: check if it will be erased in production
+      log(logName, 'Received modelValue:', modelValue, 'tinyColor:', tinyColor, 'value:', value);
+
+      if (isUndefined(originalFormat)) {
+        if (!isUndefined(value)) {
+          originalFormat = tinycolor(value).getFormat() as TinyColorFormat;
+        }
+        if (!isUndefined(modelValue)) {
           originalFormat = tinycolor(modelValue).getFormat() as TinyColorFormat;
         }
       }
-      if (typeof isObjectOriginally === 'undefined') {
+
+      if (isUndefined(isObjectOriginally)) {
+        if (typeof value === 'object' && !(value instanceof tinycolor)) {
+          isObjectOriginally = true;
+        }
         if (typeof modelValue === 'object') {
           isObjectOriginally = true;
         }
       }
-      return value;
+      return tinycolor(colorInput);
     },
     set: (newValue: tinycolor.ColorInput) => {
       updateColor(newValue);
     }
-});
+  });
 
   const updateColor = (value: tinycolor.ColorInput) => {
-    const newValue = tinycolor(value);
-    if (Object.prototype.hasOwnProperty.call(props, 'tinyColor')) {
+    log(logName, 'got updated value`', value);
+
+    let newValue = tinycolor(value);
+
+    if (hasActualValueOwnProperty(props, 'tinyColor')) {
+      log(logName, 'emit `update:tinyColor`', newValue);
       emit('update:tinyColor', newValue);
     }
-    if (Object.prototype.hasOwnProperty.call(props, 'modelValue')) {
-      emit('update:modelValue', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
+
+    if (hasActualValueOwnProperty(props, 'modelValue')) {
+      newValue = transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally);
+
+      log(logName, 'emit `update:modelValue`', newValue);
+      emit('update:modelValue', newValue);
     }
+
     // backward compatible for v-model in Vue 2.7
-    if (Object.prototype.hasOwnProperty.call(props, 'value')) {
-      emit('input', transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally));
+    if (hasActualValueOwnProperty(props, 'value')) {
+      newValue = transformToOriginalInputFormat(newValue, originalFormat, isObjectOriginally);
+
+      log(logName, 'emit `input`', newValue);
+      emit('input', newValue);
     }
   }
 

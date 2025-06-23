@@ -64,7 +64,7 @@ const props = defineProps<Props>();
 /** Record the location where the user clicks */
 const pointerLeftRef = ref(0);
 
-const tinyColorRef = defineColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit, 'saturation');
 
 const hsv = computed(() => {
   return tinyColorRef.value.toHsv();

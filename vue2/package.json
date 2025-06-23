@@ -26,6 +26,7 @@
   "scripts": {
     "build": "vite build",
     "demo": "vite demo",
+    "demo:debug": "VITE_DEBUG=true npm run demo",
     "test": "jest"
   },
   "dependencies": {

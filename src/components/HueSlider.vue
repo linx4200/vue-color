@@ -1,18 +1,35 @@
 <template>
   <HueSlider
+    class="vc-hue-wrap"
     v-bind="$attrs"
-    :class="['vc-hue-wrap', $attrs.class]"
+    :modelValue="val"
+    @update:modelValue="update"
   />
 </template>
 
 <script setup lang="ts">
 import HueSlider from './common/HueSlider.vue';
-import { useAttrs, computed } from 'vue';
+import { computed, defineProps, defineEmits } from 'vue';
 
-const attrs = useAttrs();
+const emit = defineEmits(['input', 'update:modelValue']);
+
+const props = defineProps<{
+  modelValue?: number | string;
+  /** `value` is for Vue 2.7 compatibility, please use `modelValue` instead if you're using Vue 3.x */
+  value?: number | string;
+}>();
+
+const val = computed(() => props.modelValue ?? props.value ?? 0);
+
+const update = (newHue: number) => {
+  emit('input', newHue);
+  emit('update:modelValue', newHue);
+}
+
 const thumbColor = computed(() => {
-  return `hsl(${attrs.modelValue ?? 0}, 100%, 50%)`;
+  return `hsl(${val.value}, 100%, 50%)`;
 });
+
 </script>
 
 <style scoped>

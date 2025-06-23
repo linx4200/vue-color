@@ -51,7 +51,7 @@ type Props = {
 const props = defineProps<Props>();
 const emit = defineEmits(EmitEventNames);
 
-const colorRef = defineColorModel(props, emit);
+const colorRef = defineColorModel(props, emit, 'alpha');
 
 const gradientColor = computed(() => {
   const rgba = colorRef.value.toRgb();
