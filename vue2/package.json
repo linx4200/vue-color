@@ -12,7 +12,7 @@
     "@babel/preset-typescript": "^7.27.1",
     "@testing-library/vue": "^5.9.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.3",
+    "@types/node": "^24.0.4",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue2": "^2.3.3",
     "@vue/vue2-jest": "^29.2.6",

@@ -24,6 +24,7 @@
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
     "demo": "vite demo",
     "demo:build": "vite build demo",
+    "demo:debug": "VITE_DEBUG=true vite demo",
     "test": "vitest --workspace=vitest.workspace.ts",
     "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"

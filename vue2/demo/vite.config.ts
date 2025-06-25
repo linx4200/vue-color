@@ -10,6 +10,9 @@ const __dirname = dirname(__filename);
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  define: {
+    __IS_DEBUG__: !!process.env.VITE_DEBUG
+  },
   resolve: {
     alias: [
       {
