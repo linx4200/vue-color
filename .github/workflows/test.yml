@@ -25,16 +25,23 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
 
-      - name: Install dependencies
+      - name: Install dependencies (root)
         run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Run tests
+      - name: Run root tests
         run: npm run coverage
+
+      - name: Install and run Vue 2.7 tests
+        working-directory: vue2
+        run: |
+          npm ci
+          npm run test
 
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+

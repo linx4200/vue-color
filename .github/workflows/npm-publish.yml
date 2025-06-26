@@ -37,6 +37,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install and build for Vue 2.7
+        working-directory: vue2
+        run: |
+          npm ci
+          npm run build
+
       - name: Publish package
         run: npm publish
         env:

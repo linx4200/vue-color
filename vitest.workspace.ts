@@ -28,5 +28,8 @@ export default defineWorkspace([
         ],
       },
     },
+    define: {
+      __IS_DEBUG__: false
+    },
   },
 ])

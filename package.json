@@ -16,11 +16,18 @@
     "./style.css": {
       "import": "./dist/vue-color.css",
       "require": "./dist/vue-color.css"
+    },
+    "./vue2": {
+      "import": "./dist/vue2/vue-color.js",
+      "require": "./dist/vue2/vue-color.umd.cjs"
+    },
+    "./vue2/style.css": {
+      "import": "./dist/vue2/vue-color.css",
+      "require": "./dist/vue2/vue-color.css"
     }
   },
   "types": "./dist/types/index.d.ts",
   "scripts": {
-    "postinstall": "cd vue2 && npm install",
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
     "demo": "vite demo",
     "demo:build": "vite build demo",
@@ -63,5 +70,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "homepage": "https://linx4200.github.io/vue-color/"
 }
