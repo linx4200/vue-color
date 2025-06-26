@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
-          path: './demo/vue3/dist'
+          path: './demo/dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
