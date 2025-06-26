@@ -4,8 +4,9 @@ updates:
   - package-ecosystem: "npm"
     # Look for `package.json` and `lock` files in the `root` directory
     directory: "/"
-    schedule:
-      interval: "monthly"
+    # ❌ Removed schedule to prevent auto-trigger
+    # schedule:
+    #   interval: "monthly"
     labels:
       - "dependencies"
     groups:
