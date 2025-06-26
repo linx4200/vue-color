@@ -1,11 +1,11 @@
-import { fireEvent } from '@testing-library/vue';
+import { EventType, fireEvent } from '@testing-library/vue';
 
 /**
  * Simulate a mousedown event using the given `left` and `top` percentages.
  *
  * @param Object Be aware that the values of `left` and `top` are percentages.
  */
-export const mockClickPosition = ({ container, left, top }: { container: HTMLElement, left?: number, top?: number }) => {
+export const mockClickPosition = ({ container, left = 0, top = 0, event = 'mouseDown' }: { container: HTMLElement, left?: number, top?: number, event?: EventType }) => {
 
   const mockContainerWidth = 100;
   const mockContainerHeight = 100;
@@ -22,11 +22,15 @@ export const mockClickPosition = ({ container, left, top }: { container: HTMLEle
     value: mockContainerHeight,
   });
 
-  const clientX = (left ?? 0) * mockContainerWidth;
-  const clientY = (top ?? 0) * mockContainerHeight;
+  const clientX = left * mockContainerWidth;
+  const clientY = top * mockContainerHeight;
 
-  fireEvent.mouseDown(container, {
+  fireEvent[event](container, {
     clientX,
     clientY
   });
+}
+
+export const wait = () => {
+  return new Promise(resolve => setTimeout(resolve));
 }

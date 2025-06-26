@@ -87,7 +87,7 @@ const config: Config = {
     '^@components/(.*)$': '<rootDir>/../src/components/$1',
     '^vue$': '<rootDir>/node_modules/vue/dist/vue.runtime.common.js',
     '^tinycolor2$': '<rootDir>/node_modules/tinycolor2/cjs/tinycolor.js',
-    '^material-colors$': '<rootDir>/material-colors/dist/colors.es2015.js',
+    '^material-colors$': '<rootDir>/node_modules/material-colors/dist/colors.js',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

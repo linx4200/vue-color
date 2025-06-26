@@ -77,8 +77,6 @@ export interface defineColorModelProps {
   value?: tinycolor.ColorInput;
 }
 
-// todo: 单测: 单独的 vue2 测试环境，再建一个独立文件选几个典型的组件测试测试 v-model
-
 export const EmitEventNames = ['update:tinyColor', 'update:modelValue', 'input'];
 
 export function defineColorModel(props: defineColorModelProps, emit: EmitFn, name?: string) {
