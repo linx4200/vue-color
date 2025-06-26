@@ -108,6 +108,7 @@ const onModeChange = (isDark: boolean) => {
       <main class="intro text">
         A collection of efficient color pickers designed for modern web development.
         <ul class="feature-list text">
+          <li>✅ Supports both Vue 2.7 and Vue 3</li>
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>

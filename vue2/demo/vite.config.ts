@@ -25,8 +25,8 @@ export default defineConfig({
       },
       {
         find: /^vue-color\/vue2$/,
-        // replacement: resolve(__dirname, '../../dist/vue2/vue-color.js')
-        replacement: resolve(__dirname, '../../src/index.ts')
+        replacement: resolve(__dirname, '../../dist/vue2/vue-color.js')
+        // replacement: resolve(__dirname, '../../src/index.ts')
       },
       {
         find: /^vue-color\/vue2\/style.css$/,
