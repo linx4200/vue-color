@@ -1,11 +1,11 @@
 <script lang="ts">
+const DEFAULT_COLOR = 'F5F7FA';
+const DEFAULT_COLOR_DARK = '#004035';
+
 import { parseSearchParams } from './utils';
 const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'material', 'slider', 'twitter', 'swatches', 'hue'] as const;
 const searchParams = parseSearchParams(location.search);
 const manualEnabledPickers = searchParams.picker?.split(',');
-
-const DEFAULT_COLOR = 'F5F7FA';
-const DEFAULT_COLOR_DARK = '#004035';
 
 function invertColor({ r, g, b, a}: { r: number; g: number; b: number, a: number }): string {
   const invert = (val: number, alpha: number) => alpha === 0 ? 0 : 255 - val;
@@ -108,6 +108,7 @@ const onModeChange = (isDark: boolean) => {
       <main class="intro text">
         A collection of efficient color pickers designed for modern web development.
         <ul class="feature-list text">
+          <li>✅ Supports both Vue 2.7 and Vue 3</li>
           <li>✅ Modular & Tree-Shakable</li>
           <li>✅ TypeScript Ready</li>
           <li>✅ SSR-Friendly</li>

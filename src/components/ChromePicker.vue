@@ -30,16 +30,16 @@
         <div class="fields" v-show="fieldsIndex === getFormatIndex('rgb')" v-if="isSupportedFormat('rgb')">
           <!-- rgba -->
           <div class="field">
-            <EdIn label="r" :value="rgb.r" @change="(v: number) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
+            <EdIn label="r" :value="rgb.r" @change="(v) => inputChangeRGBA('r', v)" :a11y="{label: 'Red'}"></EdIn>
           </div>
           <div class="field">
-            <EdIn label="g" :value="rgb.g" @change="(v: number) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
+            <EdIn label="g" :value="rgb.g" @change="(v) => inputChangeRGBA('g', v)" :a11y="{label: 'Green'}"></EdIn>
           </div>
           <div class="field">
-            <EdIn label="b" :value="rgb.b" @change="(v: number) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
+            <EdIn label="b" :value="rgb.b" @change="(v) => inputChangeRGBA('b', v)" :a11y="{label: 'Blue'}"></EdIn>
           </div>
           <div class="field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeRGBA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v) => inputChangeRGBA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
@@ -54,16 +54,16 @@
         <div class="fields" v-show="fieldsIndex === getFormatIndex('hsl')" v-if="isSupportedFormat('hsl')">
           <!-- hsla -->
           <div class="field">
-            <EdIn label="h" :value="hueRef.toFixed()" @change="(v: number) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
+            <EdIn label="h" :value="hueRef.toFixed()" @change="(v) => inputChangeHSLA('h', v)" :a11y="{label: 'Hue'}"></EdIn>
           </div>
           <div class="field">
-            <EdIn label="s" :value="hsl.s" @change="(v: number) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
+            <EdIn label="s" :value="hsl.s" @change="(v) => inputChangeHSLA('s', v)" :a11y="{label: 'Saturation'}"></EdIn>
           </div>
           <div class="field">
-            <EdIn label="l" :value="hsl.l" @change="(v: number) => inputChangeHSLA('l', v)" :a11y="{label: 'Lightness'}"></EdIn>
+            <EdIn label="l" :value="hsl.l" @change="(v) => inputChangeHSLA('l', v)" :a11y="{label: 'Lightness'}"></EdIn>
           </div>
           <div class="field" v-if="!disableAlpha">
-            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v: number) => inputChangeHSLA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
+            <EdIn label="a" :value="alpha" :step="0.01" :max="1" @change="(v) => inputChangeHSLA('a', v)" :a11y="{label: 'Transparency'}"></EdIn>
           </div>
         </div>
 
@@ -100,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed, ref } from 'vue';
 
 import Saturation from './common/SaturationSlider.vue';
@@ -108,14 +109,21 @@ import Alpha from './common/AlphaSlider.vue';
 import EdIn from './common/EditableInput.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 import { useHueRef } from '../composable/hue.ts';
 
 import { isValid } from '../utils/color';
 
 type Format = 'hex' | 'rgb' | 'hsl';
 type Props = {
+  /**
+   * Whether to disable the alpha (transparency) channel in the UI.
+   * When set to true, the color picker will not display or allow adjustment of alpha values.
+   */
   disableAlpha?: boolean;
+  /**
+   * Whether to disable all input fields in the UI.
+   */
   disableFields?: boolean;
   /**
    * An array of color format options used to control the display of the format field.
@@ -126,15 +134,28 @@ type Props = {
    * @default ['rgb', 'hex', 'hsl']
    */
   formats?: Array<Format>;
-}
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+};
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   formats: () => ['rgb', 'hex', 'hsl']
-});
+})
 
 const emit = defineEmits(EmitEventNames);
 
-const tinyColorRef = defineColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit, 'chrome');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
@@ -160,7 +181,7 @@ const rgb = computed(() => {
 });
 
 const alpha = computed(() => {
-  return tinyColorRef.value.getAlpha();
+  return Number(tinyColorRef.value.getAlpha().toFixed(2));
 });
 
 const VALID_FORMATS: Set<Format> = new Set(['hex', 'hsl', 'rgb']);

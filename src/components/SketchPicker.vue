@@ -78,6 +78,7 @@ const presetColorsOfSketch = [
 </script>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed } from 'vue';
 
 import EdIn from './common/EditableInput.vue';
@@ -86,28 +87,55 @@ import Hue from './common/HueSlider.vue';
 import Alpha from './common/AlphaSlider.vue';
 import Checkerboard from './common/CheckerboardBG.vue';
 
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 import { useHueRef } from '../composable/hue.ts';
 
 import { isValid, isTransparent } from '../utils/color';
 
 type Props = {
+  /**
+   * Custom list of preset colors shown below the picker.
+   * Defaults to the standard Sketch-style swatches.
+   */
   presetColors?: string[];
+  /**
+   * Whether to disable the alpha (transparency) slider and input field.
+   * When true, users cannot adjust transparency.
+   */
   disableAlpha?: boolean;
+  /**
+   * Whether to hide all input fields (Hex, RGBA).
+   * Only the visual picker and preset colors will be available.
+   */
   disableFields?: boolean;
+
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
 }
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   presetColors: () => presetColorsOfSketch,
   disableAlpha: false,
-  disableFields: false
+  disableFields: false,
 });
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
 const tinyColorRef = defineColorModel(props, emit);
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
-const alpha = computed(() => tinyColorRef.value.getAlpha());
+const alpha = computed(() => Number(tinyColorRef.value.getAlpha().toFixed(2)));
+
 const hex = computed(() => {
   let hex;
   if (alpha.value < 1) {

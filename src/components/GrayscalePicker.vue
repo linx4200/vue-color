@@ -29,14 +29,32 @@ const defaultColors = [
 </script>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed } from 'vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 
-type Props = {
+interface Props {
+  /**
+   * The list of grayscale colors displayed in the picker.
+   * Defaults to a 20-step grayscale palette from white to black.
+   */
   palette?: string[];
-}
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+};
 
-const props = withDefaults(defineProps<Props & useTinyColorModelProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   palette: () => defaultColors
 });
 

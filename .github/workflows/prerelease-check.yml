@@ -32,3 +32,9 @@ jobs:
 
       - name: Demo Build
         run: npm run demo:build
+
+      - name: Install and build for Vue 2.7
+        working-directory: vue2
+        run: |
+          npm ci
+          npm run build

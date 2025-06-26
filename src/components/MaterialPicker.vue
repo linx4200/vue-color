@@ -18,12 +18,28 @@
 </template>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed } from 'vue';
 import EdIn from './common/EditableInput.vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 import { isValid } from '../utils/color';
 
-const props = defineProps<useTinyColorModelProps>();
+type Props = {
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+}
+const props = defineProps<Props>();
 const emit = defineEmits(EmitEventNames);
 
 const tinyColorRef = defineColorModel(props, emit);

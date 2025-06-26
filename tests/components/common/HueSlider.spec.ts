@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import Hue from '../../../src/components/common/HueSlider.vue';
 import { waitForRerender } from '../../tools';
@@ -22,6 +22,11 @@ test('The position of the picker should be correct', async () => {
   await waitForRerender();
   expect(pointerElement?.style.left).toBe('100%');
   expect(pointerElement?.style.top).toBe('0px');
+
+  // test invalid input format
+  rerender({ modelValue: 'abc' });
+  await waitForRerender();
+  expect(pointerElement?.style.left).toBe('100%');
 
 
   // ======= vertical =======
@@ -83,6 +88,28 @@ test('Click the pointer and update color events should be emitted with correct a
   // click the bottom outer space of the slider
   slider.element().dispatchEvent(new MouseEvent('mousedown', { button: 0, clientX: box.left + box.width / 2, clientY: box.top + box.height + 100 }));
   expect(emitted()['update:modelValue'][2]).toEqual([0]);
+});
+
+test('When touch or mouse events are finished, should remove all event listeners', () => {
+  const { getByRole } = render(Hue, {
+    props: {
+      modelValue: 10,
+      direction: 'vertical',
+    },
+  });
+
+  const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
+  const containerELE = getByRole('slider').element();
+  containerELE.dispatchEvent(new MouseEvent('touchstart'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(0);
+
+  window.dispatchEvent(new MouseEvent('touchend'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(4);
+
+  containerELE.dispatchEvent(new MouseEvent('mousedown'));
+  window.dispatchEvent(new MouseEvent('mouseup'));
+  expect(removeEventListenerSpy).toHaveBeenCalledTimes(8);
 });
 
 const keyboardEventCases = [

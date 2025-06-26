@@ -6,10 +6,9 @@
         horizontal: props.direction === 'horizontal',
         vertical: props.direction === 'vertical',
       }"
-      ref="container"
+      ref="containerRef"
       @mousedown="handleMouseDown"
-      @touchmove="handleChange"
-      @touchstart="handleChange"
+      @touchstart="handleMouseDown"
       @keydown="handleKeyDown"
       role="slider"
       :aria-valuenow="hue"
@@ -28,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch, computed, ref, useTemplateRef, onUnmounted } from 'vue';
+import { watch, computed, ref, onUnmounted } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
@@ -38,19 +37,26 @@ import { throttle } from '../../utils/throttle.ts';
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
+  // Avoiding `defineModel` for Vue 2.7 compatibility
+  modelValue?: number | string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  direction: 'horizontal'
+  direction: 'horizontal',
+  modelValue: 0
 });
 
-const hue = defineModel({
-  default: 0
+const emit = defineEmits(['update:modelValue'])
+
+const hue = computed(() => {
+  const value = Number(props.modelValue);
+  return Number.isNaN(value) ? 0 : value;
 });
 
 const pullDirection = ref<'right' | 'left' | undefined>();
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref<HTMLElement | null>(null);
 
 watch(hue, (newHue, oldHue) => {
   if (newHue !== 0 && newHue - oldHue > 0) pullDirection.value = 'right';
@@ -77,19 +83,16 @@ const pointerLeft = computed(() => {
   }
 });
 
-function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
-  if(!skip) {
-    e.preventDefault();
-  }
+function handleChange (e: MouseEvent | TouchEvent) {
 
   const container = containerRef.value;
+  /* v8 ignore next 4 */
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    /* v8 ignore next 2 */
     return
   }
-  const containerWidth = container.clientWidth
-  const containerHeight = container.clientHeight
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
 
   const {x: xOffset, y: yOffset } = getAbsolutePosition(container);
   const {x: pageX, y: pageY } = getPageXYFromEvent(e);
@@ -128,25 +131,34 @@ function handleChange (e: MouseEvent | TouchEvent, skip?: boolean) {
   }
 }
 
-function emitChange(h: number) {
-  hue.value = h;
+function emitChange(newHue: number) {
+  emit('update:modelValue', newHue);
 }
 
 const throttledHandleChange = throttle(handleChange);
 
-function handleMouseDown (e: MouseEvent) {
-  handleChange(e, true)
-  window.addEventListener('mousemove', throttledHandleChange)
-  window.addEventListener('mouseup', handleMouseUp)
+function handleMouseDown (e: MouseEvent | TouchEvent) {
+  handleChange(e);
+  if (e.type.startsWith('mouse')) {
+    window.addEventListener('mousemove', throttledHandleChange);
+    window.addEventListener('mouseup', handleMouseUp);
+  } else {
+    window.addEventListener('touchmove', throttledHandleChange)
+    window.addEventListener('touchend', handleMouseUp);
+  }
 }
 
+/* v8 ignore next 3 */
 function handleMouseUp () {
   unbindEventListeners();
 }
 
 function unbindEventListeners () {
-  window.removeEventListener('mousemove', throttledHandleChange)
-  window.removeEventListener('mouseup', handleMouseUp)
+  window.removeEventListener('mousemove', throttledHandleChange);
+  window.removeEventListener('mouseup', handleMouseUp);
+
+  window.removeEventListener('touchmove', throttledHandleChange);
+  window.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -202,6 +214,8 @@ onUnmounted(() => {
   right: 0px;
   bottom: 0px;
   left: 0px;
+  /** preventing default (scroll) behavior */
+  touch-action: none;
 }
 .horizontal {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);

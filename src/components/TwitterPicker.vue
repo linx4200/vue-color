@@ -47,18 +47,48 @@ const defaultColors = [
 </script>
 
 <script setup lang="ts">
+import tinycolor from 'tinycolor2';
 import { computed } from 'vue';
 import EdIn from './common/EditableInput.vue';
-import { defineColorModel, EmitEventNames ,type useTinyColorModelProps } from '../composable/colorModel';
+import { defineColorModel, EmitEventNames } from '../composable/colorModel';
 import { isValid } from '../utils/color';
 
 type Props = {
+  /**
+   * Width of the picker container.
+   * Can be a number (in pixels) or a string with CSS units (e.g., "100%", "300px").
+   * Defaults to 276.
+   */
   width?: number | string;
+  /**
+   * List of preset color swatches to display.
+   * Each color should be a valid hex string (e.g., "#FF6900").
+   * Defaults to a curated Twitter-style palette.
+   */
   presetColors?: string[];
+  /**
+   * Position of the decorative triangle at the top of the picker.
+   * Can be `'top-left'`, `'top-right'`, or `'hide'`.
+   * Defaults to `'top-left'`.
+   */
   triangle?: 'hide' | 'top-left' | 'top-right';
-}
 
-const props = withDefaults(defineProps<useTinyColorModelProps & Props>(), {
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+};
+
+const props = withDefaults(defineProps<Props>(), {
   width: 276,
   presetColors: () => defaultColors,
   triangle: 'top-left'

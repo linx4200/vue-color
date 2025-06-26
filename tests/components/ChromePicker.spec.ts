@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { render } from 'vitest-browser-vue';
 import ChromePicker from '../../src/components/ChromePicker.vue';
 import { waitForRerender } from '../tools';
@@ -45,8 +45,15 @@ test('props.formats', async () => {
     // @ts-expect-error test wrong format
     formats: 'a'
   });
+
+  const consoleWarningSpy = vi.spyOn(console, 'warn');
+  // make it silent for once
+  consoleWarningSpy.mockImplementationOnce(() => undefined);
+
   await waitForRerender();
   await expect.element(getByTestId('fields')).not.toBeInTheDocument();
+  // will throw an error says "[Vue warn]: Invalid prop: type check failed for prop "formats". Expected Array, got String with value "a"."
+  expect(consoleWarningSpy).toHaveBeenCalledTimes(1);
 
   rerender({
     // @ts-expect-error test wrong format

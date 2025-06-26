@@ -6,10 +6,9 @@
     <div class="gradient" :style="{background: gradientColor}"></div>
     <div
         class="slider"
-        ref="container"
+        ref="containerRef"
         @mousedown="handleMouseDown"
-        @touchmove="handleChange"
-        @touchstart="handleChange"
+        @touchstart="handleMouseDown"
         role="slider"
         aria-label="Transparency"
         aria-valuemax="1"
@@ -26,16 +25,33 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, onUnmounted } from 'vue';
+import tinycolor from 'tinycolor2';
+import { ref, computed, onUnmounted } from 'vue';
 import Checkerboard from './CheckerboardBG.vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
+import { defineColorModel, EmitEventNames } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
 
-const props = defineProps<useTinyColorModelProps>();
+type Props = {
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
+};
+
+const props = defineProps<Props>();
 const emit = defineEmits(EmitEventNames);
 
-const colorRef = defineColorModel(props, emit);
+const colorRef = defineColorModel(props, emit, 'alpha');
 
 const gradientColor = computed(() => {
   const rgba = colorRef.value.toRgb();
@@ -45,20 +61,18 @@ const gradientColor = computed(() => {
 
 const alpha = computed(() => colorRef.value.getAlpha());
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref<HTMLElement | null>(null);
 
-function handleChange (e: MouseEvent | TouchEvent, skip = false) {
-  if (!skip) {
-    e.preventDefault();
-  }
+function handleChange (e: MouseEvent | TouchEvent) {
 
   const container = containerRef.value;
+    /* v8 ignore next 4 */
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    /* v8 ignore next 2 */
     return
   }
-  const containerWidth = container.clientWidth
+  const containerWidth = container.clientWidth;
 
   const { x: xOffset } = getAbsolutePosition(container);
   const { x: pageX } = getPageXYFromEvent(e);
@@ -80,12 +94,18 @@ function handleChange (e: MouseEvent | TouchEvent, skip = false) {
 
 const throttledHandleChange = throttle(handleChange);
 
-function handleMouseDown (e: MouseEvent) {
-  handleChange(e, true);
-  window.addEventListener('mousemove', throttledHandleChange);
-  window.addEventListener('mouseup', handleMouseUp);
+function handleMouseDown (e: MouseEvent | TouchEvent) {
+  handleChange(e);
+  if (e.type.startsWith('mouse')) {
+    window.addEventListener('mousemove', throttledHandleChange);
+    window.addEventListener('mouseup', handleMouseUp);
+  } else {
+    window.addEventListener('touchmove', throttledHandleChange)
+    window.addEventListener('touchend', handleMouseUp);
+  }
 }
 
+/* v8 ignore next 3 */
 function handleMouseUp () {
   unbindEventListeners();
 }
@@ -93,6 +113,9 @@ function handleMouseUp () {
 function unbindEventListeners () {
   window.removeEventListener('mousemove', throttledHandleChange);
   window.removeEventListener('mouseup', handleMouseUp);
+
+  window.removeEventListener('touchmove', throttledHandleChange);
+  window.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -121,6 +144,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.vc-alpha-slider {
+  /** preventing default (scroll) behavior */
+  touch-action: none;
+}
 .checkerboard {
   position: absolute;
   top: 0px;

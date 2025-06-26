@@ -3,10 +3,9 @@
   <div
     class="vc-saturation-slider bg"
     :style="{background: bgColor}"
-    ref="container"
+    ref="containerRef"
     @mousedown="handleMouseDown"
-    @touchmove="handleChange"
-    @touchstart="handleChange"
+    @touchstart="handleMouseDown"
     role="application"
     aria-label="Saturation and brightness picker"
   >
@@ -32,8 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useTemplateRef, ref, onUnmounted } from 'vue';
-import { defineColorModel, EmitEventNames, type useTinyColorModelProps } from '../../composable/colorModel.ts';
+import tinycolor from 'tinycolor2';
+import { computed, ref, onUnmounted } from 'vue';
+import { defineColorModel, EmitEventNames } from '../../composable/colorModel.ts';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { clamp } from '../../utils/math.ts';
 import { throttle } from '../../utils/throttle.ts';
@@ -43,15 +43,28 @@ type Props = {
    * Second priority is the hue value from `v-model` or `v-model:tineColor`.
    * */
   hue?: number;
+  /**
+   * Used with `v-model:tinyColor`. Accepts any valid TinyColor input format.
+   */
+  tinyColor?: tinycolor.ColorInput;
+  /**
+   * Used with `v-model`. Accepts any valid TinyColor input format.
+   */
+  modelValue?: tinycolor.ColorInput;
+  /**
+   * Fallback for `v-model` compatibility in Vue 2.7.
+   * Accepts any valid TinyColor input.
+   */
+  value?: tinycolor.ColorInput;
 }
 
 const emit = defineEmits(['change'].concat(EmitEventNames));
-const props = defineProps<Props & useTinyColorModelProps>();
+const props = defineProps<Props>();
 
 /** Record the location where the user clicks */
 const pointerLeftRef = ref(0);
 
-const tinyColorRef = defineColorModel(props, emit);
+const tinyColorRef = defineColorModel(props, emit, 'saturation');
 
 const hsv = computed(() => {
   return tinyColorRef.value.toHsv();
@@ -77,20 +90,19 @@ const pointerLeft = computed(() => {
   return hsv.value.s * 100 + '%';
 });
 
-const containerRef = useTemplateRef('container');
+// No using `useTemplateRef` because of vue 2.7 compatibility
+const containerRef = ref<HTMLElement | null>(null);
 
-function handleChange (e: MouseEvent | TouchEvent, skip = false) {
-  if(!skip) {
-    e.preventDefault();
-  }
-  var container = containerRef.value;
+function handleChange (e: MouseEvent | TouchEvent) {
+
+  const container = containerRef.value;
+  /* v8 ignore next 3 */
   if (!container) {
     // for some edge cases, container may not exist. see #220
-    /* v8 ignore next 2 */
     return;
   }
-  const containerWidth = container.clientWidth
-  const containerHeight = container.clientHeight
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
 
   const { x: xOffset, y: yOffset } = getAbsolutePosition(container);
   const { x: pageX, y: pageY } = getPageXYFromEvent(e);
@@ -131,10 +143,16 @@ function onChange (param: { h: number, s: number, v: number, a: number }) {
 
 const throttledHandleChange = throttle(handleChange, 20);
 
-function handleMouseDown () {
-  window.addEventListener('mousemove', throttledHandleChange)
-  window.addEventListener('mouseup', throttledHandleChange)
-  window.addEventListener('mouseup', handleMouseUp)
+function handleMouseDown (e: MouseEvent | TouchEvent) {
+  if (e.type.startsWith('mouse')) {
+    window.addEventListener('mousemove', throttledHandleChange)
+    window.addEventListener('mouseup', throttledHandleChange)
+    window.addEventListener('mouseup', handleMouseUp)
+  } else if (e.type.startsWith('touch')) {
+    window.addEventListener('touchmove', throttledHandleChange)
+    window.addEventListener('touchend', throttledHandleChange)
+    window.addEventListener('touchend', handleMouseUp)
+  }
 }
 
 function handleMouseUp () {
@@ -145,6 +163,10 @@ function unbindEventListeners () {
   window.removeEventListener('mousemove', throttledHandleChange);
   window.removeEventListener('mouseup', throttledHandleChange);
   window.removeEventListener('mouseup', handleMouseUp);
+
+  window.removeEventListener('touchmove', throttledHandleChange);
+  window.removeEventListener('touchend', throttledHandleChange);
+  window.removeEventListener('touchend', handleMouseUp);
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -199,6 +221,8 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
+  /** preventing default (scroll) behavior */
+  touch-action: none;
 }
 
 .white {

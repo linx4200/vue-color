@@ -5,11 +5,10 @@
   <a href="https://github.com/linx4200/vue-color"><img src="https://img.shields.io/github/stars/linx4200/vue-color?style=social" alt="Github stars" /></a>
 </p>
 
-![Vue 3](https://img.shields.io/badge/Vue-3.0-brightgreen)
 ![Package Size](https://img.shields.io/bundlephobia/minzip/vue-color)
 ![Test Coverage](https://codecov.io/gh/linx4200/vue-color/branch/main/graph/badge.svg)
 
-A collection of efficient and customizable color pickers built with [Vue 3](https://vuejs.org/), designed for modern web development.
+A collection of efficient and customizable color pickers, designed for modern web development.
 
 ## 🧪 Live Demo
 
@@ -18,6 +17,8 @@ Explore the components in action: 👉 [Open Live Demo](https://linx4200.github.
 <img src="./docs/pickers.png" style="width: 800px;">
 
 ## ✨ Features
+
+- **Dual Vue Compatibility** – Supports both Vue 2.7 and Vue 3 out of the box
 
 - **Modular & Tree-Shakable** – Import only what you use
 
@@ -67,6 +68,8 @@ const color = defineModel({
 });
 </script>
 ```
+
+If you plan to use `vue-color` with Vue 2.7, please refer to [Use with Vue 2.7](#use-with-vue-27).
 
 > 📘 For a full list of available components, see the [Documentation](#all-available-pickers).
 
@@ -166,7 +169,7 @@ Since `vue-color` relies on DOM interaction, components must be rendered client-
 
 <script setup lang="ts">
 import { ClientOnly } from '#components';
-import {ChromePicker } from 'vue-color';
+import { ChromePicker } from 'vue-color';
 </script>
 ```
 
@@ -178,6 +181,65 @@ By default, `vue-color` uses CSS variables defined under the :root scope. To ena
 <html class="dark">
   <!-- your app -->
 </html>
+```
+
+### Use with Vue 2.7
+
+To use `vue-color` with Vue 2.7:
+
+```vue
+<template>
+  <ChromePicker v-model="color" />
+</template>
+
+<script>
+import { ref } from 'vue'
+// Note: use the Vue 2.7 specific entry point
+import { ChromePicker } from 'vue-color/vue2'
+
+export default {
+  setup() {
+    const color = ref('#5c8f94');
+    return { color };
+  }
+}
+</script>
+```
+
+The Vue 2.7 build is fully compatible with the Vue Composition API introduced in 2.7.
+
+Make sure to use `vue-color/vue2` as the import path, and include the correct stylesheet:
+import `vue-color/vue2/style.css` in your main entry file.
+
+#### TypeScript Support in Vue 2.7
+
+Vue 2.7 has full TypeScript support, but `vue-color` does **not include type declarations** for the Vue 2.7 build.
+
+You can work around this by manually adding the following shim:
+
+```ts
+// vue-color-shims.d.ts
+declare module 'vue-color/vue2' {
+  import { Component } from 'vue';
+  import tinycolor from 'tinycolor2';
+
+  export const ChromePicker: Component;
+  export const SketchPicker: Component;
+  export const PhotoshopPicker: Component;
+  export const CompactPicker: Component;
+  export const GrayscalePicker: Component;
+  export const MaterialPicker: Component;
+  export const SliderPicker: Component;
+  export const TwitterPicker: Component;
+  export const SwatchesPicker: Component;
+  export const HueSlider: Component;
+  export const tinycolor: typeof tinycolor;
+}
+
+declare module '*.css' {
+  const content: { [className: string]: string };
+  export default content;
+}
 ```
 
 ## 🧩 FAQ / Issue Guide

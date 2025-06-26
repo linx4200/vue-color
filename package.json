@@ -1,6 +1,6 @@
 {
   "name": "vue-color",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "type": "module",
   "files": [
     "dist"
@@ -16,6 +16,14 @@
     "./style.css": {
       "import": "./dist/vue-color.css",
       "require": "./dist/vue-color.css"
+    },
+    "./vue2": {
+      "import": "./dist/vue2/vue-color.js",
+      "require": "./dist/vue2/vue-color.umd.cjs"
+    },
+    "./vue2/style.css": {
+      "import": "./dist/vue2/vue-color.css",
+      "require": "./dist/vue2/vue-color.css"
     }
   },
   "types": "./dist/types/index.d.ts",
@@ -23,6 +31,7 @@
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
     "demo": "vite demo",
     "demo:build": "vite build demo",
+    "demo:debug": "VITE_DEBUG=true vite demo",
     "test": "vitest --workspace=vitest.workspace.ts",
     "coverage": "vitest run --coverage --coverage.include=src/components --coverage.include=src/composable --coverage.include=src/utils",
     "lint": "eslint"
@@ -33,7 +42,7 @@
   },
   "author": "Xinran <liuxinran1008@gmail.com>, xiaokai <kexiaokai@gmail.com>",
   "peerDependencies": {
-    "vue": "^3.5.13"
+    "vue": ">=2.7.0 <4.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
@@ -61,5 +70,6 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "homepage": "https://linx4200.github.io/vue-color/"
 }
