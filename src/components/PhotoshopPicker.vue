@@ -251,7 +251,6 @@ const handleReset = () => {
   transform: translate(-6px, -6px);
 }
 .hue {
-  position: relative;
   height: 256px;
   width: 19px;
   margin-left: 10px;
