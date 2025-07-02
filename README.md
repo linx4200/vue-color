@@ -1,4 +1,4 @@
-# 🎨 Vue Color v3.0
+# 🎨 Vue Color
 
 <p>
   <a href="https://www.npmjs.com/package/vue-color"><img src="https://img.shields.io/npm/dm/vue-color.svg" alt="NPM monthly downloads" /></a>
@@ -192,21 +192,14 @@ To use `vue-color` with Vue 2.7:
   <ChromePicker v-model="color" />
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 // Note: use the Vue 2.7 specific entry point
 import { ChromePicker } from 'vue-color/vue2'
 
-export default {
-  setup() {
-    const color = ref('#5c8f94');
-    return { color };
-  }
-}
+const color = ref('#5c8f94');
 </script>
 ```
-
-The Vue 2.7 build is fully compatible with the Vue Composition API introduced in 2.7.
 
 Make sure to use `vue-color/vue2` as the import path, and include the correct stylesheet:
 import `vue-color/vue2/style.css` in your main entry file.
