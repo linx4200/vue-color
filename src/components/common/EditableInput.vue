@@ -90,6 +90,7 @@ function handleKeyDown (e: KeyboardEvent) {
   position: relative;
 }
 .vc-input-input {
+  width: 100%;
   padding: 0;
   border: 0;
   outline: none;
