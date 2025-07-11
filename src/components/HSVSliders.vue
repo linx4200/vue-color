@@ -9,22 +9,28 @@
     <div class="slider-wrap">
       <span class="label">S</span>
       <BaseSlider
-        :style="{background: getSaturationGradient(hueRef, brightness)}"
         aria-label="saturation"
         :model-value="saturation"
         @update:model-value="onSChange"
-      ></BaseSlider>
+      >
+        <template #background>
+          <div class="gradient" :style="{background: saturationGradient}"></div>
+        </template>
+      </BaseSlider>
       <EditableInput :value="saturation.toFixed()" @change="onSChange" :a11y="{label: 'saturation'}" :min="0" :max="100" />
     </div>
 
     <div class="slider-wrap">
       <span class="label">V</span>
       <BaseSlider
-        :style="{background: getBrightnessGradient(hueRef, saturation)}"
         aria-label="Brightness"
         :model-value="brightness"
         @update:model-value="onBChange"
-      ></BaseSlider>
+      >
+        <template #background>
+          <div class="gradient" :style="{background: brightnessGradient}"></div>
+        </template>
+      </BaseSlider>
       <EditableInput :value="brightness.toFixed()" @change="onBChange" :a11y="{label: 'Brightness'}" :min="0" :max="100" />
     </div>
 
@@ -35,6 +41,42 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+function getSaturationGradient(hue: number, brightness: number) {
+  const steps = 10;
+  const gradientStops: string[] = [];
+  for (let i = 0; i <= steps; i++) {
+    let s = i / steps;
+    const hsvColor = { h: hue, s: s, v: brightness / 100 };
+    const rgbColor = tinycolor(hsvColor). toRgb();
+    if (rgbColor) {
+      const r = Math.round(rgbColor.r);
+      const g = Math.round(rgbColor.g);
+      const b = Math.round(rgbColor.b);
+      gradientStops.push(`rgb(${r} ${g} ${b})`);
+    }
+  }
+  return `linear-gradient(to right, ${gradientStops.join(', ')})`;
+}
+
+function getBrightnessGradient(hue: number, saturation: number) {
+  const steps = 10;
+  const gradientStops: string[] = [];
+  for (let i = 0; i <= steps; i++) {
+    let v = i / steps;
+    const hsvColor = { h: hue, s: saturation / 100, v };
+    const rgbColor = tinycolor(hsvColor). toRgb();
+    if (rgbColor) {
+      const r = Math.round(rgbColor.r);
+      const g = Math.round(rgbColor.g);
+      const b = Math.round(rgbColor.b);
+      gradientStops.push(`rgb(${r} ${g} ${b})`);
+    }
+  }
+  return `linear-gradient(to right, ${gradientStops.join(', ')})`;
+}
+</script>
 
 <script setup lang="ts">
 import tinycolor from 'tinycolor2';
@@ -80,7 +122,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(EmitEventNames);
 
-const tinyColorRef = defineColorModel(props, emit, 'chrome');
+const tinyColorRef = defineColorModel(props, emit, 'HSVSliders');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
@@ -91,6 +133,10 @@ const saturation = ref(hsv.value.s * 100);
 const brightness = ref(hsv.value.v * 100);
 
 const alpha = computed(() => tinyColorRef.value.getAlpha());
+
+const saturationGradient = computed(() => getSaturationGradient(hueRef.value, brightness.value));
+
+const brightnessGradient = computed(() => getBrightnessGradient(hueRef.value, saturation.value));
 
 const onSChange = (value: number | string) => {
   const s = Number(value);
@@ -118,40 +164,6 @@ const onAlphaChange = (value: number | string) => {
   }
 }
 
-function getSaturationGradient(hue: number, brightness: number) {
-  const steps = 10;
-  const gradientStops: string[] = [];
-  for (let i = 0; i <= steps; i++) {
-    let s = i / steps;
-    const hsvColor = { h: hue, s: s, v: brightness / 100 };
-    const rgbColor = tinycolor(hsvColor). toRgb();
-    if (rgbColor) {
-      const r = Math.round(rgbColor.r);
-      const g = Math.round(rgbColor.g);
-      const b = Math.round(rgbColor.b);
-      gradientStops.push(`rgb(${r} ${g} ${b})`);
-    }
-  }
-  return `linear-gradient(to right, ${gradientStops.join(', ')})`;
-}
-
-function getBrightnessGradient(hue: number, saturation: number) {
-  const steps = 10;
-  const gradientStops: string[] = [];
-  for (let i = 0; i <= steps; i++) {
-    let v = i / steps;
-    const hsvColor = { h: hue, s: saturation / 100, v };
-    const rgbColor = tinycolor(hsvColor). toRgb();
-    if (rgbColor) {
-      const r = Math.round(rgbColor.r);
-      const g = Math.round(rgbColor.g);
-      const b = Math.round(rgbColor.b);
-      gradientStops.push(`rgb(${r} ${g} ${b})`);
-    }
-  }
-  return `linear-gradient(to right, ${gradientStops.join(', ')})`;
-}
-
 const thumbColorForH = computed(() => {
   return `hsl(${hueRef.value}, 100%, 50%)`;
 });
@@ -159,7 +171,6 @@ const thumbColorForH = computed(() => {
 const thumbColor = computed(() => {
   return tinyColorRef.value.toRgbString();
 });
-
 </script>
 
 <style scoped>
@@ -168,14 +179,6 @@ const thumbColor = computed(() => {
   width: 100%;
   font-family: Menlo, Consolas, 'Courier New', monospace;
 }
-.slider-bg {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-}
-
 .slider-wrap {
   display: flex;
   gap: 12px;
@@ -200,27 +203,20 @@ const thumbColor = computed(() => {
 
 .vc-hsv-sliders :deep(.vc-base-slider) {
   /* margin-top = 1/2 * (pickerHeight - sliderHeight) */
-  margin-top: 7px;
-  height: 12px;
+  margin-top: 5px;
+  height: 14px;
 }
-.h-slider :deep(.slider) {
+
+.vc-hsv-sliders :deep(.background) {
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-.s-slider :deep(.vc-base-slider), .l-slider :deep(.vc-base-slider) {
-  border-radius: 4px;
-  border: 1px solid #ddd;
+
+.gradient {
+  width: 100%;
+  height: 100%;
 }
-.vc-hsv-sliders :deep(.checkerboard) {
-  border-radius: 4px;
-}
-.vc-hsv-sliders :deep(.gradient) {
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-.vc-hsv-sliders :deep(.slider) {
-  margin: 0;
-}
+
 .vc-hsv-sliders :deep(.picker) {
   width: 20px;
   height: 20px;
@@ -230,7 +226,7 @@ const thumbColor = computed(() => {
   border: 2px white solid;
   /* translateY: (selfWidth + selfBorder*2) - sliderHight * 1/2  */
   /* translateX: (selfWidth + selfBorder*2) * 1/2  */
-  transform: translateX(-12px) translateY(-6px);
+  transform: translateX(-12px) translateY(-5px);
 }
 
 .h-slider :deep(.picker) {
