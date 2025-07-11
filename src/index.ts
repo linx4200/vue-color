@@ -10,6 +10,8 @@ export { default as SliderPicker } from './components/SliderPicker.vue';
 export { default as SwatchesPicker } from './components/SwatchesPicker.vue';
 export { default as TwitterPicker } from './components/TwitterPicker.vue';
 export { default as HueSlider } from './components/HueSlider.vue';
+export { default as HSLSliders } from './components/HSLSliders.vue';
+export { default as HSVSliders } from './components/HSVSliders.vue';
 
 export { default as AlphaSlider } from './components/common/AlphaSlider.vue';
 
