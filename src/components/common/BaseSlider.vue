@@ -1,23 +1,25 @@
 <template>
   <div class="vc-base-slider">
-    <slot name="background"></slot>
+    <div v-if="$slots.background" class="background">
+      <slot name="background"></slot>
+    </div>
     <div
-        :class="{
-          slider: true,
-          horizontal: direction === 'horizontal',
-          vertical: direction === 'vertical',
-        }"
-        ref="containerRef"
-        @mousedown="handleMouseDown"
-        @touchstart="handleMouseDown"
-        role="slider"
-        :aria-label="ariaLabel"
-        :aria-valuemax="max"
-        aria-valuemin="0"
-        :aria-valuenow="currentValue.toFixed(1)"
-        tabindex="0"
-        @keydown="handleKeydown"
-      >
+      :class="{
+        slider: true,
+        horizontal: direction === 'horizontal',
+        vertical: direction === 'vertical',
+      }"
+      ref="containerRef"
+      @mousedown="handleMouseDown"
+      @touchstart="handleMouseDown"
+      role="slider"
+      :aria-label="ariaLabel"
+      :aria-valuemax="max"
+      aria-valuemin="0"
+      :aria-valuenow="currentValue.toFixed(1)"
+      tabindex="0"
+      @keydown="handleKeydown"
+    >
       <div
         class="picker-wrap"
         :style="{
@@ -196,15 +198,19 @@ onUnmounted(() => {
   /** preventing default (scroll) behavior */
   touch-action: none;
 }
-.slider {
-  cursor: pointer;
-  z-index: 2;
-  margin: 0 3px;
+.background, .slider {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
   left: 0px;
+}
+.background {
+  overflow: hidden;
+}
+.slider {
+  cursor: pointer;
+  z-index: 2;
 }
 .picker-wrap {
   position: absolute;

@@ -8,6 +8,7 @@
     @update:model-value="handleChange"
     aria-label="Hue"
   >
+    <template #background><div class="gradient"></div></template>
     <template #picker><slot></slot></template>
   </BaseSlider>
 </template>
@@ -31,7 +32,11 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: 0
 });
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
+
+const gradientBg = computed(() => {
+  return `linear-gradient(to ${props.direction === 'horizontal' ? 'right' : 'top'}, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)`;
+});
 
 const hue = computed(() => {
   const value = Number(props.modelValue);
@@ -82,14 +87,10 @@ function emitChange(newHue: number) {
   /** preventing default (scroll) behavior */
   touch-action: none;
 }
-:deep(.horizontal) {
-  background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
-}
-:deep(.vertical) {
-  background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
-}
-:deep(.slider) {
-  margin: 0;
+.gradient {
+  width: 100%;
+  height: 100%;
   border-radius: 2px;
+  background: v-bind(gradientBg);
 }
 </style>

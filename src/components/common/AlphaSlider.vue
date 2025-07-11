@@ -7,9 +7,7 @@
     @update:model-value="handleChange"
   >
     <template #background>
-      <div class="checkerboard">
-        <Checkerboard />
-      </div>
+      <Checkerboard />
       <div class="gradient" :style="{background: gradientColor}"></div>
     </template>
   </BaseSlider>
@@ -59,14 +57,8 @@ function handleChange (value: number) {
 </script>
 
 <style scoped>
-.checkerboard {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
+.vc-alpha-slider :deep(.vc-checkerboard) {
   border-radius: 2px;
-  overflow: hidden;
 }
 .gradient {
   position: absolute;

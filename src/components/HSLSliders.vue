@@ -9,22 +9,28 @@
     <div class="slider-wrap s-slider">
       <span class="label">S</span>
       <BaseSlider
-        :style="{background: getSaturationGradient(hueRef, lightness)}"
         aria-label="saturation"
         :model-value="saturation"
         @update:model-value="onSChange"
-      ></BaseSlider>
+      >
+        <template #background>
+          <div class="gradient" :style="{background: saturationGradient}"></div>
+        </template>
+      </BaseSlider>
       <EditableInput :value="saturation.toFixed()" @change="onSChange" :a11y="{label: 'saturation'}" :min="0" :max="100" />
     </div>
 
     <div class="slider-wrap l-slider">
       <span class="label">L</span>
       <BaseSlider
-        :style="{background: getLightnessGradient(hueRef, saturation)}"
         aria-label="lightness"
         :model-value="lightness"
         @update:model-value="onLChange"
-      ></BaseSlider>
+      >
+        <template #background>
+          <div class="gradient" :style="{background: lightnessGradient}"></div>
+        </template>
+      </BaseSlider>
       <EditableInput :value="lightness.toFixed()" @change="onLChange" :a11y="{label: 'lightness'}" :min="0" :max="100" />
     </div>
 
@@ -35,6 +41,32 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+function getSaturationGradient(hue: number, lightness: number) {
+  return `linear-gradient(to right,
+    hsl(${hue} 0% ${lightness}%),
+    hsl(${hue} 50% ${lightness}%),
+    hsl(${hue} 100% ${lightness}%)
+  )`;
+}
+
+function getLightnessGradient(hue: number, saturation: number) {
+  return `linear-gradient(to right,
+    hsl(${hue} ${saturation}% 0%),
+    hsl(${hue} ${saturation}% 10%),
+    hsl(${hue} ${saturation}% 20%),
+    hsl(${hue} ${saturation}% 30%),
+    hsl(${hue} ${saturation}% 40%),
+    hsl(${hue} ${saturation}% 50%),
+    hsl(${hue} ${saturation}% 60%),
+    hsl(${hue} ${saturation}% 70%),
+    hsl(${hue} ${saturation}% 80%),
+    hsl(${hue} ${saturation}% 90%),
+    hsl(${hue} ${saturation}% 100%)
+  )`;
+}
+</script>
 
 <script setup lang="ts">
 import tinycolor from 'tinycolor2';
@@ -80,7 +112,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(EmitEventNames);
 
-const tinyColorRef = defineColorModel(props, emit, 'chrome');
+const tinyColorRef = defineColorModel(props, emit, 'HSLSliders');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
@@ -118,29 +150,13 @@ const onAlphaChange = (value: number | string) => {
   }
 }
 
-function getSaturationGradient(hue: number, lightness: number) {
-  return `linear-gradient(to right,
-    hsl(${hue} 0% ${lightness}%),
-    hsl(${hue} 50% ${lightness}%),
-    hsl(${hue} 100% ${lightness}%)
-  )`;
-}
+const saturationGradient = computed(() =>
+  getSaturationGradient(hueRef.value, lightness.value)
+);
 
-function getLightnessGradient(hue: number, saturation: number) {
-  return `linear-gradient(to right,
-    hsl(${hue} ${saturation}% 0%),
-    hsl(${hue} ${saturation}% 10%),
-    hsl(${hue} ${saturation}% 20%),
-    hsl(${hue} ${saturation}% 30%),
-    hsl(${hue} ${saturation}% 40%),
-    hsl(${hue} ${saturation}% 50%),
-    hsl(${hue} ${saturation}% 60%),
-    hsl(${hue} ${saturation}% 70%),
-    hsl(${hue} ${saturation}% 80%),
-    hsl(${hue} ${saturation}% 90%),
-    hsl(${hue} ${saturation}% 100%)
-  )`;
-}
+const lightnessGradient = computed(() =>
+  getLightnessGradient(hueRef.value, saturation.value)
+);
 
 const thumbColorForH = computed(() => {
   return `hsl(${hueRef.value}, 100%, 50%)`;
@@ -162,14 +178,6 @@ const thumbColor = computed(() => {
   width: 100%;
   font-family: Menlo, Consolas, 'Courier New', monospace;
 }
-.slider-bg {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-}
-
 .slider-wrap {
   display: flex;
   gap: 12px;
@@ -194,27 +202,20 @@ const thumbColor = computed(() => {
 
 .vc-hsl-sliders :deep(.vc-base-slider) {
   /* margin-top = 1/2 * (pickerHeight - sliderHeight) */
-  margin-top: 7px;
-  height: 12px;
+  margin-top: 5px;
+  height: 14px;
 }
-.h-slider :deep(.slider) {
+
+.vc-hsl-sliders :deep(.background) {
   border-radius: 4px;
   border: 1px solid #ddd;
 }
-.s-slider :deep(.vc-base-slider), .l-slider :deep(.vc-base-slider) {
-  border-radius: 4px;
-  border: 1px solid #ddd;
+
+.gradient {
+  width: 100%;
+  height: 100%;
 }
-.vc-hsl-sliders :deep(.checkerboard) {
-  border-radius: 4px;
-}
-.vc-hsl-sliders :deep(.gradient) {
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-.vc-hsl-sliders :deep(.slider) {
-  margin: 0;
-}
+
 .vc-hsl-sliders :deep(.picker) {
   width: 20px;
   height: 20px;
@@ -224,7 +225,7 @@ const thumbColor = computed(() => {
   border: 2px white solid;
   /* translateY: (selfWidth + selfBorder*2) - sliderHight * 1/2  */
   /* translateX: (selfWidth + selfBorder*2) * 1/2  */
-  transform: translateX(-12px) translateY(-6px);
+  transform: translateX(-12px) translateY(-5px);
 }
 
 .h-slider :deep(.picker) {
