@@ -1,12 +1,12 @@
 <template>
   <div class="vc-hsv-sliders">
-    <div class="slider-wrap">
+    <div class="slider-wrap h-slider">
       <span class="label">H</span>
       <HueSlider :modelValue="hueRef" @update:modelValue="updateHueRef"></HueSlider>
       <EditableInput :value="hueRef.toFixed()" @change="updateHueRef" :a11y="{label: 'hue'}" />
     </div>
 
-    <div class="slider-wrap">
+    <div class="slider-wrap s-slider">
       <span class="label">S</span>
       <BaseSlider
         aria-label="saturation"
@@ -20,7 +20,7 @@
       <EditableInput :value="saturation.toFixed()" @change="onSChange" :a11y="{label: 'saturation'}" :min="0" :max="100" />
     </div>
 
-    <div class="slider-wrap">
+    <div class="slider-wrap b-slider">
       <span class="label">V</span>
       <BaseSlider
         aria-label="Brightness"
@@ -152,7 +152,7 @@ const onBChange = (value: number | string) => {
   brightness.value = b;
   tinyColorRef.value = {
     ...hsv.value,
-    l: b / 100
+    v: b / 100
   }
 }
 
@@ -169,7 +169,10 @@ const thumbColorForH = computed(() => {
 });
 
 const thumbColor = computed(() => {
-  return tinyColorRef.value.toRgbString();
+  return tinycolor({
+    ...hsv.value,
+    a: 1
+  }).toHslString();
 });
 </script>
 
@@ -232,8 +235,7 @@ const thumbColor = computed(() => {
 .h-slider :deep(.picker) {
   background-color: v-bind('thumbColorForH');
 }
-
-.s-slider :deep(.picker), .l-slider :deep(.picker) {
+.s-slider :deep(.picker), .b-slider :deep(.picker) {
   background-color: v-bind('thumbColor');
 }
 
