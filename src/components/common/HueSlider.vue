@@ -55,7 +55,7 @@ const sliderValue = computed(() => {
     if (hue.value === 0 && pullDirection.value === 'right') {
       return 0;
     }
-    return 360 - hue.value;
+    return hue.value;
   }
   if (props.direction === 'horizontal') {
     if (hue.value === 0 && pullDirection.value === 'right') {
@@ -67,16 +67,9 @@ const sliderValue = computed(() => {
 });
 
 function handleChange (value: number) {
-  let newValue = Math.round(value);
-  if (props.direction === 'vertical') {
-    newValue = Math.round(360 - newValue);
-  }
-  if (hue.value !== newValue) {
-    emitChange(newValue);
-  }
+  emitChange(Math.round(value));
 }
 function emitChange(newHue: number) {
-  console.log('=emitChange=>', newHue);
   emit('update:modelValue', newHue);
 }
 </script>

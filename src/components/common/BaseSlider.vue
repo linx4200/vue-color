@@ -40,6 +40,7 @@
 import { ref, computed, onUnmounted } from 'vue';
 import { getPageXYFromEvent, getAbsolutePosition, resolveArrowDirection } from '../../utils/dom.ts';
 import { throttle } from '../../utils/throttle.ts';
+import { isDefined } from '../../utils/helpers.ts';
 
 type Props = {
   direction?: 'horizontal' | 'vertical';
@@ -58,27 +59,33 @@ const props = withDefaults(defineProps<Props>(), {
   ariaLabel: 'slider'
 });
 
-const { max, direction } = props;
-
 const emit = defineEmits(['input', 'update:modelValue']);
 
 const currentValue = computed(() => props.modelValue ?? props.value);
 
 const positionPortion = computed(() => {
-  return ((100 * currentValue.value) / props.max) + '%';
+  let percentage = currentValue.value / props.max;
+  if (props.direction === 'vertical') {
+    // In a vertical slider,
+    // lower values place the picker lower on the track,
+    // which corresponds to a higher percentage in CSS positioning.
+    percentage = 1 - percentage;
+  }
+  return 100 * percentage + '%';
 });
 
 // No using `useTemplateRef` because of vue 2.7 compatibility
 const containerRef = ref<HTMLElement | null>(null);
 
 function emitChange (value?: number) {
-  if (typeof value !== 'undefined') {
+  if (isDefined(value)) {
     emit('input', value);
     emit('update:modelValue', value);
   }
 }
 
 function handleChange (e: MouseEvent | TouchEvent) {
+  const { direction, max } = props;
 
   const container = containerRef.value;
     /* v8 ignore next 4 */
@@ -100,11 +107,11 @@ function handleChange (e: MouseEvent | TouchEvent) {
 
   if (direction === 'vertical') {
     if (top < 0) {
-      newValue = 0;
-    } else if (top > containerHeight) {
       newValue = max;
+    } else if (top > containerHeight) {
+      newValue = 0;
     } else {
-      newValue = (top / containerHeight) * max;
+      newValue = (1 - (top / containerHeight)) * max;
     }
   } else {
     if (left < 0) {
@@ -115,7 +122,6 @@ function handleChange (e: MouseEvent | TouchEvent) {
       newValue = (left / containerWidth) * max;
     }
   }
-
   emitChange(newValue);
 }
 
@@ -147,6 +153,7 @@ function unbindEventListeners () {
 
 function handleKeydown(e: KeyboardEvent) {
   e.preventDefault();
+  const { direction, max } = props;
   const keyDirection = resolveArrowDirection(e);
   const step = props.step ?? max / 100;
   const value = currentValue.value;
@@ -156,28 +163,28 @@ function handleKeydown(e: KeyboardEvent) {
       if (direction !== 'horizontal') {
         return;
       }
-      newValue = value - step < 0 ? 0 : Math.floor(value - step);
+      newValue = value - step < 0 ? 0 : value - step;
       break;
     }
     case 'right': {
       if (direction !== 'horizontal') {
         return;
       }
-      newValue = value + step > max ? max : Math.ceil(value + step);
+      newValue = value + step > max ? max : value + step;
       break;
     }
     case 'down': {
       if (direction !== 'vertical') {
         return;
       }
-      newValue = value - step < 0 ? 0 : Math.floor(value - step);
+      newValue = value - step < 0 ? 0 : value - step;
       break;
     }
     case 'up': {
       if (direction !== 'vertical') {
         return
       }
-      newValue = value + step > max ? max : Math.ceil(value + step);
+      newValue = value + step > max ? max : value + step;
       break;
     };
   }

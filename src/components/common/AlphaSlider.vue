@@ -50,9 +50,7 @@ const gradientColor = computed(() => {
 const alpha = computed(() => colorRef.value.getAlpha());
 
 function handleChange (value: number) {
-  if (alpha.value !== value) {
-    colorRef.value = colorRef.value.setAlpha(value).clone();
-  }
+  colorRef.value = colorRef.value.setAlpha(value).clone();
 }
 </script>
 
