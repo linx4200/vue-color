@@ -3,7 +3,7 @@
     <div class="slider-wrap h-slider">
       <span class="label">H</span>
       <HueSlider :modelValue="hueRef" @update:modelValue="updateHueRef"></HueSlider>
-      <EditableInput :value="hueRef.toFixed()" @change="updateHueRef" :a11y="{label: 'hue'}" />
+      <EditableInput v-if="!disableFields" :value="Number(hueRef).toFixed()" @change="onHChange" :a11y="{label: 'hue'}" />
     </div>
 
     <div class="slider-wrap s-slider">
@@ -17,7 +17,7 @@
           <div class="gradient" :style="{background: saturationGradient}"></div>
         </template>
       </BaseSlider>
-      <EditableInput :value="saturation.toFixed()" @change="onSChange" :a11y="{label: 'saturation'}" :min="0" :max="100" />
+      <EditableInput v-if="!disableFields" :value="saturation.toFixed()" @change="onSChange" :a11y="{label: 'saturation'}" :min="0" :max="100" />
     </div>
 
     <div class="slider-wrap b-slider">
@@ -31,13 +31,13 @@
           <div class="gradient" :style="{background: brightnessGradient}"></div>
         </template>
       </BaseSlider>
-      <EditableInput :value="brightness.toFixed()" @change="onBChange" :a11y="{label: 'Brightness'}" :min="0" :max="100" />
+      <EditableInput v-if="!disableFields" :value="brightness.toFixed()" @change="onBChange" :a11y="{label: 'Brightness'}" :min="0" :max="100" />
     </div>
 
     <div v-if="!disableAlpha" class="slider-wrap">
       <span class="label">A</span>
       <AlphaSlider v-model:tinyColor="tinyColorRef"></AlphaSlider>
-      <EditableInput :value="alpha.toFixed(2)" @change="onAlphaChange" :a11y="{label: 'alpha'}" :min="0" :max="1" :step="0.01" />
+      <EditableInput v-if="!disableFields" :value="alpha.toFixed(2)" @change="onAlphaChange" :a11y="{label: 'alpha'}" :min="0" :max="1" :step="0.01" />
     </div>
   </div>
 </template>
@@ -138,6 +138,13 @@ const saturationGradient = computed(() => getSaturationGradient(hueRef.value, br
 
 const brightnessGradient = computed(() => getBrightnessGradient(hueRef.value, saturation.value));
 
+const onHChange = (value?: string) => {
+  if (!value) {
+    return;
+  }
+  updateHueRef(Number(value));
+}
+
 const onSChange = (value: number | string) => {
   const s = Number(value);
   saturation.value = s;
@@ -212,7 +219,7 @@ const thumbColor = computed(() => {
 
 .vc-hsv-sliders :deep(.background) {
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--vc-input-border);
 }
 
 .gradient {

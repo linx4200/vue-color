@@ -12,7 +12,7 @@
           <div class="gradient" :style="{background: redSliderBG}"></div>
         </template>
       </BaseSlider>
-      <EditableInput :value="rgb.r" @change="(v) => onChange('r', v)" :a11y="{label: 'red'}" :min="0" :max="255" />
+      <EditableInput v-if="!disableFields" :value="rgb.r" @change="(v) => onChange('r', v)" :a11y="{label: 'red'}" :min="0" :max="255" />
     </div>
 
     <div class="slider-wrap">
@@ -27,7 +27,7 @@
           <div class="gradient" :style="{background: greenSliderBG}"></div>
         </template>
       </BaseSlider>
-      <EditableInput :value="rgb.g" @change="(v) => onChange('g', v)" :a11y="{label: 'green'}" :min="0" :max="255" />
+      <EditableInput v-if="!disableFields" :value="rgb.g" @change="(v) => onChange('g', v)" :a11y="{label: 'green'}" :min="0" :max="255" />
     </div>
 
     <div class="slider-wrap">
@@ -42,13 +42,13 @@
           <div class="gradient" :style="{background: blueSliderBG}"></div>
         </template>
       </BaseSlider>
-      <EditableInput :value="rgb.b" @change="(v) => onChange('b', v)" :a11y="{label: 'blue'}" :min="0" :max="255" />
+      <EditableInput v-if="!disableFields" :value="rgb.b" @change="(v) => onChange('b', v)" :a11y="{label: 'blue'}" :min="0" :max="255" />
     </div>
 
     <div v-if="!disableAlpha" class="slider-wrap a-slider">
       <span class="label">A</span>
       <AlphaSlider v-model:tinyColor="tinyColorRef"></AlphaSlider>
-      <EditableInput :value="alpha.toFixed(2)" @change="(v) => onChange('a', v)" :a11y="{label: 'alpha'}" :min="0" :max="1" :step="0.01" />
+      <EditableInput v-if="!disableFields" :value="alpha.toFixed(2)" @change="(v) => onChange('a', v)" :a11y="{label: 'alpha'}" :min="0" :max="1" :step="0.01" />
     </div>
   </div>
 </template>
@@ -173,7 +173,7 @@ const thumbColor = computed(() => {
 
 .vc-rgb-sliders :deep(.background) {
   border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--vc-input-border);
 }
 
 .gradient {
