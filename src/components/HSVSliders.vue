@@ -23,7 +23,7 @@
     <div class="slider-wrap b-slider">
       <span class="label">V</span>
       <BaseSlider
-        aria-label="Brightness"
+        aria-label="brightness"
         :model-value="brightness"
         @update:model-value="onBChange"
       >
@@ -31,7 +31,7 @@
           <div class="gradient" :style="{background: brightnessGradient}"></div>
         </template>
       </BaseSlider>
-      <EditableInput v-if="!disableFields" :value="brightness.toFixed()" @change="onBChange" :a11y="{label: 'Brightness'}" :min="0" :max="100" />
+      <EditableInput v-if="!disableFields" :value="brightness.toFixed()" @change="onBChange" :a11y="{label: 'brightness'}" :min="0" :max="100" />
     </div>
 
     <div v-if="!disableAlpha" class="slider-wrap">
