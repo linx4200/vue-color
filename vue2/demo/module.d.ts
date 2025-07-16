@@ -12,6 +12,9 @@ declare module 'vue-color/vue2' {
   export const TwitterPicker: Component;
   export const SwatchesPicker: Component;
   export const HueSlider: Component;
+  export const HSLSliders: Component;
+  export const HSVSliders: Component;
+  export const RGBSliders: Component;
   export const tinycolor: tinycolor;
 }
 

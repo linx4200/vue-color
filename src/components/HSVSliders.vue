@@ -10,8 +10,8 @@
       <span class="label">S</span>
       <BaseSlider
         aria-label="saturation"
-        :model-value="saturation"
-        @update:model-value="onSChange"
+        :modelValue="saturation"
+        @update:modelValue="onSChange"
       >
         <template #background>
           <div class="gradient" :style="{background: saturationGradient}"></div>
@@ -24,8 +24,8 @@
       <span class="label">V</span>
       <BaseSlider
         aria-label="brightness"
-        :model-value="brightness"
-        @update:model-value="onBChange"
+        :modelValue="brightness"
+        @update:modelValue="onBChange"
       >
         <template #background>
           <div class="gradient" :style="{background: brightnessGradient}"></div>
@@ -80,7 +80,7 @@ function getBrightnessGradient(hue: number, saturation: number) {
 
 <script setup lang="ts">
 import tinycolor from 'tinycolor2';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import BaseSlider from './common/BaseSlider.vue';
 import HueSlider from './common/HueSlider.vue';
@@ -127,12 +127,16 @@ const tinyColorRef = defineColorModel(props, emit, 'HSVSliders');
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
 const hsv = computed(() => tinyColorRef.value.toHsv());
+const alpha = computed(() => tinyColorRef.value.getAlpha());
 
+// Hold saturation and brightness(value) internally in case tinycolor drops them
 const saturation = ref(hsv.value.s * 100);
-
 const brightness = ref(hsv.value.v * 100);
 
-const alpha = computed(() => tinyColorRef.value.getAlpha());
+watch(hsv, () => {
+  saturation.value = hsv.value.s * 100;
+  brightness.value = hsv.value.v * 100;
+});
 
 const saturationGradient = computed(() => getSaturationGradient(hueRef.value, brightness.value));
 

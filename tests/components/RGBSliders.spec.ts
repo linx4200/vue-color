@@ -33,14 +33,14 @@ test('props.disableFields', async () => {
 test('render with modelValue', async () => {
   const { getByRole } = render(RGBSliders, {
     props: {
-      modelValue: { r: 120, g: 5, b: 48, a: 0.7 },
+      modelValue: '#db3794',
     },
   });
 
-  await expect.element(getByRole('textbox', { name: 'red' })).toHaveValue('120');
-  await expect.element(getByRole('textbox', { name: 'green' })).toHaveValue('5');
-  await expect.element(getByRole('textbox', { name: 'blue' })).toHaveValue('48');
-  await expect.element(getByRole('textbox', { name: 'alpha' })).toHaveValue('0.70');
+  await expect.element(getByRole('textbox', { name: 'red' })).toHaveValue('219');
+  await expect.element(getByRole('textbox', { name: 'green' })).toHaveValue('55');
+  await expect.element(getByRole('textbox', { name: 'blue' })).toHaveValue('148');
+  await expect.element(getByRole('textbox', { name: 'alpha' })).toHaveValue('1.00');
 });
 
 // Test changing inputs emits updated color

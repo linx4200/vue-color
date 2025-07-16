@@ -195,16 +195,16 @@ const onModeChange = (isDark: boolean) => {
       </div>
       <div class="row">
         <div class="col" :style="{width: '330px'}">
-          <HSLSliders v-model:tinyColor="tinyColor" v-model="color" />
-          <div class="picker-title text">&lt;HSLSliders /&gt;</div>
+          <RGBSliders v-model:tinyColor="tinyColor" v-model="color" />
+          <div class="picker-title text">&lt;RGBASliders /&gt;</div>
         </div>
         <div class="col" :style="{width: '330px'}">
           <HSVSliders v-model:tinyColor="tinyColor" v-model="color" />
           <div class="picker-title text">&lt;HSVSliders /&gt;</div>
         </div>
         <div class="col" :style="{width: '330px'}">
-          <RGBSliders v-model:tinyColor="tinyColor" v-model="color" />
-          <div class="picker-title text">&lt;RGBASliders /&gt;</div>
+          <HSLSliders v-model:tinyColor="tinyColor" v-model="color" />
+          <div class="picker-title text">&lt;HSLSliders /&gt;</div>
         </div>
       </div>
     </div>

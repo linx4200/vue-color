@@ -10,8 +10,8 @@
       <span class="label">S</span>
       <BaseSlider
         aria-label="saturation"
-        :model-value="saturation"
-        @update:model-value="onSChange"
+        :modelValue="saturation"
+        @update:modelValue="onSChange"
       >
         <template #background>
           <div class="gradient" :style="{background: saturationGradient}"></div>
@@ -24,8 +24,8 @@
       <span class="label">L</span>
       <BaseSlider
         aria-label="lightness"
-        :model-value="lightness"
-        @update:model-value="onLChange"
+        :modelValue="lightness"
+        @update:modelValue="onLChange"
       >
         <template #background>
           <div class="gradient" :style="{background: lightnessGradient}"></div>
@@ -70,7 +70,7 @@ function getLightnessGradient(hue: number, saturation: number) {
 
 <script setup lang="ts">
 import tinycolor from 'tinycolor2';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import BaseSlider from './common/BaseSlider.vue';
 import HueSlider from './common/HueSlider.vue';
@@ -116,13 +116,20 @@ const tinyColorRef = defineColorModel(props, emit, 'HSLSliders');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
 
-const hsl = computed(() => tinyColorRef.value.toHsl());
+const hsl = computed(() => {
+  const value = tinyColorRef.value.toHsl();
+  return value;
+});
+const alpha = computed(() => tinyColorRef.value.getAlpha());
 
+// Hold saturation and lightness internally in case tinycolor drops them
 const saturation = ref(hsl.value.s * 100);
-
 const lightness = ref(hsl.value.l * 100);
 
-const alpha = computed(() => tinyColorRef.value.getAlpha());
+watch(hsl, () => {
+  saturation.value = hsl.value.s * 100;
+  lightness.value = hsl.value.l * 100;
+});
 
 const onHChange = (value?: string) => {
   if (!value) {

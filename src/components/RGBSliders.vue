@@ -4,8 +4,8 @@
       <span class="label">R</span>
       <BaseSlider
         aria-label="red"
-        :model-value="rgb.r"
-        @update:model-value="(v) => onChange('r', v)"
+        :modelValue="rgb.r"
+        @update:modelValue="(v) => onChange('r', v)"
         :max="255"
       >
         <template #background>
@@ -19,8 +19,8 @@
       <span class="label">G</span>
       <BaseSlider
         aria-label="green"
-        :model-value="rgb.g"
-        @update:model-value="(v) => onChange('g', v)"
+        :modelValue="rgb.g"
+        @update:modelValue="(v) => onChange('g', v)"
         :max="255"
       >
         <template #background>
@@ -34,8 +34,8 @@
       <span class="label">B</span>
       <BaseSlider
         aria-label="blue"
-        :model-value="rgb.b"
-        @update:model-value="(v) => onChange('b', v)"
+        :modelValue="rgb.b"
+        @update:modelValue="(v) => onChange('b', v)"
         :max="255"
       >
         <template #background>

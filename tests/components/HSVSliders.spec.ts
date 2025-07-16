@@ -33,14 +33,14 @@ test('props.disableFields', async () => {
 test('render with modelValue', async () => {
   const { getByRole } = render(HSVSliders, {
     props: {
-      modelValue: { h: 120, s: 0.5, v: 0.4, a: 0.7 },
+      modelValue: '#5999bd33',
     },
   });
 
-  await expect.element(getByRole('textbox', { name: 'hue' })).toHaveValue('120');
-  await expect.element(getByRole('textbox', { name: 'saturation' })).toHaveValue('50');
-  await expect.element(getByRole('textbox', { name: 'brightness' })).toHaveValue('40');
-  await expect.element(getByRole('textbox', { name: 'alpha' })).toHaveValue('0.70');
+  await expect.element(getByRole('textbox', { name: 'hue' })).toHaveValue('202');
+  await expect.element(getByRole('textbox', { name: 'saturation' })).toHaveValue('53');
+  await expect.element(getByRole('textbox', { name: 'brightness' })).toHaveValue('74');
+  await expect.element(getByRole('textbox', { name: 'alpha' })).toHaveValue('0.20');
 });
 
 // Test changing inputs emits updated color

@@ -1,10 +1,10 @@
 <template>
   <BaseSlider
     class="vc-alpha-slider"
-    :model-value="alpha"
+    :modelValue="alpha"
     :max="1"
     aria-label="Transparency"
-    @update:model-value="handleChange"
+    @update:modelValue="handleChange"
   >
     <template #background>
       <Checkerboard />

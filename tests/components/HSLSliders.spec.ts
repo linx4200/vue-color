@@ -33,13 +33,13 @@ test('props.disableFields', async () => {
 test('render with modelValue', async () => {
   const { getByRole } = render(HSLSliders, {
     props: {
-      modelValue: { h: 120, s: 0.5, l: 0.4, a: 0.7 },
+      modelValue: '#ccb166b3',
     },
   });
 
-  await expect.element(getByRole('textbox', { name: 'hue' })).toHaveValue('120');
+  await expect.element(getByRole('textbox', { name: 'hue' })).toHaveValue('44');
   await expect.element(getByRole('textbox', { name: 'saturation' })).toHaveValue('50');
-  await expect.element(getByRole('textbox', { name: 'lightness' })).toHaveValue('40');
+  await expect.element(getByRole('textbox', { name: 'lightness' })).toHaveValue('60');
   await expect.element(getByRole('textbox', { name: 'alpha' })).toHaveValue('0.70');
 });
 

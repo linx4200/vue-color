@@ -3,9 +3,9 @@
     class="vc-hue-slider"
     :max="360"
     :step="1"
-    :model-value="sliderValue"
+    :modelValue="sliderValue"
     :direction="direction"
-    @update:model-value="handleChange"
+    @update:modelValue="handleChange"
     aria-label="Hue"
   >
     <template #background><div class="gradient"></div></template>
@@ -66,7 +66,7 @@ const sliderValue = computed(() => {
   return 0;
 });
 
-function handleChange (value: number) {
+function handleChange(value: number) {
   emitChange(Math.round(value));
 }
 function emitChange(newHue: number) {
