@@ -12,6 +12,9 @@ import {
   TwitterPicker,
   SwatchesPicker,
   HueSlider,
+  HSLSliders,
+  HSVSliders,
+  RGBSliders,
   tinycolor
 } from 'vue-color/vue2';
 
@@ -45,6 +48,9 @@ const updateHue = (newHue: number) => {
       <TwitterPicker v-model="color" />
       <SwatchesPicker v-model="color" />
       <SliderPicker v-model="color" />
+      <HSLSliders v-model="color" :style="{width: '500px'}" />
+      <HSVSliders v-model="color" :style="{width: '500px'}" />
+      <RGBSliders v-model="color" :style="{width: '500px'}" />
     </div>
   </div>
 </template>
