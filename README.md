@@ -96,6 +96,9 @@ import { ChromePicker, CompactPicker, HueSlider /** ...etc  */ } from 'vue-color
 |  TwitterPicker   |  [View](./docs/components/TwitterPicker.md)  |
 |  HueSlider   |  [View](./docs/components/HueSlider.md)  |
 |  AlphaSlider   |  -  |
+|  HSLSliders   |  [View](./docs/components/HSLSliders.md)  |
+|  HSVSliders   |  [View](./docs/components/HSVSliders.md)  |
+|  RGBSliders   |  [View](./docs/components/RGBSliders.md)  |
 
 ### Props & Events
 
