@@ -3,7 +3,7 @@ const DEFAULT_COLOR = 'F5F7FA';
 const DEFAULT_COLOR_DARK = '#004035';
 
 import { parseSearchParams } from './utils';
-const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'material', 'slider', 'twitter', 'swatches', 'hue'] as const;
+const pickers = ['chrome', 'sketch', 'photoshop', 'compact', 'grayscale', 'material', 'slider', 'twitter', 'swatches', 'hue', 'sliders'] as const;
 const searchParams = parseSearchParams(location.search);
 const manualEnabledPickers = searchParams.picker?.split(',');
 
@@ -36,6 +36,9 @@ import {
   TwitterPicker,
   SwatchesPicker,
   HueSlider,
+  HSLSliders,
+  HSVSliders,
+  RGBSliders,
   tinycolor
 // } from '../dist/vue-color.js';
 } from '../src';
@@ -188,6 +191,20 @@ const onModeChange = (isDark: boolean) => {
             <div><SwatchesPicker v-model:tinyColor="tinyColor" v-model="color" /></div>
             <div class="picker-title text">&lt;SwatchesPicker /&gt;</div>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col" :style="{width: '330px'}">
+          <RGBSliders v-model:tinyColor="tinyColor" v-model="color" />
+          <div class="picker-title text">&lt;RGBASliders /&gt;</div>
+        </div>
+        <div class="col" :style="{width: '330px'}">
+          <HSVSliders v-model:tinyColor="tinyColor" v-model="color" />
+          <div class="picker-title text">&lt;HSVSliders /&gt;</div>
+        </div>
+        <div class="col" :style="{width: '330px'}">
+          <HSLSliders v-model:tinyColor="tinyColor" v-model="color" />
+          <div class="picker-title text">&lt;HSLSliders /&gt;</div>
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { getFractionDigit } from '../../utils/math';
 import { resolveArrowDirection } from '../../utils/dom';
+import { isDefined } from '../../utils/helpers';
 
 type Props = {
   value: string | number;
@@ -40,12 +41,13 @@ const ariaLabel = props.a11y?.label ?? props.label;
 const labelId = `input__label__${ariaLabel}__${Math.random().toString().slice(2, 5)}`;
 
 function update (newVal: number | string) {
-  if (props.max && +newVal > props.max) {
-    emit('change', props.max);
+  const { min, max } = props;
+  if (isDefined(max) && +newVal > max) {
+    emit('change', max);
     return;
   }
-  if (props.min && +newVal < props.min) {
-    emit('change', props.min);
+  if (isDefined(min) && +newVal < min) {
+    emit('change', min);
     return;
   }
   emit('change', newVal);
@@ -90,6 +92,7 @@ function handleKeyDown (e: KeyboardEvent) {
   position: relative;
 }
 .vc-input-input {
+  width: 100%;
   padding: 0;
   border: 0;
   outline: none;

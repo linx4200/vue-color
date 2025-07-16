@@ -1,4 +1,4 @@
-# 🎨 Vue Color v3.0
+# 🎨 Vue Color
 
 <p>
   <a href="https://www.npmjs.com/package/vue-color"><img src="https://img.shields.io/npm/dm/vue-color.svg" alt="NPM monthly downloads" /></a>
@@ -18,7 +18,7 @@ Explore the components in action: 👉 [Open Live Demo](https://linx4200.github.
 
 ## ✨ Features
 
-- **Dual Vue Compatibility** – Supports both Vue 2.7 and Vue 3 out of the box
+- **Dual Vue Compatibility** – Supports **both Vue 2.7 and Vue 3** out of the box
 
 - **Modular & Tree-Shakable** – Import only what you use
 
@@ -96,6 +96,9 @@ import { ChromePicker, CompactPicker, HueSlider /** ...etc  */ } from 'vue-color
 |  TwitterPicker   |  [View](./docs/components/TwitterPicker.md)  |
 |  HueSlider   |  [View](./docs/components/HueSlider.md)  |
 |  AlphaSlider   |  -  |
+|  HSLSliders   |  [View](./docs/components/HSLSliders.md)  |
+|  HSVSliders   |  [View](./docs/components/HSVSliders.md)  |
+|  RGBSliders   |  [View](./docs/components/RGBSliders.md)  |
 
 ### Props & Events
 
@@ -192,21 +195,14 @@ To use `vue-color` with Vue 2.7:
   <ChromePicker v-model="color" />
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 // Note: use the Vue 2.7 specific entry point
 import { ChromePicker } from 'vue-color/vue2'
 
-export default {
-  setup() {
-    const color = ref('#5c8f94');
-    return { color };
-  }
-}
+const color = ref('#5c8f94');
 </script>
 ```
-
-The Vue 2.7 build is fully compatible with the Vue Composition API introduced in 2.7.
 
 Make sure to use `vue-color/vue2` as the import path, and include the correct stylesheet:
 import `vue-color/vue2/style.css` in your main entry file.

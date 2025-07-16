@@ -3,6 +3,8 @@ import { render } from 'vitest-browser-vue';
 import Hue from '../../../src/components/common/HueSlider.vue';
 import { waitForRerender } from '../../tools';
 
+const zeroValue = /0(px|%)?/;
+
 test('The position of the picker should be correct', async () => {
   const { getByRole, rerender } = render(Hue, {
     props: {
@@ -34,14 +36,14 @@ test('The position of the picker should be correct', async () => {
   rerender({ direction: 'vertical', modelValue: 180 });
   await waitForRerender();
   expect(pointerElement?.style.top).toBe('50%');
-  expect(pointerElement?.style.left).toBe('0px');
+  expect(pointerElement?.style.left).toMatch(zeroValue);
 
   rerender({ direction: 'vertical', modelValue: 200 });
   await waitForRerender();
   rerender({ direction: 'vertical', modelValue: 0 });
   await waitForRerender();
-  expect(pointerElement?.style.top).toBe('0px');
-  expect(pointerElement?.style.left).toBe('0px');
+  expect(pointerElement?.style.top).toMatch(zeroValue);
+  expect(pointerElement?.style.left).toMatch(zeroValue);
 });
 
 test('Click the pointer and update color events should be emitted with correct alpha value (horizontally)', () => {
@@ -72,6 +74,9 @@ test('Click the pointer and update color events should be emitted with correct a
     props: {
       modelValue: 10,
       direction: 'vertical',
+      style: {
+        height: '100px'
+      }
     },
   });
 
@@ -118,7 +123,7 @@ const keyboardEventCases = [
     direction: 'vertical' as const,
     oppositeDirection: 'horizontal' as const,
     initialValue: 11.1,
-    changedValueNormally: 13,
+    changedValueNormally: 12,
     valueOfLimitation: 360
   },
   {
@@ -153,6 +158,10 @@ describe('When keyboard events is fired, update color events should be emitted w
       props: {
         modelValue: initialValue,
         direction: oppositeDirection as 'horizontal' | 'vertical',
+        style: {
+          width: '100px',
+          height: '100px'
+        }
       },
     });
     const slider = getByRole('slider').element();

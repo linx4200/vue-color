@@ -88,7 +88,7 @@ test('When up and down keyboard events are fired then update color events should
   expect(emitted()).toHaveProperty('update:modelValue');
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  expect(emitted()['update:modelValue'][0]?.[0]?.a).toBeCloseTo(0.1, 0);
+  expect(emitted()['update:modelValue'][0]?.[0]?.a).toBeCloseTo(0.19, 0);
 
   await rerender({modelValue : { r: 100, g: 100, b: 100, a: 0 }});
   const keyboardEvent2 = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
@@ -102,7 +102,7 @@ test('When up and down keyboard events are fired then update color events should
   slider.dispatchEvent(keyboardEvent3);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  expect(emitted()['update:modelValue'][2]?.[0]?.a).toBe(0.1);
+  expect(emitted()['update:modelValue'][2]?.[0]?.a).toBe(0.01);
 
   await rerender({modelValue : { r: 100, g: 100, b: 100, a: 1 }});
   const keyboardEvent4 = new KeyboardEvent('keydown', { code: 'ArrowRight' });

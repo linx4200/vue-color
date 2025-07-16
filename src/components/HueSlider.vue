@@ -34,11 +34,9 @@ const thumbColor = computed(() => {
 
 <style scoped>
 .vc-hue-wrap {
-  position: relative;
-  width: 100%;
   height: 8px;
 }
-.vc-hue-wrap :deep(.container) {
+.vc-hue-wrap :deep(.slider) {
   border-radius: 4px;
 }
 .vc-hue-wrap :deep(.picker) {
