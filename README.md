@@ -18,7 +18,7 @@ Explore the components in action: 👉 [Open Live Demo](https://linx4200.github.
 
 ## ✨ Features
 
-- **Dual Vue Compatibility** – Supports both Vue 2.7 and Vue 3 out of the box
+- **Dual Vue Compatibility** – Supports **both Vue 2.7 and Vue 3** out of the box
 
 - **Modular & Tree-Shakable** – Import only what you use
 
