@@ -144,6 +144,9 @@ function onChange (param: { h: number, s: number, v: number, a: number }) {
 const throttledHandleChange = throttle(handleChange, 20);
 
 function handleMouseDown (e: MouseEvent | TouchEvent) {
+  // Prevent default browser behavior that might cause cursor issues
+  e.preventDefault();
+  
   if (e.type.startsWith('mouse')) {
     window.addEventListener('mousemove', throttledHandleChange)
     window.addEventListener('mouseup', throttledHandleChange)
