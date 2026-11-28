@@ -29,6 +29,7 @@
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "build": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
+    "prepare": "vite build && vue-tsc --project tsconfig.lib.json --declaration --emitDeclarationOnly",
     "demo": "vite demo",
     "demo:build": "vite build demo",
     "demo:debug": "VITE_DEBUG=true vite demo",

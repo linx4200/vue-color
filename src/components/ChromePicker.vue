@@ -24,6 +24,12 @@
             <Alpha v-model:tinyColor="tinyColorRef"></Alpha>
           </div>
         </div>
+	      <button v-if="hasEyeDropper" type="button" role="button" class="eye-dropper-button" @click="openColorPicker">
+		      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+			      <path d="M0 0h24v24H0z" fill="none" />
+			      <path fill="currentColor" d="M19.41 3c-.78-.78-2.05-.78-2.83 0l-2.59 2.59L12.7 4.3l-1.41 1.41L12.58 7l-8.29 8.29c-.13.13-.22.29-.26.46l-1 4c-.09.34.01.7.26.95c.19.19.45.29.71.29c.08 0 .16 0 .24-.03l4-1c.18-.04.34-.13.46-.26l8.29-8.29l1.29 1.29l1.41-1.41L18.4 10l2.59-2.59c.78-.78.78-2.05 0-2.83L19.4 2.99ZM7.48 18.1l-2.11.53l.53-2.11l8.1-8.1l1.59 1.59l-8.1 8.1Z" />
+		      </svg>
+	      </button>
       </div>
 
       <div class="fieldsWrap" v-if="showFields" data-testid="fields">
@@ -112,6 +118,12 @@ import Checkerboard from './common/CheckerboardBG.vue';
 import { defineColorModel, EmitEventNames } from '../composable/colorModel.ts';
 import { useHueRef } from '../composable/hue.ts';
 
+declare global {
+	interface Window {
+		EyeDropper?: any;
+	}
+}
+
 type Format = 'hex' | 'rgb' | 'hsl';
 type Props = {
   /**
@@ -156,6 +168,8 @@ const emit = defineEmits(EmitEventNames);
 const tinyColorRef = defineColorModel(props, emit, 'chrome');
 
 const { hueRef, updateHueRef } = useHueRef(tinyColorRef);
+
+const hasEyeDropper = !!window.EyeDropper;
 
 const fieldsIndex = ref(0);
 let highlight = ref(false);
@@ -267,6 +281,17 @@ const showHighlight = () => {
 }
 const hideHighlight = () => {
   highlight.value = false;
+}
+
+function openColorPicker() {
+	if (!(<any>window).EyeDropper) {
+		return;
+	}
+
+	const eyeDropper = new window.EyeDropper();
+	eyeDropper.open().then((result:any) => {
+		tinyColorRef.value = result.sRGBHex;
+	});
 }
 </script>
 
@@ -410,5 +435,18 @@ const hideHighlight = () => {
 .alpha-disabled :deep(.hue-wrap) {
   margin-top: 4px;
   margin-bottom: 4px;
+}
+.eye-dropper-button {
+	border: none;
+	background-color: transparent;
+	padding: 0;
+	aspect-ratio: 1;
+	margin-left: 16px;
+	margin-right: -4px;
+}
+
+.eye-dropper-button svg {
+	width: 18px;
+	height: auto;
 }
 </style>
